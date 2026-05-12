@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRIS.ai: AI agent map v2 (Strategy Day, 12 May 2026)</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --paper: #ffffff;
+    --ink: #161b22;
+    --ink-2: #475063;
+    --ink-3: #8a93a0;
+    --line: #e3e7ec;
+    --line-strong: #c3cad3;
+    --ctx:   #0e9d9c;   /* context sources  (teal)   */
+    --store: #7a5cd6;   /* knowledge store  (violet) */
+    --dev:   #2563eb;   /* dev pipeline     (blue)   */
+    --side:  #d8791c;   /* standalone       (amber)  */
+    --human: #df2f6a;   /* human gate       (pink)   */
+    --neutral: #6b7480;
+    --ctx-tint:   #e6f6f5;
+    --store-tint: #efeafa;
+    --dev-tint:   #e7effd;
+    --side-tint:  #fbf1e3;
+    --human-tint: #fceaf1;
+    --neutral-tint: #eef0f2;
+    /* one type scale: 24 / 16 / 13 / 12 / 11 */
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    margin: 0; padding: 40px 32px 72px; color: var(--ink);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 24px; margin: 0 0 6px; letter-spacing: -0.015em; }
+  .sub { color: var(--ink-2); margin: 0 0 8px; font-size: 14px; max-width: 940px; }
+  .sub b { color: var(--ink); }
+  .stamp { font-size: 11px; color: var(--ink-3); margin: 0 0 4px; display: flex; align-items: center; gap: 7px; }
+  .stamp .live-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--ink-3); display: inline-block; }
+  .stamp i { font-style: italic; color: var(--ink-2); }
+  code { background: var(--bg); border: 1px solid var(--line); border-radius: 5px; padding: 0 4px; font-size: 11.5px; }
+
+  /* ===== icon badge ===== */
+  .ico {
+    flex: 0 0 auto; width: 30px; height: 30px; border-radius: 9px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .ico svg { width: 16px; height: 16px; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+  .ico.lg { width: 38px; height: 38px; border-radius: 11px; }
+  .ico.lg svg { width: 20px; height: 20px; }
+  .ico.sm { width: 24px; height: 24px; border-radius: 7px; }
+  .ico.sm svg { width: 13px; height: 13px; }
+  .ico.ctx     { background: var(--ctx-tint);     color: var(--ctx); }
+  .ico.store   { background: var(--store-tint);   color: var(--store); }
+  .ico.dev     { background: var(--dev-tint);     color: var(--dev); }
+  .ico.side    { background: var(--side-tint);    color: var(--side); }
+  .ico.human   { background: var(--human-tint);   color: var(--human); }
+  .ico.neutral { background: var(--neutral-tint); color: var(--neutral); }
+
+  /* ===== legends up top ===== */
+  .keys { display: flex; gap: 22px 28px; flex-wrap: wrap; margin: 16px 0 6px; font-size: 11px; color: var(--ink-2); align-items: flex-start; }
+  .keys .grp { display: flex; flex-direction: column; gap: 4px; }
+  .keys .grp .ttl { font-weight: 700; color: var(--ink); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; }
+  .keys .grp .row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .keys .it { display: inline-flex; align-items: center; gap: 6px; }
+  .keys .sw { width: 10px; height: 10px; border-radius: 3px; display: inline-block; flex: 0 0 auto; }
+
+  /* ===== lane header ===== */
+  .lane {
+    font-size: 16px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink);
+    margin: 30px 0 14px; display: flex; align-items: baseline; gap: 10px;
+  }
+  .lane .dot { width: 11px; height: 11px; border-radius: 3px; flex: 0 0 auto; align-self: center; }
+  .lane .n { font-variant-numeric: tabular-nums; opacity: .45; font-size: 14px; }
+  .lane .rest { color: var(--ink-3); font-weight: 500; font-size: 12px; }
+  .lane.ctx   { color: var(--ctx);   } .lane.ctx   .dot { background: var(--ctx);   }
+  .lane.store { color: var(--store); } .lane.store .dot { background: var(--store); }
+  .lane.dev   { color: var(--dev);   } .lane.dev   .dot { background: var(--dev);   }
+  .lane.side  { color: var(--side);  } .lane.side  .dot { background: var(--side);  }
+  .lane .rest { color: var(--ink-3); }
+
+  /* ===== grid + cards ===== */
+  .grid { display: grid; gap: 14px; }
+  .grid.c5 { grid-template-columns: repeat(5, 1fr); }
+  .grid.c3 { grid-template-columns: repeat(3, 1fr); }
+  .grid.c2 { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 1000px) { .grid.c5, .grid.c3 { grid-template-columns: repeat(2, 1fr); } .grid.c2 { grid-template-columns: 1fr; } }
+  @media (max-width: 640px)  { .grid { grid-template-columns: 1fr !important; } }
+
+  .card {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 11px;
+    padding: 13px 14px 11px; display: flex; flex-direction: column; gap: 7px;
+    box-shadow: 0 1px 2px rgba(16,24,40,.04);
+  }
+  .card .hd { display: flex; align-items: center; gap: 9px; }
+  .card .hd h3 { margin: 0; font-size: 13px; line-height: 1.3; letter-spacing: -0.005em; flex: 1; min-width: 0; }
+  .card .hd h3 .tag { display: block; font-weight: 400; color: var(--ink-3); font-size: 10.5px; margin-top: 1px; }
+  .card .desc { margin: 0; font-size: 12px; color: var(--ink-2); line-height: 1.45; }
+  .card .desc b { color: var(--ink); }
+  .card.src      { border-top: 3px solid var(--ctx); }
+  .card.dev-card { border-top: 3px solid var(--dev); }
+  .card.side-card{ border-top: 3px solid var(--side); }
+  .card.store-em { border: 1.5px solid var(--store); background: var(--store-tint); }
+  .card.store-em .hd h3 { color: var(--store); }
+  .card.human-card { border: 1.5px solid var(--human); background: var(--human-tint); }
+  .card.human-card .hd h3 { color: var(--human); }
+  .card.neutral-em { border-top-color: #9aa3af; }
+  .card.neutral-em .hd h3 { color: var(--ink-2); }
+  .card.span2 { grid-column: span 2; }
+
+  /* step number + inline ref */
+  .stepnum { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 6px; font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums; background: var(--dev); color: #fff; }
+  .stepnum.human { background: var(--human); }
+  .ref { display: inline-flex; align-items: center; justify-content: center; width: 15px; height: 15px; border-radius: 4px; font-size: 9.5px; font-weight: 800; background: var(--dev-tint); color: var(--dev); vertical-align: middle; font-variant-numeric: tabular-nums; margin: 0 1px; }
+  .ref.human { background: var(--human-tint); color: var(--human); }
+
+  /* ===== card footer strip: trigger + impact/effort, one consistent treatment ===== */
+  .meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: auto; padding-top: 9px; border-top: 1px solid var(--line); font-size: 10px; }
+  .meta .trig { display: inline-flex; align-items: center; gap: 5px; font-weight: 700; padding: 2px 8px; border-radius: 6px; letter-spacing: .01em; white-space: nowrap; }
+  .meta .trig svg { width: 10px; height: 10px; stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .meta .trig.event  { background: #fdeede; color: #b06012; }
+  .meta .trig.live   { background: #e7effd; color: #2057c7; }
+  .meta .trig.sched  { background: #ecf3ec; color: #2e7d4f; }
+  .meta .trig.commit { background: #f1edfa; color: #6b4fc9; }
+  .meta .trig.demand { background: #eef0f2; color: #51596a; }
+  .meta .trig.passive{ background: #f5f1eb; color: #8a6d3a; }
+  .meta .ie { display: inline-flex; align-items: center; gap: 7px; margin-left: auto; }
+  .meta .ie .imp, .meta .ie .eff { display: inline-flex; align-items: center; gap: 3px; font-weight: 800; letter-spacing: .03em; }
+  .meta .ie .lbl { color: var(--ink-3); font-weight: 600; }
+  .imp.hi  { color: #c01b52; } .imp.med { color: #9a6510; } .imp.lo  { color: #707a86; }
+  .eff.lo  { color: #157a3d; } .eff.med { color: #946200; } .eff.hi  { color: #6b4fc9; }
+  .meta .state { color: var(--ink-3); font-style: italic; font-weight: 600; }
+  .meta .pill { display: inline-flex; align-items: center; gap: 3px; font-weight: 700; padding: 2px 7px; border-radius: 999px; border: 1px solid; }
+  .meta .pill svg { width: 9px; height: 9px; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .meta .pill.auto    { color: #117a3d; border-color: #b6e2c7; background: #ecf8f0; }
+  .meta .pill.approve { color: var(--human); border-color: #f3bcce; background: #fdedf3; }
+  .fn { color: var(--ink-3); font-weight: 700; cursor: default; }
+  .fn sup { font-size: 8.5px; }
+
+  /* ===== arrows ===== */
+  .v-arrow { display: flex; flex-direction: column; align-items: center; gap: 7px; margin: 16px 0; }
+  .v-arrow .cap { font-size: 11px; color: var(--ink-3); text-align: center; max-width: 760px; }
+  .v-arrow .cap b { color: var(--ink-2); font-weight: 700; }
+  .v-arrow .line { width: 0; height: 22px; border-left: 3px solid var(--line-strong); }
+  .v-arrow .tip { width: 11px; height: 11px; border-right: 3px solid var(--line-strong); border-bottom: 3px solid var(--line-strong); transform: rotate(45deg); margin-top: -9px; }
+  .v-arrow.ctx-c .line, .v-arrow.ctx-c .tip { border-color: var(--ctx); }
+  .v-arrow.store-c .line, .v-arrow.store-c .tip { border-color: var(--store); }
+  .v-arrow + .lane { margin-top: 16px; }
+
+  .pipeflow { display: flex; align-items: stretch; gap: 0; }
+  .pipeflow .grid { flex: 1; }
+  .h-arrow { flex: 0 0 34px; display: flex; align-items: center; justify-content: center; align-self: center; }
+  .h-arrow .shaft { width: 16px; height: 0; border-top: 3px solid var(--line-strong); }
+  .h-arrow .tip { width: 9px; height: 9px; border-right: 3px solid var(--line-strong); border-top: 3px solid var(--line-strong); transform: rotate(45deg); margin-left: -7px; }
+  .h-arrow.two { flex-direction: column; gap: 5px; }
+  .h-arrow.two .fwd, .h-arrow.two .bwd { display: flex; align-items: center; }
+  .h-arrow.two .fwd .shaft { border-top-color: var(--dev); } .h-arrow.two .fwd .tip { border-right-color: var(--dev); border-top-color: var(--dev); }
+  .h-arrow.two .bwd { flex-direction: row-reverse; }
+  .h-arrow.two .bwd .shaft { border-top-color: var(--side); } .h-arrow.two .bwd .tip { border-right-color: var(--side); border-top-color: var(--side); transform: rotate(225deg); margin-left: 0; margin-right: -7px; }
+
+  .loopback { display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 11px; color: var(--side); margin: 8px 0; font-weight: 600; }
+  .loopback svg { width: 16px; height: 12px; }
+
+  /* ===== footnotes ===== */
+  .notes { margin-top: 36px; padding: 18px 22px; background: var(--paper); border: 1px solid var(--line); border-radius: 11px; }
+  .notes h2 { font-size: 16px; margin: 0 0 12px; display: flex; align-items: center; gap: 9px; }
+  .notes .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; }
+  @media (max-width: 760px) { .notes .grid2 { grid-template-columns: 1fr; } }
+  .notes .item { font-size: 12px; color: var(--ink-2); line-height: 1.5; display: flex; gap: 9px; }
+  .notes .item .mark { flex: 0 0 auto; width: 19px; height: 19px; border-radius: 5px; background: var(--neutral-tint); color: var(--ink-2); font-weight: 800; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; margin-top: 1px; font-variant-numeric: tabular-nums; }
+  .notes .item b { color: var(--ink); }
+  .notes .item i { color: var(--ink-2); }
+  .notes .item code { font-size: 11px; }
+  .notes h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); margin: 18px 0 10px; }
+  .notes .takeaways .item { font-size: 12.5px; }
+  .notes .takeaways .mark { background: transparent; }
+
+  /* ===== print ===== */
+  @page { size: A3 landscape; margin: 12mm; }
+  @media print {
+    body { padding: 0; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .wrap { max-width: none; }
+    .card, .notes { box-shadow: none !important; }
+    .card, .v-arrow, .loopback, .pipeflow, .notes .item { break-inside: avoid; }
+    .lane { break-after: avoid; break-inside: avoid; }
+    .grid { break-inside: avoid-page; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>IRIS.ai: AI agent map</h1>
+  <p class="sub">From the Strategy Day brainstorm, 12 May 2026. What context feeds which agent, how they hand off, and what triggers each. Read top to bottom: context flows <b>down</b>; corrections flow <b>back up</b>. <span style="color:var(--ink-3)">Numbered tags <span class="fn"><sup>n</sup></span> point to the detail notes at the bottom.</span></p>
+  <p class="stamp"><span class="live-dot"></span>built live during the meeting, folded in from the Tactiq transcript as it was discussed. <i>final: 817 blocks / ~76 min. covers the dev pipeline + 11 standalone agents.</i></p>
+
+  <div class="keys">
+    <div class="grp">
+      <span class="ttl">lanes</span>
+      <span class="row">
+        <span class="it"><span class="sw" style="background:var(--ctx)"></span>context sources</span>
+        <span class="it"><span class="sw" style="background:var(--store)"></span>knowledge store</span>
+        <span class="it"><span class="sw" style="background:var(--dev)"></span>dev pipeline</span>
+        <span class="it"><span class="sw" style="background:var(--side)"></span>standalone agents</span>
+        <span class="it"><span class="sw" style="background:var(--human)"></span>human gate</span>
+      </span>
+    </div>
+    <div class="grp">
+      <span class="ttl">trigger</span>
+      <span class="row">
+        <span class="it"><span class="sw" style="background:#b06012"></span>event-driven</span>
+        <span class="it"><span class="sw" style="background:#2057c7"></span>live in IDE</span>
+        <span class="it"><span class="sw" style="background:#2e7d4f"></span>scheduled</span>
+        <span class="it"><span class="sw" style="background:#6b4fc9"></span>on commit/ingest</span>
+        <span class="it"><span class="sw" style="background:#51596a"></span>on demand</span>
+        <span class="it"><span class="sw" style="background:#8a6d3a"></span>passive</span>
+      </span>
+    </div>
+    <div class="grp">
+      <span class="ttl">impact / build</span>
+      <span class="row">
+        <span class="it"><span class="imp hi">●●●</span><span class="imp med">●●</span><span class="imp lo">●</span> impact (high → low)</span>
+        <span class="it"><span class="eff lo">◆</span><span class="eff med">◆◆</span><span class="eff hi">◆◆◆</span> build effort (small → large)</span>
+        <span class="it"><span class="state">(exists)</span> already there</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ============ LANE 1 ============ -->
+  <div class="lane ctx"><span class="dot"></span><span class="n">1</span> Context sources <span class="rest">today: ~30 scattered, siloed piles of sediment</span></div>
+  <div class="grid c5">
+    <div class="card src">
+      <div class="hd"><span class="ico ctx"><svg viewBox="0 0 24 24" stroke="currentColor"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="19" x2="12" y2="22"/></svg></span><h3>Meeting transcripts</h3></div>
+      <p class="desc">Tactiq (Teams + Meet) and Gemini notes. Business, tech and client calls. <span class="fn"><sup>1</sup></span></p>
+    </div>
+    <div class="card src">
+      <div class="hd"><span class="ico ctx"><svg viewBox="0 0 24 24" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><h3>HubSpot</h3></div>
+      <p class="desc">Jordan's pipeline: per-customer call summaries, NDAs, deal activity. Today only the business side reads it.</p>
+    </div>
+    <div class="card src">
+      <div class="hd"><span class="ico ctx"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M4 20a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2z"/></svg></span><h3>Google Drive: scoping</h3></div>
+      <p class="desc">Scoping files, HTML demos, Excel sheets, SoWs. The "prep-PoC" understanding lives here.</p>
+    </div>
+    <div class="card src">
+      <div class="hd"><span class="ico ctx"><svg viewBox="0 0 24 24" stroke="currentColor"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg></span><h3>Code repos + Jira / Asana</h3></div>
+      <p class="desc">~200 repos, commit history, PR comments, tickets, in-flight Asana tasks, QA bug reports, monitoring alerts. <span class="fn"><sup>2</sup></span></p>
+    </div>
+    <div class="card src">
+      <div class="hd"><span class="ico ctx"><svg viewBox="0 0 24 24" stroke="currentColor"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4z"/></svg></span><h3>Interview recordings</h3></div>
+      <p class="desc">Candidate interviews + Victor's repo-walkthrough videos. Raw, untranscribed.</p>
+    </div>
+  </div>
+
+  <div class="v-arrow ctx-c">
+    <span class="cap"><b>ingestion pipeline</b> · fires on each new transcript / recording / commit · transcribe, translate (BG → EN), summarize, index</span>
+    <span class="line"></span><span class="tip"></span>
+  </div>
+
+  <!-- ============ LANE 2 ============ -->
+  <div class="lane store"><span class="dot"></span><span class="n">2</span> Unified knowledge store <span class="rest">"context is king": everything in one place</span></div>
+  <div class="grid c2">
+    <div class="card store-em span2">
+      <div class="hd">
+        <span class="ico store lg"><svg viewBox="0 0 24 24" stroke="currentColor"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg></span>
+        <h3>Company knowledge base / RAG</h3>
+      </div>
+      <p class="desc">All transcripts, videos, scoping files, HubSpot summaries, repo metadata, Jira: one place. Per-engagement <code>CONTEXT / STATUS / SOURCES.md</code> on top. Self-hostable models so it doesn't hinge on a paid API. <span class="fn"><sup>3</sup></span></p>
+      <div class="meta"><span class="state">the foundation</span><span class="ie"><span class="lbl">impact</span><span class="imp hi">●●●</span><span class="lbl">build</span><span class="eff hi">◆◆◆</span></span></div>
+    </div>
+    <div class="card store-em span2">
+      <div class="hd">
+        <span class="ico store"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+        <h3>Central agent-settings repo<span class="tag">one project, company-wide. No more copy-pasting rules into every repo.</span></h3>
+      </div>
+      <p class="desc">Holds <i>how the agents operate</i>: shared rules, per-repo architecture docs, code conventions, the knowledge files the reviewer learns into. Every agent pulls from it, business keeps control. <span class="fn"><sup>4</sup></span></p>
+      <div class="meta"><span class="ie"><span class="lbl">impact</span><span class="imp hi">●●●</span><span class="lbl">build</span><span class="eff med">◆◆</span></span></div>
+    </div>
+  </div>
+
+  <div class="v-arrow store-c">
+    <span class="cap">queried by every agent below</span>
+    <span class="line"></span><span class="tip"></span>
+  </div>
+
+  <!-- ============ LANE 3 ============ -->
+  <div class="lane dev"><span class="dot"></span><span class="n">3</span> Dev agent pipeline <span class="rest">one feature, end to end · human gate only where it matters</span></div>
+  <p style="font-size:11px;color:var(--ink-3);margin:-6px 0 12px"><span class="ref">1</span> starts when a feature is requested · <span class="ref">2</span>→<span class="ref">6</span> chain off it · <span class="ref">3</span>↔<span class="ref">4</span> self-loop until clean · <span class="ref human">5</span> only on the items the agent flags high-risk.</p>
+
+  <div class="pipeflow">
+    <div class="grid c2">
+      <div class="card dev-card">
+        <div class="hd"><span class="ico dev"><svg viewBox="0 0 24 24" stroke="currentColor"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6"/></svg></span><h3><span class="stepnum">1</span> Requirements / alignment agent</h3></div>
+        <p class="desc">Turns the discussed feature into a written spec, before implementation. <span class="fn"><sup>5</sup></span></p>
+        <div class="meta"><span class="ie"><span class="lbl">impact</span><span class="imp hi">●●●</span><span class="lbl">build</span><span class="eff lo">◆</span></span></div>
+      </div>
+      <div class="card dev-card">
+        <div class="hd"><span class="ico dev"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M9 19h6a4 4 0 0 0 0-8H9a4 4 0 0 1 0-8h6"/></svg></span><h3><span class="stepnum">2</span> Planner agent</h3></div>
+        <p class="desc">Implementation plan: steps, dependencies, effort. Feeds the "how long / how much GPU $" answer back to Jordan for PoC pricing. <span class="fn"><sup>6</sup></span></p>
+        <div class="meta"><span class="ie"><span class="lbl">impact</span><span class="imp hi">●●●</span><span class="lbl">build</span><span class="eff med">◆◆</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="v-arrow"><span class="line"></span><span class="tip"></span></div>
+
+  <div class="pipeflow">
+    <div class="grid c2" style="position:relative">
+      <div class="card dev-card">
+        <div class="hd"><span class="ico dev"><svg viewBox="0 0 24 24" stroke="currentColor"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><h3><span class="stepnum">3</span> Implementer agent</h3></div>
+        <p class="desc">Writes the code against the plan. First pass of agent iteration. <span class="fn"><sup>7</sup></span></p>
+        <div class="meta"><span class="ie"><span class="lbl">impact</span><span class="imp hi">●●●</span><span class="lbl">build</span><span class="eff med">◆◆</span></span></div>
+      </div>
+      <div class="card dev-card">
+        <div class="hd"><span class="ico dev"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><h3><span class="stepnum">4</span> Reviewer agent</h3></div>
+        <p class="desc">Reviews the whole PR (already beats the in-editor agent). Its real job: <b>build the knowledge file so the next review is better</b>. <span class="fn"><sup>8</sup></span></p>
+        <div class="meta"><span class="pill auto"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg>auto-loop with <span class="ref" style="background:#fff;border:1px solid #b6e2c7;color:#117a3d">3</span></span><span class="state">exists</span><span class="ie"><span class="lbl">impact</span><span class="imp hi">●●●</span><span class="lbl">build</span><span class="eff lo">◆</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loopback"><svg viewBox="0 0 16 12" fill="none"><path d="M2 6h12M4 3 1 6l3 3M12 9l3-3-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="ref">3</span>↔<span class="ref">4</span> iterate until only the important stuff is left for a human</div>
+
+  <div class="v-arrow"><span class="line"></span><span class="tip"></span></div>
+
+  <div class="grid c2">
+    <div class="card human-card">
+      <div class="hd"><span class="ico human"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></span><h3><span class="stepnum human">5</span> Human review</h3></div>
+      <p class="desc">Only the items the agent flags high-risk reach a human. Approve / edit / reject; bad outcomes feed back as corrections. <span class="fn"><sup>9</sup></span></p>
+      <div class="meta"><span class="pill approve"><svg viewBox="0 0 24 24" stroke="currentColor"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>phone-approve, no auto-timeout</span><span class="state">mobile path</span><span class="ie"><span class="lbl">impact</span><span class="imp hi">●●●</span><span class="lbl">build</span><span class="eff med">◆◆</span></span></div>
+    </div>
+    <div class="card dev-card">
+      <div class="hd"><span class="ico dev"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></span><h3><span class="stepnum">6</span> Docs + hooks agent</h3></div>
+      <p class="desc">On merge: regenerate docs, write + close Jira items, run pre-/post-commit hooks. Feeds updated docs back up to the store. <span class="fn"><sup>10</sup></span></p>
+      <div class="meta"><span class="pill auto"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg>auto-run</span><span class="ie"><span class="lbl">impact</span><span class="imp med">●●</span><span class="lbl">build</span><span class="eff lo">◆</span></span></div>
+    </div>
+  </div>
+
+  <!-- ============ LANE 4 ============ -->
+  <div class="lane side"><span class="dot"></span><span class="n">4</span> Standalone agents <span class="rest">off the same knowledge store · each has its own trigger</span></div>
+  <div class="grid c3">
+
+    <div class="card side-card">
+      <div class="hd"><span class="ico side"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M8 2l1.5 1.5M16 2l-1.5 1.5"/><path d="M9 7h6v4a3 3 0 0 1-6 0z"/><path d="M12 11v9"/><path d="M5 9H2M5 14H2M5 19l3-2M22 9h-3M22 14h-3M22 19l-3-2"/><path d="M9 13a4 4 0 0 0-4 4M15 13a4 4 0 0 1 4 4"/></svg></span><h3>Repo-monitoring auto-fixer</h3></div>
+      <p class="desc">Alert comes in → analyzes, maybe fixes, opens a PR through <span class="ref">4</span>/<span class="ref human">5</span>. Also picks up Rossen's small QA bugs. <b>Needs strong test coverage</b> or fixes regress. <span class="fn"><sup>11</sup></span></p>
+      <div class="meta"><span class="trig event"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg>event-driven</span><span class="pill approve"><svg viewBox="0 0 24 24" stroke="currentColor"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>PR reviewed</span><span class="ie"><span class="imp hi">●●●</span><span class="eff med">◆◆</span></span></div>
+    </div>
+
+    <div class="card side-card">
+      <div class="hd"><span class="ico side"><svg viewBox="0 0 24 24" stroke="currentColor"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span><h3>Code-reuse / dedup agent</h3></div>
+      <p class="desc">As you type in your IDE: "that function already does it, modify these instead." Kills cross-team duplication. <span class="fn"><sup>12</sup></span></p>
+      <div class="meta"><span class="trig live"><svg viewBox="0 0 24 24" stroke="currentColor"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>live in IDE</span><span class="ie"><span class="imp hi">●●●</span><span class="eff hi">◆◆◆</span></span></div>
+    </div>
+
+    <div class="card side-card">
+      <div class="hd"><span class="ico side"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.66 2.69 3 6 3s6-1.34 6-3v-5"/></svg></span><h3>Onboarding generator</h3></div>
+      <p class="desc">Interview recordings + Victor's repo videos + Sara's doc → a personalized onboarding guide per new hire: which repo, where the creds are, which Slack channel.</p>
+      <div class="meta"><span class="trig event"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg>event-driven</span><span class="ie"><span class="imp med">●●</span><span class="eff lo">◆</span></span></div>
+    </div>
+
+    <div class="card side-card">
+      <div class="hd"><span class="ico side"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2-.1-2.8a2 2 0 0 0-2.8 0z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.9-.6 8.3-5 11a22 22 0 0 1-3.9 2z"/><path d="M9 12H4s.6-3.3 2-4c1.6-.8 5 0 5 0M12 15v5s3.3-.6 4-2c.8-1.6 0-5 0-5"/></svg></span><h3>Deployment agent</h3></div>
+      <p class="desc">Deploying is a whole day of README steps. Runs them, sanity-checks staging, fixes a failed command instead of you.</p>
+      <div class="meta"><span class="trig demand"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>on demand</span><span class="ie"><span class="imp med">●●</span><span class="eff lo">◆</span></span></div>
+    </div>
+
+    <div class="card side-card">
+      <div class="hd"><span class="ico side"><svg viewBox="0 0 24 24" stroke="currentColor"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg></span><h3>Email-reply agent</h3></div>
+      <p class="desc">Drafts replies to incoming emails; you check and send. Sara's third personal agent. Not always perfect, leaves gaps you fill.</p>
+      <div class="meta"><span class="trig event"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg>event-driven</span><span class="ie"><span class="imp lo">●</span><span class="eff lo">◆</span></span></div>
+    </div>
+
+    <div class="card side-card">
+      <div class="hd"><span class="ico side"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg></span><h3>Code-intelligence / migration agent<span class="tag">"qualification" demo, wanted internally too</span></h3></div>
+      <p class="desc">Deep repo analysis: dependency graph, architecture, ownership, infra, CVEs, cost, auto-docs. Also feeds the repo context into <span class="ref">2</span>/<span class="ref">3</span> and the dedup agent.</p>
+      <div class="meta"><span class="trig commit"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="3"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="21" y2="12"/></svg>on commit/ingest</span><span class="state">partly built</span><span class="ie"><span class="imp hi">●●●</span><span class="eff hi">◆◆◆</span></span></div>
+    </div>
+
+    <div class="card side-card">
+      <div class="hd"><span class="ico side"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="18" cy="18" r="4"/><path d="M18 16.5V18l1 1"/></svg></span><h3>Personal meeting assistant</h3></div>
+      <p class="desc">~15 min before a meeting: who, last notes + action items, what to prepare, the relevant Slack thread. Runs on a local model. <span class="fn"><sup>13</sup></span></p>
+      <div class="meta"><span class="trig sched"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></svg>scheduled</span><span class="state">exists</span><span class="ie"><span class="imp med">●●</span><span class="eff lo">◆</span></span></div>
+    </div>
+
+    <div class="card side-card">
+      <div class="hd"><span class="ico side"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M8 3 4 7l4 4"/><path d="M4 7h12a4 4 0 0 1 0 8h-1"/><path d="m16 21 4-4-4-4"/><path d="M20 17H8"/></svg></span><h3>Business ↔ tech translator</h3></div>
+      <p class="desc">Down: business-call context → language the dev agents can use. Up: implementation reality (limits, effort, GPU/LLM cost) → language Jordan uses for pricing.</p>
+      <div class="meta"><span class="trig demand"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>on demand / handoff</span><span class="ie"><span class="imp hi">●●●</span><span class="eff med">◆◆</span></span></div>
+    </div>
+
+    <div class="card side-card">
+      <div class="hd"><span class="ico side"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><h3>Team-orchestration agent<span class="tag">the AWS "agents observe the team" angle</span></h3></div>
+      <p class="desc">Profiles each person, then suggests who does which task, who talks to whom, and helps phrase the cross-team message. <span class="fn"><sup>14</sup></span></p>
+      <div class="meta"><span class="trig passive"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 4 2 7h10c0-3 2-4 2-7a7 7 0 0 0-7-7z"/><line x1="9" y1="20" x2="15" y2="20"/></svg>passive</span><span class="ie"><span class="imp med">●●</span><span class="eff hi">◆◆◆</span></span></div>
+    </div>
+
+    <div class="card side-card">
+      <div class="hd"><span class="ico side"><svg viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg></span><h3>Org-wide PR / activity dashboard<span class="tag">concrete near-term action item</span></h3></div>
+      <p class="desc">Code-review output + PR data from every repo → one view: draft / released / agent-reviewed / approved, who's on it, linked to standup notes. <span class="fn"><sup>15</sup></span></p>
+      <div class="meta"><span class="trig sched"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></svg>scheduled + PR events</span><span class="state">quick win</span><span class="ie"><span class="imp hi">●●●</span><span class="eff lo">◆</span></span></div>
+    </div>
+
+    <div class="card side-card neutral-em span2">
+      <div class="hd"><span class="ico neutral"><svg viewBox="0 0 24 24" stroke="currentColor"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></span><h3>Personalization layer<span class="tag">cross-cutting, sits on top of several of the above</span></h3></div>
+      <p class="desc">The dev assistant, dedup, meeting assistant and team-orchestration agent are tuned to how <i>you personally</i> work. "The future is personalization": one global knowledge base, per-person interpretation on top.</p>
+      <div class="meta"><span class="trig passive"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 4 2 7h10c0-3 2-4 2-7a7 7 0 0 0-7-7z"/><line x1="9" y1="20" x2="15" y2="20"/></svg>passive</span><span class="ie"><span class="imp med">●●</span><span class="eff med">◆◆</span></span></div>
+    </div>
+
+  </div>
+
+  <!-- ============ FOOTNOTES ============ -->
+  <div class="notes">
+    <h2><span class="ico neutral sm"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></span>Detail notes</h2>
+    <div class="grid2">
+      <div class="item"><span class="mark">1</span><div><b>Meeting transcripts.</b> Tactiq owned by Victor (works on Teams + Meet); Gemini notes save to the note-taker's personal Drive only. Tactiq is weak on Microsoft Teams; external folks on Teams stay a friction point. Enable Google transcripts for internal meetings.</div></div>
+      <div class="item"><span class="mark">2</span><div><b>Code repos + Jira / Asana.</b> The index should also surface in-flight Asana tasks, not just code: "not in the codebase yet, Vladimir is on it, talk to him."</div></div>
+      <div class="item"><span class="mark">3</span><div><b>Knowledge base / RAG.</b> "Once we have the data in one place, anything else can be integrated, even by code." The genuinely new capability is the synthesizer that re-projects all the scattered docs on demand. Maps to the per-engagement context layer (Layer 1) + a knowledge-base synthesizer.</div></div>
+      <div class="item"><span class="mark">4</span><div><b>Central agent-settings repo.</b> Feedback to the code-review agent edits a knowledge file <i>here</i> (modifying memory, not training the model). Open Q: does the agent update these files itself, or human-reviewed? They shouldn't live on the main branch (don't give the agent write access to main), so stored here or elsewhere.</div></div>
+      <div class="item"><span class="mark">5</span><div><b>Requirements / alignment agent.</b> Fed: client-call transcripts (the client describing their use case in their own words), business-meeting notes, prior specs.</div></div>
+      <div class="item"><span class="mark">6</span><div><b>Planner agent.</b> Fed: the spec from step 1, the repo dependency graph + architecture (from the code-intelligence agent), past similar plans. Could also weigh team availability / priorities, a "planner that knows the team."</div></div>
+      <div class="item"><span class="mark">7</span><div><b>Implementer agent.</b> Fed: plan from step 2, repo conventions / code style / commit format, the relevant client transcripts. Known weak spot: agents don't naturally make code reusable or human-readable, open question what to feed in to fix that.</div></div>
+      <div class="item"><span class="mark">8</span><div><b>Reviewer agent.</b> Sees the full PR + last ~4 PRs, accumulates repo standards; "some feedback, not human-level, doesn't remove your responsibility to go over almost everything," useful especially on the 2nd pass. Proposal: feed it meeting notes so it knows <i>why</i> conventions exist (today it only sees what's there, and the sensitive review discussion happens outside the PR). Blocker: repos often have no architecture doc (e.g. A6 structural), so you can't tell the agent the intended design. Open Q: can an agent trace logic / run all scenarios in its head, even with full context? Reference: CodeRabbit / Travis-style AI reviewers were partly open-source, check what's in the bucket.</div></div>
+      <div class="item"><span class="mark">9</span><div><b>Human review.</b> Human-in-the-loop is on the spec and the important calls, not every line. The agent classifies each action <span class="state" style="font-style:normal;font-weight:700;color:#117a3d">auto-run</span> / <span class="state" style="font-style:normal;font-weight:700;color:#946200">notify-me</span> / <span class="state" style="font-style:normal;font-weight:700;color:var(--human)">needs my approval</span>, and only the last reaches the phone, never auto-proceeding on a timeout. Reachable from a phone so the laptop isn't the bottleneck.</div></div>
+      <div class="item"><span class="mark">10</span><div><b>Docs + hooks agent.</b> Pre-/post-commit hooks are deterministic scripts at fixed points in the agent lifecycle (format, lint, tests). They guarantee correctness before a commit lands, since you can't expect a human to read every line in an agent-first workflow.</div></div>
+      <div class="item"><span class="mark">11</span><div><b>Repo-monitoring auto-fixer.</b> Hooked to monitoring: alert → agent → analyze → maybe fix → PR through review. Also takes the small QA bugs Rossen files (~&lt;1h each); if stuck, brings a human in. Hard prerequisite: strong automated test coverage (unit + integration; design the app to be mockable), or agent fixes introduce regressions. ~90% of these bugs are catchable by tests. Assign it like a teammate (its own account, not just an API key) so its work is trackable; start it on the <i>smallest</i> issues and widen.</div></div>
+      <div class="item"><span class="mark">12</span><div><b>Code-reuse / dedup agent.</b> Indexes all active repos; the index re-runs on commit. Tackles real cross-team duplication (e.g. SQL agents re-implementing the same code; the weekly "what is each team building" meetings exist partly because of this). Function-level indexing + docstring generation works well today on Python &amp; JavaScript (most training data). Should also surface in-flight Asana tasks, not just code.</div></div>
+      <div class="item"><span class="mark">13</span><div><b>Personal meeting assistant.</b> Sara already runs one ("removes a stress I didn't understand before"; useful when you've got 7-8 meetings a day and no prep time). Delivery: drops the brief into Google Calendar / pings on Telegram. Plus a "Monday fun-fact" digest from the knowledge base. Runs on a local model (Qwen on the data-center "Impro" box) because it hears personal conversations.</div></div>
+      <div class="item"><span class="mark">14</span><div><b>Team-orchestration agent.</b> Builds a per-person profile (the "EU AI Act risk-classification" analogy applied to people), then suggests who should do which task, who should talk to whom, and helps phrase the message ("you need to talk to Martin, here's how, given his profile"). The bet: knowledge is globalized, but its interpretation is per-person; agents replace <i>parts of a function</i>, not people, and the weak spot they actually help with is team communication, not writing code.</div></div>
+      <div class="item"><span class="mark">15</span><div><b>Org-wide PR dashboard.</b> Pipe the code-review agent's output + PR data into a database → a single app showing every PR's status, who's on it, linked to daily-standup notes. Replaces clicking into each repo. Stopgap until built: mark agent-reviewed PRs as <i>draft</i> (or rename them) so they filter cleanly in the existing PR list. (Possible graduation-internship project.)</div></div>
+    </div>
+
+    <h3>The takeaways</h3>
+    <div class="grid2 takeaways">
+      <div class="item"><span class="mark"><span class="ico store sm" style="margin:0"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span></span><div><b>The bet:</b> the win isn't a smarter coding agent, it's <i>unifying the information internally</i> so every agent (and every human) has the right context. "Knowing what's developed / will be developed" matters; "knowing every step" doesn't, so repetitive meetings get summarized down to a context pack.</div></div>
+      <div class="item"><span class="mark"><span class="ico human sm" style="margin:0"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/></svg></span></span><div><b>Human gate where it counts:</b> on the spec and the important calls, not every line. The agent triages; only high-risk reaches the phone. More agent-first the work gets, the more this matters.</div></div>
+      <div class="item"><span class="mark"><span class="ico side sm" style="margin:0"><svg viewBox="0 0 24 24" stroke="currentColor"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></span></span><div><b>Cost caveat:</b> coding agents are subsidized below true token cost today. IRIS is fine for now (Hero on AWS credits) but the architecture should lean on self-hostable models so a price/policy change isn't fatal.</div></div>
+      <div class="item"><span class="mark"><span class="ico neutral sm" style="margin:0"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span></span><div><b>Known gaps:</b> agents are bad at making code reusable / human-readable ("they don't care"), what do we feed them to fix that? Start the auto-fixer on the smallest issues and widen. Pre-commit hooks guarantee correctness before a commit lands.</div></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
