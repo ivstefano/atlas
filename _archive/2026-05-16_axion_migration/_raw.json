@@ -1,0 +1,362 @@
+{
+  "postbank": {
+    "total_size": 10188279,
+    "total_files": 34,
+    "cat_counts": {
+      "data": 1,
+      "code": 0,
+      "output": 0,
+      "other": 33
+    },
+    "cat_sizes": {
+      "data": 38635,
+      "code": 0,
+      "output": 0,
+      "other": 10149644
+    },
+    "drive_matches": 1,
+    "orphan_count": 0,
+    "excluded_files": 0,
+    "excluded_size": 0
+  },
+  "aumovio": {
+    "total_size": 181576838,
+    "total_files": 781,
+    "cat_counts": {
+      "data": 153,
+      "code": 15,
+      "output": 458,
+      "other": 155
+    },
+    "cat_sizes": {
+      "data": 141300615,
+      "code": 133809,
+      "output": 36110441,
+      "other": 4031973
+    },
+    "drive_matches": 497,
+    "orphan_count": 8,
+    "excluded_files": 1,
+    "excluded_size": 15593
+  },
+  "heineken": {
+    "total_size": 316356621,
+    "total_files": 281,
+    "cat_counts": {
+      "data": 50,
+      "code": 8,
+      "output": 175,
+      "other": 48
+    },
+    "cat_sizes": {
+      "data": 177394442,
+      "code": 101487,
+      "output": 106078250,
+      "other": 32782442
+    },
+    "drive_matches": 24,
+    "orphan_count": 26,
+    "excluded_files": 4,
+    "excluded_size": 48111
+  },
+  "welocalize": {
+    "total_size": 254178597,
+    "total_files": 182,
+    "cat_counts": {
+      "data": 49,
+      "code": 1,
+      "output": 61,
+      "other": 71
+    },
+    "cat_sizes": {
+      "data": 219256247,
+      "code": 120772,
+      "output": 21429066,
+      "other": 13372512
+    },
+    "drive_matches": 154,
+    "orphan_count": 15,
+    "excluded_files": 1,
+    "excluded_size": 104321
+  },
+  "garrett": {
+    "total_size": 502143804,
+    "total_files": 823,
+    "cat_counts": {
+      "data": 14,
+      "code": 10,
+      "output": 404,
+      "other": 395
+    },
+    "cat_sizes": {
+      "data": 52285450,
+      "code": 198305,
+      "output": 285384509,
+      "other": 164275540
+    },
+    "drive_matches": 13,
+    "orphan_count": 3,
+    "excluded_files": 0,
+    "excluded_size": 0
+  },
+  "sms-group": {
+    "total_size": 2759813589,
+    "total_files": 8403,
+    "cat_counts": {
+      "data": 6649,
+      "code": 60,
+      "output": 238,
+      "other": 1456
+    },
+    "cat_sizes": {
+      "data": 2583011513,
+      "code": 663565,
+      "output": 6048675,
+      "other": 170089836
+    },
+    "drive_matches": 6710,
+    "orphan_count": 16,
+    "excluded_files": 6,
+    "excluded_size": 58311
+  },
+  "tandf": {
+    "total_size": 1270680845,
+    "total_files": 4400,
+    "cat_counts": {
+      "data": 150,
+      "code": 23,
+      "output": 1351,
+      "other": 2876
+    },
+    "cat_sizes": {
+      "data": 459146478,
+      "code": 200152,
+      "output": 100371661,
+      "other": 710962554
+    },
+    "drive_matches": 1407,
+    "orphan_count": 0,
+    "excluded_files": 6,
+    "excluded_size": 53828
+  },
+  "agrolimen": {
+    "total_size": 82245861,
+    "total_files": 332,
+    "cat_counts": {
+      "data": 96,
+      "code": 6,
+      "output": 140,
+      "other": 90
+    },
+    "cat_sizes": {
+      "data": 51540800,
+      "code": 45080,
+      "output": 6581070,
+      "other": 24078911
+    },
+    "drive_matches": 279,
+    "orphan_count": 2,
+    "excluded_files": 0,
+    "excluded_size": 0
+  },
+  "fresenius": {
+    "total_size": 48144783,
+    "total_files": 178,
+    "cat_counts": {
+      "data": 25,
+      "code": 17,
+      "output": 103,
+      "other": 33
+    },
+    "cat_sizes": {
+      "data": 44068238,
+      "code": 125044,
+      "output": 2853299,
+      "other": 1098202
+    },
+    "drive_matches": 150,
+    "orphan_count": 0,
+    "excluded_files": 2,
+    "excluded_size": 5979
+  },
+  "deutschebahn": {
+    "total_size": 33124898,
+    "total_files": 12,
+    "cat_counts": {
+      "data": 8,
+      "code": 0,
+      "output": 0,
+      "other": 4
+    },
+    "cat_sizes": {
+      "data": 33007961,
+      "code": 0,
+      "output": 0,
+      "other": 116937
+    },
+    "drive_matches": 7,
+    "orphan_count": 1,
+    "excluded_files": 0,
+    "excluded_size": 0
+  },
+  "nhs": {
+    "total_size": 38391,
+    "total_files": 3,
+    "cat_counts": {
+      "data": 0,
+      "code": 0,
+      "output": 0,
+      "other": 3
+    },
+    "cat_sizes": {
+      "data": 0,
+      "code": 0,
+      "output": 0,
+      "other": 38391
+    },
+    "drive_matches": 0,
+    "orphan_count": 0,
+    "excluded_files": 0,
+    "excluded_size": 0
+  },
+  "alexfert": {
+    "total_size": 316664294,
+    "total_files": 5333,
+    "cat_counts": {
+      "data": 90,
+      "code": 39,
+      "output": 247,
+      "other": 4957
+    },
+    "cat_sizes": {
+      "data": 241459263,
+      "code": 380011,
+      "output": 9002036,
+      "other": 65822984
+    },
+    "drive_matches": 267,
+    "orphan_count": 24,
+    "excluded_files": 5459,
+    "excluded_size": 87092662
+  },
+  "shanghai-synocodes": {
+    "total_size": 4942445,
+    "total_files": 88,
+    "cat_counts": {
+      "data": 40,
+      "code": 1,
+      "output": 39,
+      "other": 8
+    },
+    "cat_sizes": {
+      "data": 3164417,
+      "code": 14352,
+      "output": 1077436,
+      "other": 686240
+    },
+    "drive_matches": 74,
+    "orphan_count": 4,
+    "excluded_files": 0,
+    "excluded_size": 0
+  },
+  "stepan": {
+    "total_size": 48456714,
+    "total_files": 56,
+    "cat_counts": {
+      "data": 12,
+      "code": 3,
+      "output": 0,
+      "other": 41
+    },
+    "cat_sizes": {
+      "data": 40334984,
+      "code": 31953,
+      "output": 0,
+      "other": 8089777
+    },
+    "drive_matches": 7,
+    "orphan_count": 6,
+    "excluded_files": 0,
+    "excluded_size": 0
+  },
+  "cetin": {
+    "total_size": 3184087,
+    "total_files": 15,
+    "cat_counts": {
+      "data": 10,
+      "code": 0,
+      "output": 1,
+      "other": 4
+    },
+    "cat_sizes": {
+      "data": 2438146,
+      "code": 0,
+      "output": 239778,
+      "other": 506163
+    },
+    "drive_matches": 0,
+    "orphan_count": 10,
+    "excluded_files": 8,
+    "excluded_size": 68406
+  },
+  "yettel": {
+    "total_size": 14221200,
+    "total_files": 535,
+    "cat_counts": {
+      "data": 55,
+      "code": 22,
+      "output": 338,
+      "other": 120
+    },
+    "cat_sizes": {
+      "data": 2603229,
+      "code": 175623,
+      "output": 7129482,
+      "other": 4312866
+    },
+    "drive_matches": 0,
+    "orphan_count": 55,
+    "excluded_files": 78,
+    "excluded_size": 585927
+  },
+  "hubspot": {
+    "total_size": 271838,
+    "total_files": 14,
+    "cat_counts": {
+      "data": 0,
+      "code": 0,
+      "output": 0,
+      "other": 14
+    },
+    "cat_sizes": {
+      "data": 0,
+      "code": 0,
+      "output": 0,
+      "other": 271838
+    },
+    "drive_matches": 0,
+    "orphan_count": 0,
+    "excluded_files": 0,
+    "excluded_size": 0
+  },
+  "aumovio-soft-impact": {
+    "total_size": 867351,
+    "total_files": 2,
+    "cat_counts": {
+      "data": 1,
+      "code": 0,
+      "output": 0,
+      "other": 1
+    },
+    "cat_sizes": {
+      "data": 849744,
+      "code": 0,
+      "output": 0,
+      "other": 17607
+    },
+    "drive_matches": 0,
+    "orphan_count": 1,
+    "excluded_files": 0,
+    "excluded_size": 0
+  }
+}
