@@ -67,14 +67,11 @@ Updated 2026-05-17.
 - **Status**: not started.
 - **Why fourth**: cheap, Friday-recurring, pairs with Viktor's Asana directive (the brief becomes the source for the Asana sync).
 
-### 5. B6 — PoC status dashboard
+### 5. ~~B6 — PoC status dashboard~~ (deprioritised 2026-05-17)
 
-- **What**: single self-contained HTML page. Reads every `CONTEXT.md` + `STATUS.md`. Renders week-by-stage roadmap grid (rows = engagements, cols = calendar weeks, cells coloured by stage, current week marked) + per-row side panel (blocked-on, next milestone, commercial gate). Cron-regenerated.
-- **Toil it removes**: kills "what's the state of X?" pings. Replaces Viktor's killed-Excel directive with a thing that's never stale. Removes ~1.5 hr/wk of "let me check / reconstruct / explain".
-- **What's left for you**: glance at it, trust it.
-- **Build effort**: ~1 day (the data already exists in repo; just rendering + a cron).
-- **Status**: not started.
-- **Why fifth**: cheap, high visibility (Viktor, Steven), turns the engagement repo into a *view* not just a store.
+- **What was**: single self-contained HTML page rendering a week-by-stage roadmap grid from `CONTEXT.md` + `STATUS.md`.
+- **Why dropped**: Asana now holds engagement state (Viktor's 2026-05-15 directive). Asana's Gantt view does the same job Steven would have wanted; Ivo will present Asana Gantt on Mondays. HubSpot (once wired) covers commercial-pipeline view. Building a third surface = duplication for negative value.
+- **If revisited later**: only if Asana Gantt + HubSpot prove insufficient — but that's the directional bet right now.
 
 ### 6. HubSpot MCP (A6)
 
@@ -145,16 +142,17 @@ Updated 2026-05-17.
 
 | After step | Toil removed (hr/wk equivalent) | % of 40-hr week shifted to analyst-work |
 |---|---|---|
-| Today (post-A2) | 12.5 | 31% |
+| Today (post-A2 + Drive reorg) | 12.5 | 31% |
 | + A8 | 16 | 40% |
 | + B2 | 21 | 53% |
 | + B3 | 23 | 58% |
 | + A9 | 25 | 63% |
-| + B6 | 26.5 | 66% |
-| + HubSpot | 27 | 68% |
-| + B1 / B4 / B5 / B7 / B8 | 32 | 80% |
+| + HubSpot | 26 | 65% |
+| + B1 / B4 / B5 / B7 / B8 | 31 | 78% |
 
-80% = the *operator hour* shrinks to ~8/wk. The remaining 32 hr is the analyst-work the role actually pays for (client calls, judgment on extraction, scope decisions, prompt tuning, commercial negotiation). That's the target: calmer, more focused, same hours, better quality.
+~78% = the *operator hour* shrinks to ~9/wk. The remaining ~31 hr is the analyst-work the role actually pays for (client calls, judgment on extraction, scope decisions, prompt tuning, commercial negotiation). That's the target: calmer, more focused, same hours, better quality.
+
+(B6 dropped — Asana Gantt covers the dashboard need without building a third surface.)
 
 ---
 
