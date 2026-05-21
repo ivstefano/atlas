@@ -5,9 +5,10 @@ Loop ran 01:42 → ~03:50 local (~2h 10min so far, may continue). Budget $200, s
 ## TL;DR
 
 - **Corpus quality jumped meaningfully**: started with 1 critical regression (ALPINE) + 20 LOW unverified docs; ended with 0 regressions + 2 LOW.
-- **18 HIGH / 69 MEDIUM / 2 LOW** across 90 docs (judged). 97% above LOW. (Plus 10 confirmed at HIGH = 28 HIGH overall.)
-- Spent **$25 of $200**.
-- 16 commits, 6 named checkpoints + start tag for staged rollback.
+- **19 HIGH / 68 MEDIUM / 2 LOW** unverified across 79 judged. Plus 10 locked-confirmed at HIGH = **29 HIGH / 68 MEDIUM / 2 LOW = 98% non-LOW quality** across 99 graded docs.
+- Spent **$26 of $200**.
+- 17 commits, 7 named checkpoints + start tag for staged rollback.
+- Started with 0 HIGH unverified → ended with 9 HIGH unverified (BMW2W UKL EPB and HONDAPV PF3 latest promotions).
 
 ## What happened (per priority)
 
