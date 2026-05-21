@@ -5,9 +5,9 @@ Loop ran 01:42 → ~03:50 local (~2h 10min so far, may continue). Budget $200, s
 ## TL;DR
 
 - **Corpus quality jumped meaningfully**: started with 1 critical regression (ALPINE) + 20 LOW unverified docs; ended with 0 regressions + 2 LOW.
-- **17 HIGH / 70 MEDIUM / 2 LOW** across 90 docs (judged). 96% above LOW.
-- Spent **$22 of $200**.
-- 13 commits, 6 named checkpoints + start tag for staged rollback.
+- **18 HIGH / 69 MEDIUM / 2 LOW** across 90 docs (judged). 97% above LOW. (Plus 10 confirmed at HIGH = 28 HIGH overall.)
+- Spent **$25 of $200**.
+- 16 commits, 6 named checkpoints + start tag for staged rollback.
 
 ## What happened (per priority)
 
@@ -66,6 +66,17 @@ This was the heaviest-leverage iteration. Three judge passes:
 8. **HONDAPV PF3 China EOP**: 10/2033 → 12/2033 (6-year cycle from SOP 01/2028). ✅
 9. **HONDAPV PF3 cycle EOP** (Mexico): updated to 10/2033 per 6y rule. ✅
 10. **JAGUAR X540 parts conversion**: lifetime 62k → 124k (×2 calipers/vehicle). ✅
+11. **DACIA BBG24 EOP**: 12/2029 → 12/2027 (explicit source "EOP Time: Dec 2027"). ✅
+12. **GREATWALL B07-MK EOP**: 12/2024 → 07/2025 (3y cycle from SOP). ✅
+13. **VWPV CHINA MQB EOP**: 12/2024 → 03/2025 (VW 7y default). ✅
+14. **FAW-VW 16082016 EOP**: 12/2024 → 02/2025 (VW 7y). ✅
+15. **BMW2W UKL EPB parts_per_vehicle**: 1 → 2 (calipers); lifetime doubled (3,869,553 → 7,739,106). Judge: LOW → HIGH. ✅
+16. **JAGUAR DL_0 customer**: Jaguar → JLR (per JLR canonicalization). ✅
+17. **GEELY SX1112_B lifetime**: blank → 915,556 (Amortization Volume column). ✅
+18. **WULING CN150CN18 sales_plant**: blank → "1000" (from LOI table). ✅
+19. **DAIMLERTRUCK Autonomous SOP**: blank → 04/2025 (from LOI "commencement April 21, 2025"). ✅
+20. **AUDI MLBEV lifetime corrections**: rows 0+1 +partial-2016 (1,123,200 → 1,248,000 / 374,400 → 416,000). ✅
+21. **HONDAPV PF3 row 1 off-by-2 rounding**: 3,520,854 → 3,520,852. ✅
 
 ## Open items for Monday call with Phil
 
