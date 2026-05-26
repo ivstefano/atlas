@@ -8,7 +8,8 @@ Ivo's operations layer: daily briefs, persistent memory index, engagement coordi
 |---|---|
 | `briefs/YYYY/WNN/` | Daily prep briefs (`_auto.md`) + call-specific briefs (`_<topic>.md`). |
 | `_config/` | Workstation setup: plugins, MCPs, settings, skills, memory — everything needed to rebuild a Claude Code environment from scratch. **Start here on a new machine.** |
-| `NEXT_PRIORITIES.md` | Build queue, framed by toil-removed-per-build-day. Updated as priorities shift. |
+| `ROADMAP.md` | Strategic frame: the founding Karpathy-lens thesis + 4-layer architecture. Quarterly read. |
+| `NEXT_PRIORITIES.md` | Tactical build queue, framed by toil-removed-per-build-day. Updated as priorities shift. |
 | `SESSION_LOG.md` | Narrative log of multi-day sessions. |
 | `CLAUDE.md` | Operating instructions for Claude when working inside atlas. Loaded automatically. |
 | `.claude/commands/` | Project-level slash commands (`/morning-brief`, `/new-engagement`). |
