@@ -2,6 +2,15 @@
 _live/transcript.txt
 _live/new_blocks.txt
 _live/.last_count
+# internal scratch / sensitive notes (keep local only)
+_live/rag_sync.txt
+_live/vankata_demo_platform.txt
+# runtime locks / state
+.claude/scheduled_tasks.lock
+# drive shortcuts (engagement file mirrors, regenerated locally)
+**/_drive
+# work-in-progress folders not yet placed in _internal/
+Neuralith Design System/
 # credentials, ever
 *.env
 *token*
