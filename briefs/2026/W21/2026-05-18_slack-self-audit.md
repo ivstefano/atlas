@@ -237,7 +237,7 @@ Ranked by leverage:
 
 1. **Today, 12:30 commercial call**: propose engagement-channel migration policy. Owner: you. Deadline: Fri 22 May. (Lens 5B)
 2. **This week**: write a 1-page "SA role at IRIS" doc. Send to Vankata first. (Lens 5A)
-3. **Friday 22 May, 17:00**: first weekly Slack post in #gtm-team or #commercial — "What shipped this week, what's next, what's blocked." 8 lines max. Repeat every Friday. (Lens 4.1)
+3. **Friday 22 May, 17:00**: first weekly Slack post in #commercial (where Steven/Viktor/Jordan/Vankata live, and where commercial state belongs per Viktor's Asana+HubSpot directive) — "What shipped this week, what's next, what's blocked." 8 lines max. Repeat every Friday. (Lens 4.1)
 4. **This week**: stop apologizing reflexively. Pick 3 messages where you'd normally say "sorry" and don't. Notice what happens. (Lens 1)
 5. **By 2026-05-25**: write a 1-page Agrolimen close-lost retro. Send to Vankata + Jordan + Steven. (Lens 4.5) Bonus: do same for any other closed-lost since you started.
 
