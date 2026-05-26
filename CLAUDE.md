@@ -20,7 +20,11 @@ This repo is Ivo's operations layer: daily briefs, session logs, MCP wiring, mig
 
 ## Memory
 
-Persistent memory lives at `~/.claude/projects/-Users-iris-Documents-atlas/memory/`. Index in `MEMORY.md` loaded each session. See that file for the catalog.
+Persistent memory lives at `~/.claude/projects/-Users-iris-Documents-atlas/memory/`. Index in `MEMORY.md` loaded each session. See that file for the catalog. Details on portability across machines / Claude accounts: [_config/memory.md](_config/memory.md).
+
+## Workstation rebuild (new machine or new Claude account)
+
+If you're a fresh Claude landing in this repo without prior context, read [_config/README.md](_config/README.md) first. It has the 6-step rebuild order (settings → global instructions → plugins → MCPs → memory verify → skills) and links to per-topic detail pages. Tell Ivo what's missing on this machine vs. what `_config/` describes, then fix it. Don't ask questions about preferences — they're documented in `_config/`.
 
 ## When in doubt
 
