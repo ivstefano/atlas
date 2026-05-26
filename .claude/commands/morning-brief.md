@@ -68,12 +68,79 @@ Additionally, via MCPs (parallel where possible):
 - **Asana (`mcp__asana__search_tasks`)**: tasks in the engagement's section (project `1214855342290138`), status `in_progress` or `pending` with due dates this week.
 - **Gmail (`mcp__claude_ai_Gmail__search_threads`)**: threads with any attendee in `from:` or `to:` from the last 7 days. Read snippet/subject only, not full bodies.
 
-### 5. "Since last brief" diff
+### 5. Gap-recovery scan (NEW — runs BEFORE state-per-engagement synthesis when gap > 1 day)
 
-Find the most recent `_auto.md` or hand-written brief in `briefs/`. If exists:
-- Note its date.
-- For each engagement appearing in BOTH the previous brief and today's: lead the engagement block with "Since last brief: <what changed>" (new STATUS entries, new Gmail threads, new Asana task status changes).
-- If the engagement is in today's calls but not in the previous brief: full state synthesis.
+Find the most recent brief in `briefs/YYYY/W*/`. Compute `gap_days = today - last_brief_date`.
+
+If `gap_days <= 1`: skip this section, proceed with normal per-engagement "Since last brief" diff (existing behaviour).
+
+If `gap_days >= 2`: run the **comprehensive recovery scan** first. The brief becomes a state-recovery tool, not just a today-prep, because Saturday-Sunday or busy-day gaps drop activity that today's brief needs to integrate.
+
+Sources to pull (parallel where possible):
+
+**Git deltas (cheap, do first):**
+```bash
+# engagements changes since last brief
+git -C ~/Documents/engagements log --since="<last_brief_date>" --until="<today>" --pretty=format:"%ad %s" --date=short --name-only
+
+# atlas changes since last brief
+git -C ~/Documents/atlas log --since="<last_brief_date>" --until="<today>" --pretty=format:"%ad %s" --date=short
+```
+
+Parse the output to identify:
+- New STATUS.md entries (which engagements?).
+- New transcripts (which engagements got new calls?).
+- New CONTEXT/SOURCES/ARTEFACTS edits (what shifted?).
+- Atlas-side: new briefs in the gap, NEXT_PRIORITIES updates, new memory entries.
+
+**Calendar events that happened in the gap:**
+- `mcp__claude_ai_Google_Calendar__list_events` from `<last_brief_date>` to today, exclude all-day events.
+- For each: was it likely attended (the user was the organiser or accepted)? If yes, did it produce a transcript that's now in the engagement folder?
+- Flag any meeting that happened but has NO STATUS update → that's a digest gap.
+
+**Gmail threads in the gap (lightweight):**
+- For each engagement that's active per Asana / STATUS, search Gmail for threads with that engagement's attendee domains modified in the gap window.
+- Use `mcp__claude_ai_Gmail__search_threads` with `newer_than:<gap_days>d`.
+- Read snippets only, not full bodies.
+
+**Slack threads in the gap (lightweight, sampled):**
+- `mcp__slack__conversations_history` for #C0AEY7YBBA8 + DMs to/from key counterparts (Vankata, Viktor, Steven, Jordan).
+- Filter to the gap window. Snippets only.
+
+**Asana task state changes:**
+- `mcp__asana__list_tasks` in commercial-engagements project (`1214855342290138`), modified in the gap window. State transitions only — what moved from pending → done, or got reassigned.
+
+### 5b. Gap-recovery output section
+
+If `gap_days >= 2`, the brief gets a new section near the top, between TL;DR and Today's calls:
+
+```markdown
+## Since last brief (gap: N days — DD May to DD May)
+
+### What happened (by engagement)
+
+**heineken**
+- 2026-05-23: STATUS entry on <topic>
+- 2026-05-24 Gmail: thread from Lucy re <subject>
+- 2026-05-24 Slack: Vankata DM thread about <topic>
+- Asana: task "X" moved to done
+
+**aumovio**
+- ...
+
+### What happened (atlas-side)
+- New briefs: <list>
+- NEXT_PRIORITIES updates: <one-liner>
+- Memory entries added: <list>
+
+### Calls that happened with NO STATUS update yet (digest gap)
+- DD May HH:MM — <title> — <engagement>. Transcript: present | absent. Recommend running `/post-meeting-digest` on it.
+
+### Open action items still due (from STATUS "next action" lines)
+- <engagement> — <action with owner + date>
+```
+
+After this gap-recovery section, proceed with normal per-engagement state synthesis (existing step 6).
 
 ### 6. Synthesise the brief
 
