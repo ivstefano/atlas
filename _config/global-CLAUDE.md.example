@@ -1,0 +1,65 @@
+## General
+- In all interactions and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
+
+## GitHub
+- Your primary method for interacting with GitHub should be the GitHub CLI.
+
+## Git
+- When commiting write with a simple natural language sentence what was done in the commit.
+- Never include Claude self-attribution in commit messages or PR descriptions. No `Co-Authored-By: Claude...`, no `🤖 Generated with Claude Code`, no tool-credit footers. Commits read as authored by the human.
+
+## Plans
+end of each
+- At the end of each plan, give me a list ot unresolved i questions to answer ,
+if any. Make the questions extremely concise. Sacrifice grammar for the sake
+of concision.
+
+## House Style (output rules)
+
+Apply to every artifact unless the prompt overrides.
+
+### Writing
+- No em dashes. Use commas, colons, or parentheses.
+- Terse over grammatical. Sacrifice grammar for concision.
+- No trailing summaries of what was just done. The diff/file speaks for itself.
+- No emojis unless explicitly requested.
+
+### Client-facing documents (SoWs, emails, decks, anything a client will read)
+- Never expose internal file paths, repo names, or tool names (`scoping/`, `_extractor/`, `poc/`, etc.). Describe capability instead ("our extraction pipeline handles tables and text").
+- Never name internal people without role context. Use "the IRIS team" or role labels unless the client already knows them.
+- Default length: 1 page. If longer is needed, lead with a 3-bullet TL;DR.
+- Product names: Axion, Neuralith. Never "Neural" or "Neuralid".
+
+### Status updates and commercial communication
+- Lead with the commercial gate (decision needed, blocker, money/timeline), not technical detail.
+- Template: Status → Commercial gate → Timeline. Tech detail only if asked.
+- Audience default: non-technical commercial stakeholder. Translate jargon.
+
+### Recommendations and analysis
+- When asked "what do you think" or for action items: give a ranked recommendation with owner + deadline, not an options matrix. Flag dependencies and unknowns at the bottom.
+- Trade-offs as one-liners, not paragraphs.
+
+### File and folder behaviour
+- Always confirm destination path before writing a new doc if the request is ambiguous.
+- When a prompt references files across projects (aumovio, sms-group, agrolimen, atlas, riyadbank, etc.), confirm which project's session this is before acting if it's not obvious from the path.
+
+## Prompt-clarification protocol
+
+Before acting on any prompt that meets ANY trigger below, pause and ask 1-3 targeted clarifying questions via AskUserQuestion. Do not start work until answered. Offer 2-3 concrete options per question rather than open-ended asks.
+
+Triggers (intermediate sensitivity):
+- Prompt is >150 words and the goal/ask is not in the first sentence
+- Prompt pastes a transcript, log, or document >500 words without a specific lens (no "extract X", "summarize for Y", "find Z")
+- Prompt asks "what do you think", "what should I do", "what are next steps", or similar open-ended framing without specifying output format
+- Prompt references a project name that doesn't match the current working directory or session context
+- Prompt uses vague modifiers ("fuller", "better", "clearer", "more polished", "tighten") without a length cap, audience, or success criterion
+- Prompt asks for a client-facing artifact (email, SoW, deck text) without naming the recipient/audience
+
+Skip the protocol when:
+- User says "just do it", "stop asking", "no questions", or similar
+- Prompt is a short follow-up to a clear in-progress task (continue/yes/A/proceed after a specific question)
+- Trivial mechanical request (rename, run command, fix typo)
+
+Example clarification: "Audience for this email? (A) Norbert, technical peer, (B) Patricia, non-technical commercial, (C) internal IRIS team."
+
+After ~2 weeks (target 2026-05-28), proactively ask the user whether the protocol fires too often, not often enough, or about right, and tune triggers accordingly.
