@@ -14,9 +14,10 @@ This repo is Ivo's operations layer: daily briefs, session logs, MCP wiring, mig
 
 - **briefs/** — daily prep briefs (`YYYY-MM-DD.md`) and call briefs (`YYYY-MM-DD_<topic>.md`). Committed.
 - **SESSION_LOG.md** — narrative log of multi-day sessions, newest section appended.
-- **_live/** — in-flight working state (call notes during meetings, scratch).
 - **_iris_people.md** — name ↔ nickname ↔ role decoder for transcripts.
-- **_migration_protocol.md**, **_digest_protocol.md**, **_gmail_digest_protocol.md** — reusable procedures.
+- **_migration_protocol.md**, **_digest_protocol.md**, **_gmail_digest_protocol.md**, **_hubspot_mcp_setup.md** — reusable procedures.
+- **.claude/scripts/** — automation primitives: `tactiq_pull.py`, `tactiq_watch.py`, `tactiq_client.py`, `post_meeting_digest.py`, `gap_scan.py`.
+- **.claude/skills/** + **.claude/commands/** — project-scoped skills and slash commands: `/tactiq-pull`, `/post-meeting-digest`, `/morning-brief`, `/new-engagement`, `/brief`.
 
 ## Memory
 

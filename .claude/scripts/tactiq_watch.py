@@ -20,6 +20,7 @@ import tactiq_client as tc  # noqa: E402
 
 ATLAS_ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 LIVE_DIR = os.path.join(ATLAS_ROOT, "_live")
+# Note: _live/ is gitignored. If it doesn't exist, this script creates it on first run.
 FULL_PATH = os.path.join(LIVE_DIR, "transcript.txt")
 NEW_PATH = os.path.join(LIVE_DIR, "new_blocks.txt")
 COUNT_PATH = os.path.join(LIVE_DIR, ".last_count")
