@@ -1,0 +1,17 @@
+# STATE: sms-group
+
+_Working memory for this task. Auto-written on session end/compact. Read on session start.
+This is NOT the client-facing STATUS.md._
+
+last_session: (not yet captured)
+last_tab: A: sms-group
+
+## Now
+No working session captured yet. See engagements/sms-group/STATUS.md for client-facing project state.
+
+## Next action
+(will be written on first session flush)
+
+## Open threads
+
+## Don't re-explain

@@ -19,3 +19,6 @@ Neuralith Design System/
 # python
 __pycache__/
 *.pyc
+
+# state system: keep STATE files (portable), ignore runtime log
+_state/.flush.log
