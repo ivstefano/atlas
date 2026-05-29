@@ -51,6 +51,23 @@ Then:
 4. Set `Type:` in `CONTEXT.md` to the answer from Q3.
 5. Remove `.DS_Store` from the copied folder.
 
+## Step 3.5 — Drive folder + symlink
+
+The Drive shared org folder is mounted at:
+`/Users/iris/Library/CloudStorage/GoogleDrive-ivo@iris.ai/.shortcut-targets-by-id/0B1Dd1wWV_2fRLXFaV2ppdTBqMzA/Iris.ai - Everyone/Commercial/POC/Scoping Exercises/`
+
+Convention (from deutschebahn, heineken, fresenius-sqr): each engagement stage that has a Drive presence gets a `data/` symlink pointing to its Drive subfolder.
+
+Steps:
+1. Determine the Drive folder name — use the display name (e.g. "Acme Logistics"), check if a folder already exists under `Scoping Exercises/`. If it does, use it. If not, create it: `mkdir -p "<DRIVE_BASE>/<DisplayName>"`.
+2. Create the symlink for the initial stage (usually `1_pre-scoping`):
+   ```bash
+   ln -s "<DRIVE_BASE>/<DisplayName>" engagements/<dest>/<slug>/1_pre-scoping/data
+   ```
+3. If the Drive mount is not available (path doesn't exist), skip silently and note it in the Step 7 report — do NOT fail the scaffold.
+
+Note: do NOT create a real `data/` directory before the symlink — that was the bug from fresenius-sqr (mkdir ran before ln -s, making it a real dir). Always symlink directly.
+
 ## Step 4 — register alias
 
 Append entry to `engagements/_aliases.yaml`. Insert alphabetically among active engagements (not in the `_internal:` or tombstone sections at the bottom). Format:
@@ -93,6 +110,7 @@ Scaffolded: engagements/<dest>/<slug>/
   Stage: <stage>  Type: <type>  Lead: <lead source>
   CONTEXT.md, STATUS.md, COMMERCIAL.md, SOURCES.md, ARTEFACTS.md, _briefs/, 1_pre-scoping/ all seeded
   _aliases.yaml entry added (domains: <list or "empty — fill after first call">)
+  Drive: <"1_pre-scoping/data/ → Scoping Exercises/<DisplayName>/ (symlinked)" or "Drive mount unavailable — symlink skipped, do manually">
 
 Asana: section NOT auto-created (manual: project 1214855342290138, add section "<Display Name>")
 HubSpot: not wired yet — Jordan creates the deal there
