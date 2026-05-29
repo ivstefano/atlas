@@ -6,8 +6,8 @@ _All tasks with durable working memory. Newest activity first. Open `_state/<tas
 |---|---|---|---|
 | 2026-05-29T11:10 | **operations** | A: Operations | Live-test a real tab kill/resume: from an engagement folder, end a session, conf |
 | 2026-05-28T11:17 | **aumovio** | A: Aumovio | Run overlay.yaml reconciliation against Phil's GT once remaining GT lands; resol |
-| 2026-05-15T00:00 | **deutschebahn** | A: Demo | Follow-up Mon 15 Jun. Jordan's proposal due mid-June (Jordan owns commercial; do |
-| (not yet captured) | **spie** | A: spie | (will be written on first session flush) |
-| (not yet captured) | **sms-group** | A: sms-group | (will be written on first session flush) |
-| (not yet captured) | **garrett** | A: garrett | (will be written on first session flush) |
-| (not yet captured) | **fresenius-sqr** | A: fresenius-sqr | (will be written on first session flush) |
+| 2026-05-28T00:00 | **fresenius-sqr** | A: fresenius-sqr | Send follow-up email with data request by EOD 2026-05-29: input docs needed (3.2 |
+| 2026-05-26T00:00 | **demo** | A: Demo | Produce 3 demo videos by Fri 5 Jun for the June 8 London summit (Ada streams on  |
+| 2026-05-22T00:00 | **spie** | A: spie | Prep the 29 May 17:00 BG Teams call: concrete pilot scope + price options, inclu |
+| 2026-05-21T00:00 | **garrett** | A: garrett | Deliver the click-through demo (Liviu accepted this format) by Fri 29 May, for A |
+| 2026-05-20T00:00 | **sms-group** | A: sms-group | Before Gerald's end-of-May holiday: lead-author the Stage 2 scope + commercial p |

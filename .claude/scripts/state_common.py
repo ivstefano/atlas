@@ -29,8 +29,12 @@ def resolve_task(cwd: str) -> str:
     try:
         rel = p.relative_to(ENGAGEMENTS)
         parts = rel.parts
-        if parts and not parts[0].startswith("_"):
-            return parts[0]
+        if parts:
+            # Special-cased _-prefixed paths get their own task.
+            if parts[:2] == ("_internal", "marketing-demos"):
+                return "demo"
+            if not parts[0].startswith("_"):
+                return parts[0]
     except ValueError:
         pass
     return "operations"
