@@ -3,17 +3,17 @@
 _Working memory for this task. Auto-written on session end/compact. Read on session start.
 This is NOT the client-facing STATUS.md._
 
-last_session: 2026-05-28T11:17
-last_tab: A: Aumovio
+last_session: 2026-05-31T (board catch-up, via Slack)
+last_tab: A: Operations
 
 ## Now
-100/100 corpus OCR'd + extracted. Reference + corpus predictions merged into unified dataset, exported to Phil's V4 template (100-doc, three sections). CJK text sanitized in export. 83 docs Opus-judged (27 High / 52 Med / 1 Low).
+100/100 corpus reviewed + hand-fixed for correct flagging, SENT to Norbert + Phil 28 May (two files: combined extractions from the PoC + latest-results-only). Viktor agreed (Tue 26 May, w/ Petar) to SHOW Bedrock + Opus results for now, improve Qwen results in Full Implementation later. Petar happy with the results. Vankata flag (28 May): Aumovio is NEARING acceptance criteria — need to alert Jordan + Steven and start prepping for acceptance.
 
 ## Next action
-Run overlay.yaml reconciliation against Phil's GT once remaining GT lands; resolve the 7 known Phil-GT quirks via the overlay rather than editing predictions.
+Two live threads: (1) flag to Jordan + Steven that Aumovio nears acceptance criteria, start acceptance prep (Vankata's ask). (2) Run overlay.yaml reconciliation against Phil's GT once remaining GT lands; resolve the 7 known Phil-GT quirks via overlay, not by editing predictions.
 
 ## Open threads
-- Convergence pitch: port my prompts INTO Martin's deployment shell (my pipeline 99.6% F1 vs Martin's 62.7% on same docs). Blocked on Viktor, who pushed Alex toward Martin's.
+- Convergence pitch: port my prompts INTO Martin's deployment shell (my pipeline 99.6% F1 vs Martin's 62.7% on same docs). Blocked on Viktor, who pushed Alex toward Martin's. Note: Viktor's "Bedrock+Opus now, Qwen later" call partly sidesteps this for the deliverable.
 - 16 corrupt docs re-OCR'd 2026-05-28, may need re-judge.
 - 2 service contracts correctly 0-row, keep flagged so they aren't treated as misses.
 

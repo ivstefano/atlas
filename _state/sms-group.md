@@ -3,8 +3,11 @@
 _Working memory for this task. Auto-written on session end/compact. Read on session start.
 This is NOT the client-facing STATUS.md._
 
-last_session: 2026-05-20T00:00
-last_tab: A: sms-group
+last_session: 2026-05-31T (board catch-up)
+last_tab: A: Operations
+
+## ⚠️ Deadline reached
+End-of-May = now (2026-05-31). The Stage 2 scope + commercial proposal was to be authored before Gerald's end-of-May holiday. No file activity in sms-group/ since 20 May and no new email/calendar — likely NOT yet drafted. This is the most overdue item on the board. Confirm status before the next SMS touchpoint.
 
 ## Now
 PoC closed, moving to expansion-scoping. 20 May Gerald+Matthias presentation went well: substantive yes on the staircase, operationally deferred to end of July. Gerald endorsed value categories + 90-95% reliability target; Matthias bought into Stage 3 use cases; Thorsten championed. No commercial commitment in the room.

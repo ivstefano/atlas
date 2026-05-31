@@ -3,17 +3,17 @@
 _Working memory for this task. Auto-written on session end/compact. Read on session start.
 This is NOT the client-facing STATUS.md._
 
-last_session: 2026-05-28T00:00
-last_tab: A: fresenius-sqr
+last_session: 2026-05-31T (board catch-up)
+last_tab: A: Operations
 
 ## Now
-Scoping the multi-use-case SQR rollout (separate from the old fresenius/ literature engagement). 28 May CMC scoping call done (Sanja Matern + Sathya Upendran; Gerome on PTO). Use case: AI-enabled CMC regulatory intelligence - fragmented Module 3 source docs to structured eCTD-compliant Module 2/3 dossiers. Manual authoring is 3-6 months/submission today.
+Scoping the multi-use-case SQR rollout (separate from the old fresenius/ literature engagement). 28 May CMC scoping call done. Data-request email SENT 29 May 10:31 ("CMC Scoping: Data request and next steps", to Sathya/Sanja/Gerome, cc Jordan/Vankata). Ivo's action is DONE; ball is now in Fresenius's court. Use case: AI-enabled CMC regulatory intelligence - fragmented Module 3 source docs to structured eCTD-compliant Module 2/3 dossiers. Manual authoring is 3-6 months/submission today.
 
 ## Next action
-Send follow-up email with data request by EOD 2026-05-29: input docs needed (3.2.P section, batch records, spec validation reports), one historical submission package as output reference, plus questions. Owner: Ivo.
+Prep the Tue 2 Jun 17:00 CET (18:00 BG) CMC call (Sathya + Sanja, 1hr Teams). Chase whether sample docs arrived; if not, that's the agenda. Owner: Ivo.
 
 ## Open threads
-- Blocked on Sathya providing sample input docs + historical output reference. He's under FDA bombardment (60 queries due Tue), low bandwidth.
+- Blocked on Sathya providing sample input docs + historical output reference. He's under FDA bombardment (60 queries due Tue), low bandwidth — docs may slip.
 - Second workstream: Gregor Felsner complaint-coding scoping call Wed 3 Jun 16:00 BG.
 - Next CMC call Tue 2 Jun 17:00 CET (18:00 BG) Teams, 1hr, Sathya + Sanja.
 - PoC target = 3.2.P (drug product, Fresenius-owned). 3.2.S (drug substance) partly restricted (manufacturer DMF goes direct to FDA), Fresenius lacks full source there.

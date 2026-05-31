@@ -12,6 +12,12 @@ Built durable per-task working-memory system. STATE.md per task in atlas/_state/
 ## Next action
 Live-test a real tab kill/resume: from an engagement folder, end a session, confirm flush writes STATE, kill terminal, relaunch, confirm SessionStart injects it.
 
+## Cross-engagement (from Slack sweep 2026-05-31, week of 23-29 May)
+- **Heineken**: presentation is ~Tue 2 Jun. Jordan flagged Mon 1 Jun = "aggressive sprint, only day before". Steven asked Ivo (DM 29 May) for the showcase as a previewable link + whether NDA blocks showing Heineken's own docs (Ivo: likely yes per Liana → use other form docs in same format). PENDING: send Steven the previewable link. Jordan's V1 Heineken deck + a generalized consulting-template deck are the reusable basis for future client decks.
+- **Teams transcript blocker**: HubSpot ↔ MS Teams org-wide rollout NOT enabled (needs Teams admin, not HubSpot admin). Cost ~1-2 days reconstructing lost Heineken transcripts. Asked Viktor/Ivan Georgiev 27 May to enable. Bites Fresenius + T&F too (both Teams-first). Workaround: Tactiq via Teams browser version. CHECK if enabled yet.
+- **Aumovio acceptance**: Vankata wants Jordan + Steven alerted that Aumovio nears acceptance criteria. (tracked in aumovio STATE)
+- **Brand guide**: Ada published official Iris.ai brand guide 29 May (#general) — source of truth for client-facing material, new Slides/doc templates. "Iris.ai" always lowercase-with-dot. Use for any future deck/proposal.
+
 ## Open threads
 - Haiku flush can fabricate facts in "Don't re-explain"; carry-forward compounds slop. Mitigation: keep hand-seeded baselines truthful; periodically prune STATE files.
 - Decide whether to commit _state/ or gitignore it (personal working memory, churns every session).

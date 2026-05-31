@@ -4,10 +4,10 @@ _All tasks with durable working memory. Newest activity first. Open `_state/<tas
 
 | Last session | Task | Tab | Next action |
 |---|---|---|---|
+| 2026-05-31T (board catch-up, via Slack) | **aumovio** | A: Operations | Two live threads: (1) flag to Jordan + Steven that Aumovio nears acceptance crit |
+| 2026-05-31T (board catch-up) | **spie** | A: Operations | Prep the Wed 3 Jun 17:00 BG call: concrete pilot scope + price options, includin |
+| 2026-05-31T (board catch-up) | **sms-group** | A: Operations | Before Gerald's end-of-May holiday: lead-author the Stage 2 scope + commercial p |
+| 2026-05-31T (board catch-up) | **garrett** | A: Operations | Prep the Tue 2 Jun 12:00 CET (13:00 BG) call with Liviu + Baala. Resolve price a |
+| 2026-05-31T (board catch-up) | **fresenius-sqr** | A: Operations | Prep the Tue 2 Jun 17:00 CET (18:00 BG) CMC call (Sathya + Sanja, 1hr Teams). Ch |
 | 2026-05-29T11:10 | **operations** | A: Operations | Live-test a real tab kill/resume: from an engagement folder, end a session, conf |
-| 2026-05-28T11:17 | **aumovio** | A: Aumovio | Run overlay.yaml reconciliation against Phil's GT once remaining GT lands; resol |
-| 2026-05-28T00:00 | **fresenius-sqr** | A: fresenius-sqr | Send follow-up email with data request by EOD 2026-05-29: input docs needed (3.2 |
 | 2026-05-26T00:00 | **demo** | A: Demo | Produce 3 demo videos by Fri 5 Jun for the June 8 London summit (Ada streams on  |
-| 2026-05-22T00:00 | **spie** | A: spie | Prep the 29 May 17:00 BG Teams call: concrete pilot scope + price options, inclu |
-| 2026-05-21T00:00 | **garrett** | A: garrett | Deliver the click-through demo (Liviu accepted this format) by Fri 29 May, for A |
-| 2026-05-20T00:00 | **sms-group** | A: sms-group | Before Gerald's end-of-May holiday: lead-author the Stage 2 scope + commercial p |
