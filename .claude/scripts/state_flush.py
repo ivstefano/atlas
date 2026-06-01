@@ -97,6 +97,11 @@ last_tab: {tab}
 ## Don't re-explain
 <durable facts: hosts, IDs, file paths, conventions; carry prior forward and add new>
 
+Each "Don't re-explain" bullet starts with a confidence marker "(cN)", e.g. \
+"- (c3) fact...". Rules: keep the existing marker on any fact you carry forward; \
+give brand-new facts "(c1)". Do NOT renumber or do math on the markers, a separate \
+pass recomputes them. Just preserve old markers and tag new facts c1.
+
 Terse. Sacrifice grammar for concision. No em dashes.
 CRITICAL: only record facts explicitly present in the prior STATE or the session \
 log. Do NOT invent hosts, env vars, file paths, command flags, or task names. If a \
@@ -130,6 +135,122 @@ def run_haiku(prompt: str) -> str:
     except Exception as e:
         log(f"haiku exc {e}")
         return ""
+
+
+# ---------------------------------------------------------------------------
+# Confidence decay on "Don't re-explain" facts.
+#
+# Each bullet carries a "(cN)" marker = sessions survived. Haiku is asked to
+# preserve old markers and tag new facts c1, but Haiku miscounts and reworded
+# facts drift, so we recompute deterministically here:
+#   - fuzzy-match each current bullet against the prior session's bullets
+#   - matched (reinforced) -> prior count + 1 ; unmatched (new) -> c1
+#   - sort high->low so a fresh session sees most-established facts first
+#
+# Pruning (dropping low-confidence unreinforced facts) is gated behind
+# PRUNE_ENABLED. During the trial it stays False: facts only age, nothing is
+# deleted, so we can watch whether the (cN) numbers track reality before
+# trusting them to remove anything.
+# ---------------------------------------------------------------------------
+import re
+from difflib import SequenceMatcher
+
+PRUNE_ENABLED = False   # trial: never auto-delete, only age. Flip on after review.
+PRUNE_FLOOR = 2         # prune a fact only if c < FLOOR *and* unreinforced this session
+FUZZY_THRESHOLD = 0.6   # bullet-text similarity to count as "the same fact"
+
+_MARKER = re.compile(r"^\s*-\s*\(c(\d+)\)\s*(.*)$")
+_PLAIN = re.compile(r"^\s*-\s*(.*)$")
+
+
+def _parse_dre(block: str):
+    """Parse a 'Don't re-explain' block into [(count, text)]. Missing marker -> c1."""
+    out = []
+    for ln in block.splitlines():
+        if not ln.strip().startswith("-"):
+            continue
+        m = _MARKER.match(ln)
+        if m:
+            out.append((int(m.group(1)), m.group(2).strip()))
+        else:
+            p = _PLAIN.match(ln)
+            if p and p.group(1).strip():
+                out.append((1, p.group(1).strip()))
+    return out
+
+
+def _extract_dre(state_text: str) -> str:
+    """Return the raw text under '## Don't re-explain' up to the next heading."""
+    lines = state_text.splitlines()
+    grab, buf = False, []
+    for ln in lines:
+        if ln.strip().startswith("## Don't re-explain"):
+            grab = True
+            continue
+        if grab and ln.strip().startswith("##"):
+            break
+        if grab:
+            buf.append(ln)
+    return "\n".join(buf)
+
+
+def reconcile_dre(prior_text: str, current_text: str):
+    """Recompute (cN) markers for the current block against the prior one.
+
+    Pure function (no I/O) so it can be unit-tested without Haiku.
+    Returns (rendered_block_str, stats_dict).
+    """
+    prior = _parse_dre(_extract_dre(prior_text))
+    current = _parse_dre(_extract_dre(current_text))
+
+    reconciled = []   # (count, text, reinforced)
+    used = [False] * len(prior)
+    for _, text in current:
+        best_i, best_r = -1, 0.0
+        for i, (_, ptext) in enumerate(prior):
+            if used[i]:
+                continue
+            r = SequenceMatcher(None, text.lower(), ptext.lower()).ratio()
+            if r > best_r:
+                best_i, best_r = i, r
+        if best_i >= 0 and best_r >= FUZZY_THRESHOLD:
+            used[best_i] = True
+            reconciled.append((prior[best_i][0] + 1, text, True))
+        else:
+            reconciled.append((1, text, False))
+
+    if PRUNE_ENABLED:
+        reconciled = [r for r in reconciled if not (r[0] < PRUNE_FLOOR and not r[2])]
+
+    reconciled.sort(key=lambda r: r[0], reverse=True)
+    rendered = "\n".join(f"- (c{c}) {t}" for c, t, _ in reconciled)
+    stats = {
+        "facts": len(reconciled),
+        "reinforced": sum(1 for r in reconciled if r[2]),
+        "new": sum(1 for r in reconciled if not r[2]),
+        "pruned": (len(current) - len(reconciled)) if PRUNE_ENABLED else 0,
+        "max_c": max((r[0] for r in reconciled), default=0),
+    }
+    return rendered, stats
+
+
+def apply_decay(prior_text: str, current_text: str):
+    """Splice a reconciled 'Don't re-explain' block back into current STATE text."""
+    rendered, stats = reconcile_dre(prior_text, current_text)
+    lines = current_text.splitlines()
+    start = end = None
+    for i, ln in enumerate(lines):
+        if ln.strip().startswith("## Don't re-explain"):
+            start = i
+        elif start is not None and i > start and ln.strip().startswith("##"):
+            end = i
+            break
+    if start is None:
+        return current_text, stats  # no section, nothing to do
+    if end is None:
+        end = len(lines)
+    new_lines = lines[:start + 1] + [rendered] + lines[end:]
+    return "\n".join(new_lines), stats
 
 
 def refresh_index() -> None:
@@ -195,6 +316,11 @@ def main() -> None:
     if not result or "## Now" not in result:
         log(f"{task}: haiku gave nothing usable")
         return
+    try:
+        result, stats = apply_decay(current, result)
+        log(f"{task}: decay {stats}")
+    except Exception as e:
+        log(f"{task}: decay skipped ({e})")  # never let decay break the flush
     sp.write_text(result.rstrip() + "\n")
     refresh_index()
     log(f"{task}: flushed ok")
