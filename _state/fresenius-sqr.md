@@ -3,25 +3,39 @@
 _Working memory for this task. Auto-written on session end/compact. Read on session start.
 This is NOT the client-facing STATUS.md._
 
-last_session: 2026-05-31T (board catch-up)
+last_session: 2026-06-10T (working-group call done, post-call email sent to Sathya)
 last_tab: A: Operations
 
 ## Now
-Scoping the multi-use-case SQR rollout (separate from the old fresenius/ literature engagement). 28 May CMC scoping call done. Data-request email SENT 29 May 10:31 ("CMC Scoping: Data request and next steps", to Sathya/Sanja/Gerome, cc Jordan/Vankata). Ivo's action is DONE; ball is now in Fresenius's court. Use case: AI-enabled CMC regulatory intelligence - fragmented Module 3 source docs to structured eCTD-compliant Module 2/3 dossiers. Manual authoring is 3-6 months/submission today.
+Scoping the CMC/regulatory-submissions workstream (separate from old fresenius/ literature engagement, and from fresenius-complaint-coding). STILL SCOPING — no PoC contracted.
+- 28 May + 2 Jun scoping calls done. 5 files uploaded 5 Jun, extracted 9 Jun.
+- **10 Jun working-group call done (53 min).** Resolved the input/output confusion: output = finished FDA-filed sections; input = batch records (+ 3.2.S). The 5 files are all output; 3.2.R.1.P is the raw data feeding 3.2.P.5.4 (verified — exhibit batches trace R→P.5.4, one working input→output pair already in hand). 3.2.P.1 ← 3.2.S (not yet received). 3.2.P.2 input source never named (open gap). Pilot = rebuild 3.2.P from inputs, match filed versions as answer key.
+- **Post-call email SENT** to Sathya (cc Sanja/Jordan/Vankata): secure link + data-model read to confirm + 2 asks (3.2.S, process note) + 2 consistency findings (particle-count swap on 25LG00004; E3LB141 lot reuse).
+- Governance set: weekly working session **Wed 09:00 ET (15:00 BG)** from next week; SteerCo monthly **45 min, first week of July**.
 
 ## Next action
-Prep the Tue 2 Jun 17:00 CET (18:00 BG) CMC call (Sathya + Sanja, 1hr Teams). Chase whether sample docs arrived; if not, that's the agenda. Owner: Ivo.
+Wait for Sathya's 3.2.S + process note (this week, via secure link). Once 3.2.S lands: build 3.2.P.1 from it, match to filed version. Attend Wed working session. Owner: Ivo + Vankata (technical) / Jordan (commercial). Sanja owes 3 SteerCo slots for July → Jordan.
+
+## What the 5 files are (don't re-derive)
+All FINISHED authored dossier sections for ONE simple product: Cienby (trisodium citrate dihydrate, 3-ingredient salt-water infusion). Clean digital PDFs, ~16pp. Sections: 3.2.P.1, 3.2.P.2 (partial), 3.2.P.5.1, 3.2.P.5.4, 3.2.R.1.P.
+- They're INPUTS to us but OUTPUTS of Fresenius's authoring process. We have NOT seen the raw feedstock (executed batch records, CoAs, validation reports).
+- Coverage: ~15% of one product's Module 3 by structure, ~5-10% by extraction value. Enough to scope the mechanism, not the scale.
+- Maps to Sanja's criteria: #2 (cardinal errors) + #3 (FDA queries) demonstrated via consistency check; #1 (drafting time) NOT yet provable — needs raw input side.
 
 ## Open threads
-- Blocked on Sathya providing sample input docs + historical output reference. He's under FDA bombardment (60 queries due Tue), low bandwidth — docs may slip.
-- Second workstream: Gregor Felsner complaint-coding scoping call Wed 3 Jun 16:00 BG.
-- Next CMC call Tue 2 Jun 17:00 CET (18:00 BG) Teams, 1hr, Sathya + Sanja.
-- PoC target = 3.2.P (drug product, Fresenius-owned). 3.2.S (drug substance) partly restricted (manufacturer DMF goes direct to FDA), Fresenius lacks full source there.
-- External PoC must clear Fresenius AI governance process.
+- 2 consistency findings sent to Sathya for confirm: particle-count row swap (25LG00004: 1/0 in P.5.4 vs 0/1 in 3.2.R); E3LB141 reuses lot AM1899866 across Merck/Fresenius columns (we read as re-test, not error).
+- 3.2.P.2 input source never named — likely development/formulation studies, NOT in any file we have. Ask in the process note.
+- Clinical batch E3LB141 results in P.5.4 come from attached CoAs (E3LB141 FP CoA + API CoA) we don't have — only exhibit batches fully trace. Detail for working session, not blocking.
+- Benchmark: Vankata floated 5 pairs then 20-50; Sathya not committed past this one product. Revisit after first build works.
+- "Raw scanned/handwritten batch record" ask is MOOT — Sathya confirmed no separate raw artifact (was handwritten historically, now automated; what we have IS the data).
+- Sanja owes 3 SteerCo slots for early-July. Steering committee names/emails still owed by Sathya.
+- External PoC must clear Fresenius AI governance.
 
 ## Don't re-explain
-- HubSpot deal "Fresenius Medical Care - SQR Multi-Use-Case Implementation", 300K, close 2026-09-30. Prior Axion POC (50K) closed-won 2026-04-23, history in engagements/fresenius/.
-- Sanja Matern coordinates; Sathya Upendran = SME; Gerome Fischer = champion but not day-to-day engaged.
+- HubSpot deal "Fresenius Medical Care - SQR Multi-Use-Case Implementation", €300K, close 2026-09-30. Prior Axion POC (€50K) closed-won 2026-04-23, history in engagements/fresenius/.
+- Sanja Matern coordinates + reviewer view + owns medical-device parallel; Sathya Upendran = SME + data owner; Gerome Fischer = champion/anchor, not day-to-day.
 - Success criteria (Sanja): 10% reduction in draft-creation time; <5 cardinal errors per human review; 25% fewer FDA deficiency queries in production.
-- Start narrow: Sathya suggested 3.2.P.5.1 specs + batch records starter; Sanja wants 5-10 representative doc types incl. complex scans.
-- North Star: faster time to market via faster, higher-quality submissions. Jordan owns commercial.
+- Use case: fragmented Module 3 source docs → structured eCTD-compliant Module 2/3 dossiers. Manual authoring 3-6 months/submission today. North Star: faster time to market via faster, higher-quality submissions. PoC target = 3.2.P (Fresenius-owned).
+- No ontology defined yet — the JSON is an ad-hoc first sketch, not an agreed CMC ontology. Defining the ontology is the real (chargeable, T&F-style) work.
+- Secure data transfer: Vankata generates Neuralith upload link (24-48hr), SA-only access, deleted post-PoC.
+- Jordan owns commercial + cadence. Vankata leads technical.
