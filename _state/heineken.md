@@ -3,16 +3,20 @@
 _Working memory for this task. Auto-written on session end/compact. Read on session start.
 This is NOT the client-facing STATUS.md._
 
-last_session: 2026-06-10T (internal proposal/pricing meeting, summarized from transcript)
+last_session: 2026-06-12T (filed 11 Jun demo transcript, updated STATUS/SOURCES)
 last_tab: A: Operations
 
 ## Now
-Client call with Lucy was on the calendar today 11:00-11:45 BG (Teams) but did NOT happen. Today's slot was only with Justyna, Lucy not expected. **Real client call is tomorrow 11 Jun** with Lucy. Vankata sends the proposal this evening; team reviews tomorrow morning before presenting.
+**11 Jun demo to global-analytics happened** (Lucy + Justyna + Nicholas Simigiannis + Simona Horodincu; Jordan + Vankata + Ivo + Viktor; 57 min). Champion-expansion call: Lucy brought two new senior stakeholders (Nicholas = head of decision intelligence / global analytics; Simona = mgr augmented analytics, Nick's team) to see the build. Ivo demoed chatbot (the 5-rung arc), Vankata demoed platform (context/ontology + 30-metric eval). Warm tone, no kill signals. PoC considered validated by Lucy. Filed: `4_poc/transcripts/2026-06-11_Demo_Irisai_-_Pilot_DT_Support_Functions.txt` (Tactiq KXKbckynDnlC5zQXLtA5). Summarized into STATUS + SOURCES this session.
 
-10 Jun internal meeting (Vankata, Victor, Jordan, Ivan Georgiev, Steven; 2.5hr) ran two threads: (1) the Heineken proposal, (2) a company-wide pricing-model debate. Transcript: "Heineken Internal Discussion - Proposal" 10 Jun. Not yet filed to engagement transcripts/.
+**Production gate has shifted: it's price + IT/vendor access, not conviction.** Lucy asked the two production questions — integration investment + annual run cost — and confirmed prod needs real integrations (data changes multiple times/day, manual-snapshot mode won't do).
 
 ## Next action
-Tomorrow 11 Jun pre-call: review Vankata's proposal (lands tonight) before the Lucy call. Owner: Vankata (proposal + numbers); Jordan + Vankata commercial-lead the client call. Ivo support. This is Jordan/Vankata commercial turf - flag, don't act.
+Watch for: (1) IRIS proposal email to Lucy (integration range + run cost) — owner Vankata. (2) Jordan emails next-checkpoint proposal, attendees Lucy + Justyna — owner Jordan. (3) Lucy debriefs Nicholas privately → he reverts to Jordan on sandbox-access. (4) IT/vendor-access intro to firm up integration number — owner Lucy. All Jordan/Vankata commercial turf - flag, don't act. Ivo support.
+
+## New stakeholders to watch (11 Jun)
+- **Nicholas Simigiannis** — head of decision intelligence, global analytics. Sharp architectural questions (semantic model, structured/unstructured, rules inferred-vs-provided, drag-drop-vs-code config). Could be scaling sponsor OR the build-it-ourselves risk (Agrolimen pattern). His private debrief w/ Lucy = next real signal. Asked for hands-on access; Jordan steered to guided onboarding first (PoC is a minimal extracted subset).
+- **Simona Horodincu** — mgr augmented analytics & insights, Nick's team; driving Heineken's BI→decision-intelligence shift. Probed OpCo harmonisation, data-marketplace framing, end-user traceability/trust.
 
 ## Heineken proposal as agreed 10 Jun (for tomorrow's Lucy pitch)
 - **What Lucy asked:** host current MVP as-is, no new dev, connect to live data, ~10-15 users. Budget-sensitive; her latest email reads as "what does this cost to exist" (contradicts earlier "no budget"). Steven + Vankata both now read it that way.

@@ -193,8 +193,8 @@ def render_with_header(header, body):
 
 def extract_meeting_id(arg):
     """Accept either a raw meeting ID or a Tactiq URL."""
-    # URLs look like https://app.tactiq.io/meeting/<id> or similar
-    m = re.search(r"meeting/([A-Za-z0-9]+)", arg)
+    # URLs look like https://app.tactiq.io/meeting/<id> or /transcripts/<id>
+    m = re.search(r"(?:meeting|transcripts)/([A-Za-z0-9]+)", arg)
     if m:
         return m.group(1)
     return arg.strip()
