@@ -1,4 +1,4 @@
-# atlas — operating instructions for Claude / Kiro
+@# atlas — operating instructions for Claude / Kiro
 
 This repo is Ivo's operations layer: daily briefs, session logs, MCP wiring, migration protocols, automation strategy. It does NOT hold engagement content — engagements live in `~/Documents/engagements/` (separate repo).
 
@@ -32,7 +32,7 @@ Each terminal tab is an isolated Claude session that dies on terminal close. To 
 
 ## Memory
 
-Persistent memory lives at `~/.claude/projects/-Users-iris-Documents-atlas/memory/`. Index in `MEMORY.md` loaded each session. See that file for the catalog. Details on portability across machines / Claude accounts: [_config/memory.md](_config/memory.md).
+Persistent memory lives at `~/.claude/projects/-Users-iris-Documents-atlas/memory/`. Two-tier, like briefs: `MEMORY.md` is the **active** index (evergreen rules + work touched ~last 3 weeks), loaded each session. `MEMORY_ARCHIVE.md` holds dormant/closed/absorbed memories, NOT loaded each session — the full `.md` files stay on disk so `[[links]]` resolve. **Lookup order if a fact isn't in MEMORY.md: grep MEMORY_ARCHIVE.md, then the `.md` files in the memory dir, before concluding it doesn't exist.** When a memory goes dormant, move its line from MEMORY.md to MEMORY_ARCHIVE.md; reactivate by moving it back. Portability across machines / Claude accounts: [_config/memory.md](_config/memory.md).
 
 ## Workstation rebuild (new machine or new Claude account)
 
