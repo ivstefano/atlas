@@ -3,21 +3,24 @@
 _Working memory for this task. Auto-written on session end/compact. Read on session start.
 This is NOT the client-facing STATUS.md._
 
-last_session: 2026-06-03T (first scoping call, live-copilot)
+last_session: 2026-06-12T (second scoping session, live-copilot)
 last_tab: A: Operations
 
 ## Now
-First scoping call done 3 Jun (Gregor / Beth / Brian / Mark). Use case = AI verifies complaint codes match the narrative, flags mismatches with reasoning, human decides. Own engagement, split out of fresenius-cmc 2026-06-04 (different stakeholders + use case from the CMC pilot, which stays in fresenius-cmc). Full detail in this engagement's STATUS.md 2026-06-03 entry.
+Second scoping session done 12 Jun. THREE deliverables locked (Mark): (1) narrative→code alignment at intake (right area + right specific code), (2) reportability conditions at intake, (3) investigation→coding alignment late-stage (consistency across products/sites/over-time). Gregor unified it as ONE early-stage correctness check, not separate products. POC reframed by Vankata: NOT extraction — phase 1 = define ontology FROM examples ("data retrospection agent") → SME-review → phase 2 = classify + spot-check mismatches → produces the error-rate baseline FME can't get manually. Deployment = batch export from CHS → IRIS → dashboard (no live integration; FME lockdowns). Full detail STATUS.md 2026-06-12 + 1_pre-scoping/2026-06-12_pilot-scope-wip.md.
 
 ## Next action
-Wait for Jordan to book next session (week of 9 Jun, same slot ~09:00-10:00 ET; Jordan at London Tech Week then Viva Tech). Deliverables + IQVIA data request agreed there, NOT before. NO email owed: Jordan parked the data ask to next session. If accelerating, flag the IQVIA-sample idea to Jordan internally; do not email the client. Owner: Jordan (invite); Ivo prep.
+Send FME the data request (3 artifacts, Vankata's list): (1) input→output pairs — narrative + assigned codes, ~100 records; (2) codes/ontology doc (Brian has it); (3) issue/remediation reports (reviewer write-ups = documented known-errors / recall benchmark). Ask de-identification path + owner + date. Likely puller: Brian; release authority: Gregor. Owner: Ivo/Jordan. Also: schedule recurring SteerCo+project-group; identify "Jerome/Gerome".
 
 ## Open threads
-- Open Qs for next session: code taxonomy size + fixed list? are reviewer corrections captured (original vs corrected) or overwritten? can Brian pull 30-50 IQVIA complaints (narrative + codes, incl. corrected)?
-- Success metric still qualitative ("workable program"); make objective next session (recall on known mismatches at acceptable FP rate).
-- Confirm with Jordan: is this a separate HubSpot deal or part of the SQR EUR 300K line? NDA coverage for this pilot's data before sharing.
-- Teams-first client (Tactiq via Teams browser is the transcript workaround).
-- No Drive folder yet for this engagement.
+- Data handover NOT committed in-call (owners/de-ID/dates) — close async. This is the gate on everything.
+- Ground truth is imperfect: existing CHS codes are baseline but "not 100% true" (Gregor). Success = surfaced mismatches are REAL on spot-check, not raw agreement with existing codes.
+- Ontology partly UNWRITTEN: code list exists, when-to-apply rules are tacit medical expertise. Work via examples + model's medical knowledge + Mark SME time.
+- Metrics deferred (correct): premature until data seen; requirements doc is "living", fully defined after ~2 wks scoping on real data.
+- Scale ~8,000 complaints/mo NA. Pain: ~3-5 clarifications/day to Tech Services + regulatory audit exposure.
+- Beth may have accidentally declined the invite — ensure she's on next.
+- Shared Google Doc (Jordan's "Core Requirements"): 1Tj_mrD-f2xJNM3Tz-FuBJ0YXh34tA7TPPh1aye_RFjM.
+- Confirm with Jordan: separate HubSpot deal or part of SQR line? NDA coverage before data sharing. Teams-first (Tactiq via browser). No Drive folder yet.
 
 ## Don't re-explain
 - Jordan owns commercial + cadence. Two FME pilots: CMC (fresenius-cmc) + complaint-coding (this). EUR 25k/pilot client commitment, $25k/pilot AWS POC cash sought (Jordan's).
