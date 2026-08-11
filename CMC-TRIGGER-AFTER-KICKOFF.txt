@@ -1,0 +1,58 @@
+WHEN THE FRESENIUS DATA LANDS, RUN:   /mvp-kickoff cmc
+                                      /mvp-kickoff complaint-coding
+
+(written 2026-08-11, after the "Document Extraction MVP Flow" call)
+
+
+WHAT COUNTS AS "THE DATA LANDED"
+
+  CMC              All THREE products: Cienby + the two others, inputs AND
+                   filed outputs. Cienby alone is NOT enough. Vankata's rule:
+                   building on one document risks overfitting.
+
+  Complaint coding Brian has confirmed the ground-truth lists Ivo compiled.
+
+  If it's partial, don't start. The command will refuse and tell you what's
+  missing.
+
+
+WHAT THE COMMAND DOES SO YOU DON'T HAVE TO REMEMBER
+
+  1. Drafts the clock-start email. THE 8 WEEKS STARTS FROM THIS EMAIL, not
+     from the SoW being signed.
+  2. Drafts the technical kickoff invite. Ivo presents the problem; Petar,
+     Vova, Bobby, Vankata, Victor attend.
+  3. Sets up the weekly working group afterwards, with ONLY the assigned
+     people. Bobby is explicitly not on the CMC weekly.
+  4. Front end (Vova) starts in parallel, not after the backend.
+
+
+THE QUESTIONS THAT MUST GET ASKED AT KICKOFF
+
+  CMC              Does the Axion extraction path carry PER-VALUE PROVENANCE
+                   (read-from-source with page click-through / declared-by-us /
+                   computed / gap)? Raised 11 Aug, never answered. Sathya
+                   reviews to correct our judgement calls, so if the backend
+                   artifacts don't carry it, the front end can't show it and
+                   the deliverable's core argument doesn't survive.
+
+  Complaint coding WHO OWNS IT, Axion or Neuralith? Deliberately parked until
+                   kickoff. Vankata floated Neuralith (no parsing, just free
+                   text); Bobby warned a bespoke Axion classification agent
+                   won't follow the framework and will never integrate.
+
+  Both             Does either team already have a pattern for this before
+                   anyone writes new code?
+
+
+STILL UNDECIDED, YOURS TO PICK
+
+  The weekly working group slot: Tuesday after plannings, or Wednesday.
+  Vankata left it to you.
+
+
+FULL DETAIL
+
+  _config/mvp-delivery-process.md     the agreed process, roles, open questions
+  _state/fresenius-cmc.md            live state, what's outstanding, who's away
+  _state/fresenius-complaint-coding.md
