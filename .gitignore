@@ -22,3 +22,8 @@ __pycache__/
 
 # state system: keep STATE files (portable), ignore runtime log
 _state/.flush.log
+
+# secrets: recovery codes, never commit
+bitbucket-codes/
+# serena tool cache + local project config
+.serena/
