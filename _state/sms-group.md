@@ -10,7 +10,8 @@ last_tab: A: Operations
 The SMS Stage 2 deliverable is now VANKATA-owned, not Ivo. In the 29 May Jordan/Ivo/Vankata MPDM, Jordan asked "did we provide access to SMS / set up that demo?" — answer is NO, demo + SMS user access still NOT provisioned. Vankata: "I will work on this over the weekend" + "align Monday [1 Jun] on exactly what the next steps are." Jordan still needs the "what we delivered" slides + final commercial frame/numbers. Ivo's role: support, not lead-author. Mon 1 Jun is also the Heineken sprint day, so SMS competes for attention.
 
 ## Now
-PoC closed, moving to expansion-scoping. 20 May Gerald+Matthias presentation went well: substantive yes on the staircase, operationally deferred to end of July. Gerald endorsed value categories + 90-95% reliability target; Matthias bought into Stage 3 use cases; Thorsten championed. No commercial commitment in the room. As of 29 May: demo/access not yet set up; Vankata owns the weekend push + Monday alignment.
+**WON (~3 Jul 2026): SMS sent a mail confirming — moving to full implementation.** The 20 May verbal yes on the staircase is now committed. Earlier "no commercial commitment in the room" caveat is resolved.
+PoC closed, moving to expansion-scoping. 20 May Gerald+Matthias presentation went well: substantive yes on the staircase, operationally deferred to end of July. Gerald endorsed value categories + 90-95% reliability target; Matthias bought into Stage 3 use cases; Thorsten championed. As of 29 May: demo/access not yet set up; Vankata owned the weekend push + Monday alignment.
 
 ## Next action
 Mon 1 Jun: align with Vankata + Jordan on SMS next steps (Vankata leads). Ivo supports. Two open pieces flagged by Jordan: (1) provision SMS demo + user access for Gerald/Matthias/Thorsten + few more; (2) "what we delivered" slides + final commercial frame/numbers. Stage 2 framing unchanged: no-money, 2-3 weeks, output = co-defined Stage 3 scope.

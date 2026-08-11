@@ -4,6 +4,7 @@ _All tasks with durable working memory. Newest activity first. Open `_state/<tas
 
 | Last session | Task | Tab | Next action |
 |---|---|---|---|
+| 2026-07-31T16:30 (playground funnel: 2 calls filed, STATUS committed) | **platform-product** | A: Operations | Resolve 6 open questions in `_state/platform-product.md`. Top: tell Liana tracking will undercount (Vova: any tracker partially blocked) before she builds expectations on the first campaign report. |
 | 2026-06-10T (internal proposal/pricing meeting) | **heineken** | A: Operations | Tomorrow 11 Jun pre-call: review Vankata's proposal (lands tonight) before the Lucy call. Jordan/Vankata commercial-lead. |
 | 2026-06-01T (commercial Fast Start + review-session setup) | **aumovio** | A: Operations | Prep the Wed 3 Jun 12:15 CET review: walk Norbert + Phil through results vs thei |
 | 2026-05-31T (board catch-up, via Slack C0A754ESUDB) | **sms-group** | A: Operations | Mon 1 Jun: align with Vankata + Jordan on SMS next steps (Vankata leads). Ivo su |
