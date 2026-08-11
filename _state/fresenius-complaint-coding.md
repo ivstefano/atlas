@@ -3,10 +3,29 @@
 _Working memory for this task. Auto-written on session end/compact. Read on session start.
 This is NOT the client-facing STATUS.md._
 
-last_session: 2026-06-12T (second scoping session, live-copilot)
+last_session: 2026-08-11T (MVP delivery process agreed internally; team ownership left open)
 last_tab: A: Operations
 
-## Now
+## Now (2026-08-11) — GATED ON BRIEF CONFIRMATION + AN OWNERSHIP DECISION
+
+Scoping is essentially done. Because FME could not supply concrete labelled data, **Ivo compiled ground-truth lists himself** from what they demonstrated, and Brian needs to confirm them. Sonnet 5 found problems in their data they had not spotted, and Brian confirmed those were genuine errors.
+
+**Two things block kickoff:**
+1. **Brian's confirmation of the compiled ground truth.** This is the only genuinely unblocked action on either Fresenius track and it is Ivo's to chase.
+2. **Which team owns this MVP — Axion or Neuralith. Undecided.** Vankata floated Neuralith owning it outright (no PDF parsing, no extraction, just free-floating text). Bobby's objection: if Axion builds a bespoke classification agent now it won't follow the framework and will never integrate into the platform. Vankata deferred to "let's look at the data" → **decide at the technical kickoff.**
+
+Vankata's product framing: classification is essentially ontology. Define labels + descriptions + when-triggered conditions; agents evaluate them; mutually-exclusive labels (S4 vs S5) need resolution logic. That configurable surface is what he would build as product. Ivo's counterpoint in-call: for the POC we only FLAG, we do not assign, so it is a simpler problem.
+
+**Delivery process for this MVP: [_config/mvp-delivery-process.md](../_config/mvp-delivery-process.md).**
+
+## ⚡ WHEN BRIAN CONFIRMS THE GROUND TRUTH → RUN `/mvp-kickoff complaint-coding`
+Do not improvise the kickoff. That command runs the agreed process and forces the Axion-vs-Neuralith ownership decision, which is deliberately parked until kickoff.
+
+## Next action
+**Chase Brian to confirm the compiled ground-truth lists.** That unblocks the Axion-vs-Neuralith ownership decision, which is the real gate on kickoff.
+Then run the trigger checklist in `_config/mvp-delivery-process.md`. At the technical kickoff, force the ownership call explicitly and check whether either team already has a classification pattern before anyone builds one.
+
+## Older context (Jun 2026, may be stale)
 Second scoping session done 12 Jun. THREE deliverables locked (Mark): (1) narrative→code alignment at intake (right area + right specific code), (2) reportability conditions at intake, (3) investigation→coding alignment late-stage (consistency across products/sites/over-time). Gregor unified it as ONE early-stage correctness check, not separate products. POC reframed by Vankata: NOT extraction — phase 1 = define ontology FROM examples ("data retrospection agent") → SME-review → phase 2 = classify + spot-check mismatches → produces the error-rate baseline FME can't get manually. Deployment = batch export from CHS → IRIS → dashboard (no live integration; FME lockdowns). Full detail STATUS.md 2026-06-12 + 1_pre-scoping/2026-06-12_pilot-scope-wip.md.
 
 ## Next action
