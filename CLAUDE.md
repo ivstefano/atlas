@@ -15,7 +15,7 @@ This repo is Ivo's operations layer: daily briefs, session logs, MCP wiring, mig
 - **briefs/** — daily prep briefs (`YYYY-MM-DD.md`) and call briefs (`YYYY-MM-DD_<topic>.md`). Committed.
 - **SESSION_LOG.md** — narrative log of multi-day sessions, newest section appended.
 - **_iris_people.md** — name ↔ nickname ↔ role decoder for transcripts.
-- **_migration_protocol.md**, **_digest_protocol.md**, **_gmail_digest_protocol.md**, **_hubspot_mcp_setup.md** — reusable procedures.
+- **_migration_protocol.md**, **_digest_protocol.md**, **_gmail_digest_protocol.md**, **_hubspot_mcp_setup.md**, **_asana_mcp_setup.md** — reusable procedures.
 - **.claude/scripts/** — automation primitives: `tactiq_pull.py`, `tactiq_watch.py`, `tactiq_client.py`, `post_meeting_digest.py`, `gap_scan.py`, `state_common.py` / `state_inject.py` / `state_flush.py`.
 - **.claude/skills/** + **.claude/commands/** — project-scoped skills and slash commands: `/tactiq-pull`, `/post-meeting-digest`, `/morning-brief`, `/new-engagement`, `/brief`, `/state`.
 - **_state/** — durable per-task working memory (see below).
@@ -37,6 +37,18 @@ Persistent memory lives at `~/.claude/projects/-Users-iris-Documents-atlas/memor
 ## Workstation rebuild (new machine or new Claude account)
 
 If you're a fresh Claude landing in this repo without prior context, read [_config/README.md](_config/README.md) first. It has the 6-step rebuild order (settings → global instructions → plugins → MCPs → memory verify → skills) and links to per-topic detail pages. Tell Ivo what's missing on this machine vs. what `_config/` describes, then fix it. Don't ask questions about preferences — they're documented in `_config/`.
+
+## Selling-skills lens (auto-apply on engagement work)
+
+Ivo is deliberately building selling/communication skill. The framework lives in [_selling-skills/](_selling-skills/): `working-on.md` (priority queue), `talk-like-jordan.md` (patterns), `pocket-lines.md` (verbatim lines), `drills.md` (reps).
+
+**When to apply, automatically, without being asked:** any engagement work — cwd inside `~/Documents/engagements/`, OR the task touches a client (drafting client comms, prepping/reviewing a call, analysing a transcript, writing a status/proposal/SoW, coaching feedback on a call). This is a standing instruction; treat it as always-on for that scope.
+
+**What applying it means:**
+- Client-facing output follows the 4 patterns: structured claim (what / by when / who decides), gap-as-plan, proof-by-delivery, real-vs-roadmap honesty. Structure over fluency.
+- When drafting something Ivo will say or send, prefer a `pocket-lines.md` line over improvising, especially Group B (stating a gap) and Group D (don't-guess) — his self-identified weak spots.
+- When reviewing a call/transcript, surface concrete moments where he was vague, hedged, led with mechanism instead of destination, or softened pushback — and rewrite them the way they should have gone. Log durable lessons into `_selling-skills/working-on.md`.
+- Skip it for non-engagement work (football, infra, memory admin, ops).
 
 ## When in doubt
 

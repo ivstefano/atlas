@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="bg">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -45,10 +45,6 @@
   .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
   .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
 
-  /* Language toggle */
-  html[lang="bg"] .en { display: none; }
-  html[lang="en"] .bg { display: none; }
-
   .topbar {
     border-bottom: 1px solid var(--border-soft);
     padding: 18px 0; position: sticky; top: 0;
@@ -70,32 +66,12 @@
     background: var(--c-poc); border-radius: 50%;
     box-shadow: 0 0 12px var(--c-poc);
   }
-  .topbar-right {
-    display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
-  }
   .topbar-meta {
     display: flex; gap: 24px; align-items: center;
     font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--text-muted);
+    text-transform: uppercase; color: var(--text-muted); flex-wrap: wrap;
   }
   .topbar-meta strong { color: var(--text); font-weight: 500; }
-  .lang-toggle {
-    display: inline-flex; align-items: center;
-    border: 1px solid var(--border); border-radius: 999px;
-    overflow: hidden; padding: 2px; gap: 0;
-  }
-  .lang-btn {
-    background: transparent; border: none;
-    font-family: 'Inter', sans-serif;
-    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--text-muted);
-    padding: 6px 12px; border-radius: 999px;
-    cursor: pointer; transition: all 0.15s ease;
-  }
-  .lang-btn.active {
-    background: var(--c-poc); color: white;
-  }
-  .lang-btn:not(.active):hover { color: var(--text); }
 
   .hero { padding: 72px 0 40px; }
   .eyebrow {
@@ -180,6 +156,27 @@
     font-size: 19px; color: var(--text); letter-spacing: -0.01em;
   }
   .panel-caption { font-size: 12px; color: var(--text-muted); }
+
+  /* Narrative (free-text answer) */
+  .narrative { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 800px) { .narrative { grid-template-columns: 1fr; } }
+  .narrative-block {
+    background: var(--surface); border: 1px solid var(--border-soft);
+    border-radius: 12px; padding: 24px;
+  }
+  .narrative-block h3 {
+    font-family: 'Instrument Serif', Georgia, serif; font-weight: 400;
+    font-size: 18px; color: var(--text); margin-bottom: 12px;
+  }
+  .narrative-block p { font-size: 13.5px; color: var(--text-dim); line-height: 1.65; margin-bottom: 10px; }
+  .narrative-block p:last-child { margin-bottom: 0; }
+  .narrative-block strong { color: var(--text); font-weight: 500; }
+  .narrative-full {
+    grid-column: 1 / -1; background: rgba(168, 85, 247, 0.05);
+    border: 1px solid rgba(168, 85, 247, 0.18); border-radius: 12px; padding: 24px;
+  }
+  .narrative-full p { font-size: 13.5px; color: var(--text-dim); line-height: 1.7; }
+  .narrative-full strong { color: var(--text); font-weight: 500; }
 
   .pipeline-chart { width: 100%; height: auto; }
   .pl-axis text {
@@ -310,37 +307,43 @@
   .badge.paused { color: var(--ok); background: rgba(251, 191, 36, 0.08); }
   .badge.lost { color: var(--text-muted); background: transparent; }
 
-  .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 900px) { .score-grid { grid-template-columns: 1fr; } }
-  .score-row {
-    display: grid; grid-template-columns: 1fr 90px 28px;
-    gap: 14px; align-items: center; padding: 9px 0;
-    border-bottom: 1px solid var(--border-soft);
+  /* Competency cards with "why" */
+  .comp-group-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-muted);
+    margin: 28px 0 14px; padding-top: 20px; border-top: 1px solid var(--border-soft);
   }
-  .score-row:last-child { border-bottom: none; }
-  .score-label { font-size: 13px; color: var(--text); font-weight: 500; }
-  .score-mini-bar {
-    height: 5px; background: var(--surface-3); border-radius: 3px; overflow: hidden;
+  .comp-group-label:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+  .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 820px) { .comp-grid { grid-template-columns: 1fr; } }
+  .comp {
+    background: var(--surface); border: 1px solid var(--border-soft);
+    border-radius: 10px; padding: 16px 18px;
+    display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; align-items: start;
   }
-  .score-mini-fill { height: 100%; border-radius: 3px; }
-  .score-mini-fill.s5 { width: 100%; background: var(--good); }
-  .score-mini-fill.s4 { width: 80%; background: var(--good); }
-  .score-mini-fill.s3 { width: 60%; background: var(--ok); }
-  .score-mini-fill.s2 { width: 40%; background: var(--weak); }
-  .score-mini-fill.s1 { width: 20%; background: var(--weak); }
-  .score-mini-fill.na {
-    width: 100%; background: transparent;
-    border: 1px dashed var(--text-muted); height: 5px;
+  .comp-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .comp-why { grid-column: 1 / -1; font-size: 12.5px; color: var(--text-dim); line-height: 1.5; margin-top: 4px; }
+  .comp-score {
+    font-family: 'Instrument Serif', Georgia, serif; font-size: 24px;
+    line-height: 1; color: var(--text); text-align: right; align-self: center;
+    display: inline-flex; align-items: baseline; gap: 2px;
   }
-  .score-num-sm {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-size: 17px; color: var(--text); text-align: right; line-height: 1;
+  .comp-score .of { font-size: 12px; color: var(--text-muted); font-style: italic; }
+  .comp-score.na {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500;
+    color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase;
   }
-  .score-num-sm.na {
-    font-size: 10px; font-family: 'JetBrains Mono', monospace;
-    color: var(--text-muted); font-weight: 500; letter-spacing: 0.08em;
-    text-transform: uppercase;
+  .comp-pip {
+    grid-column: 1 / -1; height: 5px; background: var(--surface-3);
+    border-radius: 3px; overflow: hidden; margin-top: 10px;
   }
+  .comp-pip-fill { height: 100%; border-radius: 3px; }
+  .comp-pip-fill.s5 { width: 100%; background: var(--good); }
+  .comp-pip-fill.s4 { width: 80%; background: var(--good); }
+  .comp-pip-fill.s3 { width: 60%; background: var(--ok); }
+  .comp-pip-fill.s2 { width: 40%; background: var(--weak); }
+  .comp-pip-fill.na { width: 100%; background: transparent; border: 1px dashed var(--text-muted); }
+  .comp.flag { border-color: rgba(245, 158, 11, 0.28); }
 
   .gap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 800px) { .gap-grid { grid-template-columns: 1fr; } }
@@ -482,23 +485,11 @@
   <!-- Topbar -->
   <div class="topbar">
     <div class="container topbar-inner">
-      <div class="topbar-id">
-        <span class="bg">Иво Стефанов · Самооценка</span>
-        <span class="en">Ivo Stefanov · Self-review dashboard</span>
-      </div>
-      <div class="topbar-right">
-        <div class="topbar-meta">
-          <span class="bg">Период · <strong>ноември 2025 - май 2026</strong></span>
-          <span class="en">Period · <strong>Nov 2025 to May 2026</strong></span>
-          <span class="bg">Роля · <strong>Solutions Architect (де факто)</strong></span>
-          <span class="en">Role · <strong>Solutions Architect (de facto)</strong></span>
-          <span class="bg">Статус · <strong>Чернова</strong></span>
-          <span class="en">Status · <strong>Draft</strong></span>
-        </div>
-        <div class="lang-toggle" role="group" aria-label="Language toggle">
-          <button type="button" class="lang-btn" data-lang="bg">БГ</button>
-          <button type="button" class="lang-btn" data-lang="en">EN</button>
-        </div>
+      <div class="topbar-id">Ivo Stefanov · Self-review</div>
+      <div class="topbar-meta">
+        <span>Period · <strong>Nov 2025 to May 2026</strong></span>
+        <span>Role · <strong>Solutions Architect (de facto)</strong></span>
+        <span>Status · <strong>Draft</strong></span>
       </div>
     </div>
   </div>
@@ -506,42 +497,63 @@
   <!-- Hero -->
   <section class="hero" style="border-top:none;">
     <div class="container">
-      <div class="eyebrow">
-        <span class="bg">Лично BI четене на последните шест месеца</span>
-        <span class="en">A personal BI read on the last six months</span>
-      </div>
-      <h1>
-        <span class="bg"><em>Software Architect</em>, който поема ролята на Solutions Architect.</span>
-        <span class="en">A <em>Software Architect</em> leaning into a Solutions Architect role.</span>
-      </h1>
-      <p class="hero-sub bg">Последните шест месеца са преход. Инженерният инстинкт е силната ми страна, върху която градя platform leverage-а. Но работата пред мен става все по-комерсиална: scoping разговори, демота с клиенти, превод между sales и engineering в реално време по обажданията. Растежът е реален. Учебната крива също. Ванката беше директен: presence-а на комерсиалните обаждания е следващото нещо, върху което трябва да работя.</p>
-      <p class="hero-sub en">The last six months have been a transition. The engineering instinct is still there, and it's what built the platform leverage. But the work in front of me now is increasingly commercial: scoping calls, client demos, in-room translation between sales and engineering. The growth is real. The learning curve is real. Vankata has been direct that commercial-call presence is where I most need to develop next.</p>
+      <div class="eyebrow">Mid-year performance review · self-assessment</div>
+      <h1>A <em>Software Architect</em> leaning into a Solutions Architect role.</h1>
+      <p class="hero-sub">The last six months have been a transition. The engineering instinct is still there, and it is what built the platform leverage. The work in front of me now is increasingly commercial: scoping calls, client demos, in-room translation between sales and engineering. The growth is real. So is the learning curve. Vankata has been direct that commercial-call presence is where I most need to develop next.</p>
 
       <div class="kpi-grid">
         <div class="kpi k1">
-          <div class="kpi-label"><span class="bg">Engagements докоснати</span><span class="en">Engagements touched</span></div>
+          <div class="kpi-label">Engagements touched</div>
           <div class="kpi-value mono">15<sup>+</sup></div>
-          <div class="kpi-delta"><span class="bg">scoping, POC, демо, handover</span><span class="en">scoping, POC, demo, handover</span></div>
+          <div class="kpi-delta">scoping, POC, demo, handover</div>
         </div>
         <div class="kpi k2">
-          <div class="kpi-label"><span class="bg">Покритие на SA скоупа</span><span class="en">SA-scope coverage</span></div>
+          <div class="kpi-label">SA-scope coverage</div>
           <div class="kpi-value mono">~70<sup>%</sup></div>
-          <div class="kpi-delta"><span class="bg">от това, което прави един SA</span><span class="en">of a textbook SA's job</span></div>
+          <div class="kpi-delta">of a textbook SA's job</div>
         </div>
         <div class="kpi k3">
-          <div class="kpi-label"><span class="bg">Време върху SA работа</span><span class="en">Time on SA work</span></div>
+          <div class="kpi-label">Time on SA work</div>
           <div class="kpi-value mono">~50<sup>%</sup></div>
-          <div class="kpi-delta"><span class="bg">припокриване с ролята</span><span class="en">overlap with textbook role</span></div>
+          <div class="kpi-delta">overlap with textbook role</div>
         </div>
         <div class="kpi k4">
-          <div class="kpi-label"><span class="bg">Време върху ops и tooling</span><span class="en">Time on ops &amp; tooling</span></div>
+          <div class="kpi-label">Time on ops &amp; tooling</div>
           <div class="kpi-value mono">~50<sup>%</sup></div>
-          <div class="kpi-delta"><span class="bg">platform leverage извън ролята</span><span class="en">platform leverage beyond the role</span></div>
+          <div class="kpi-delta">platform leverage beyond the role</div>
         </div>
       </div>
 
-      <div class="compression bg"><strong>Бележка за числата отгоре.</strong> ~70% покритие на SA скоупа, ~50% време върху SA, ~50% върху ops се събира на повече от 100%. Това е смисълът. AI-augmented tooling-ът позволява една роля да поеме работата на около 1.2 роли. Това е възможното в 8-часов ден, не устойчивото в дългосрочен план.</div>
-      <div class="compression en"><strong>Note on the numbers above.</strong> ~70% SA-scope coverage and ~50% time on SA and ~50% time on ops add to more than 100%. That's the point. AI-augmented tooling lets one role cover the work of roughly 1.2 roles. It's what's possible inside an 8-hour day, not what's sustainable indefinitely.</div>
+      <div class="compression"><strong>Note on the numbers above.</strong> ~70% SA-scope coverage and ~50% time on SA and ~50% time on ops add to more than 100%. That is the point. AI-augmented tooling lets one role cover the work of roughly 1.2 roles. It is what is possible inside an 8-hour day, not what is sustainable indefinitely.</div>
+    </div>
+  </section>
+
+  <!-- Q1: Free-text overall feedback -->
+  <section>
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Question 1 · Overall feedback on the period</div>
+        <h2>Successes, challenges, how the last <em>six months</em> felt</h2>
+        <p class="section-sub">The form's open question: overall feedback on performance and experience over the past six months, including successes, challenges, personal improvements, and how I felt.</p>
+      </div>
+
+      <div class="narrative">
+        <div class="narrative-block">
+          <h3>Successes</h3>
+          <p><strong>Delivery that moved deals.</strong> Built the Aumovio extractor V2 pipeline to 99.6% F1 on reviewed docs, well ahead of the alternative on the same corpus. Ran the DB InfraGO scoping demo to 96.6% groundedness in a single cycle. OCR'd and extracted the full 100-doc Aumovio corpus.</p>
+          <p><strong>Platform leverage that compounds.</strong> Stood up the engagement-folder convention, the deployment patterns, and the automation layer (Pyloth clone, state system, morning briefs). One SA now covers the work of roughly 1.2 roles, and a second SA could ride the same rails from day one.</p>
+          <p><strong>Breadth.</strong> Carried 15+ engagements across scoping, POC, demo, and handover without dropping the thread on any of them.</p>
+        </div>
+        <div class="narrative-block">
+          <h3>Challenges &amp; how it felt</h3>
+          <p><strong>The role outgrew the title.</strong> I came in as a Software Architect and spent the half doing Solutions Architect work. Rewarding, and also a genuine stretch: the commercial muscle is not the same as the engineering one.</p>
+          <p><strong>Commercial-call presence is the honest gap.</strong> Vankata was direct about it and he is right. The May 19 Heineken RAG-sync misframe worried Marti and Bobi, a concrete example of framing wobbling under pressure. That is the H2 focus.</p>
+          <p><strong>Multi-hat load.</strong> Demo, scoping, PM, tech-lead in the same week is energising but leaves no single dimension at best-in-class. Generalist by design, with the trade-off that comes with it.</p>
+        </div>
+        <div class="narrative-full">
+          <p><strong>Net read:</strong> the technical half has been the easier half, and it is where I delivered. The half that turns an SA from "useful in the room" into "moves the deal" is commercial coverage: speaking with the right confidence, framing in the listener's language, holding presence when a call turns adversarial. I know where the edge is, I accept the feedback, and the infrastructure to scale my output is already in place.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -549,19 +561,15 @@
   <section>
     <div class="container">
       <div class="section-head">
-        <div class="eyebrow"><span class="bg">Раздел 01 · Къде помръднах нещата</span><span class="en">Section 01 · Where the needle moved</span></div>
-        <h2>
-          <span class="bg">Принос към <em>pipeline-а</em> по поток, месец след месец</span>
-          <span class="en">Pipeline contribution by <em>stream</em>, month over month</span>
-        </h2>
-        <p class="section-sub bg">Пет потока на принос през deal pipeline-а. Всяка линия проследява колко често активността се случваше в даден месец. Тенденцията е по-важна от абсолютните бройки, това са честни приближения.</p>
-        <p class="section-sub en">Five contribution streams across the deal pipeline. Each line tracks how often the activity ran in a given month. Trend matters more than absolute counts, these are honest approximations.</p>
+        <div class="eyebrow">Section · Where the needle moved</div>
+        <h2>Pipeline contribution by <em>stream</em>, month over month</h2>
+        <p class="section-sub">Five contribution streams across the deal pipeline. Each line tracks how often the activity ran in a given month. Trend matters more than absolute counts; these are honest approximations.</p>
       </div>
 
       <div class="panel">
         <div class="panel-head">
-          <div class="panel-title"><span class="bg">Обем активност по поток (ноември 2025 - май 2026)</span><span class="en">Activity volume per stream (Nov 2025 to May 2026)</span></div>
-          <div class="panel-caption mono"><span class="bg">прибл. · бройки месечно</span><span class="en">approx · counts per month</span></div>
+          <div class="panel-title">Activity volume per stream (Nov 2025 to May 2026)</div>
+          <div class="panel-caption mono">approx · counts per month</div>
         </div>
 
         <svg class="pipeline-chart" viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" aria-label="Pipeline contribution chart">
@@ -578,23 +586,16 @@
             <text x="50" y="164" text-anchor="end">4</text>
             <text x="50" y="224" text-anchor="end">2</text>
             <text x="50" y="284" text-anchor="end">0</text>
-            <text x="60"  y="310" text-anchor="middle" class="month-bg">ное</text>
-            <text x="195" y="310" text-anchor="middle" class="month-bg">дек</text>
-            <text x="330" y="310" text-anchor="middle" class="month-bg">ян</text>
-            <text x="465" y="310" text-anchor="middle" class="month-bg">фев</text>
-            <text x="600" y="310" text-anchor="middle" class="month-bg">март</text>
-            <text x="735" y="310" text-anchor="middle" class="month-bg">апр</text>
-            <text x="860" y="310" text-anchor="middle" class="month-bg">май</text>
-            <text x="60"  y="310" text-anchor="middle" class="month-en" style="display:none;">Nov</text>
-            <text x="195" y="310" text-anchor="middle" class="month-en" style="display:none;">Dec</text>
-            <text x="330" y="310" text-anchor="middle" class="month-en" style="display:none;">Jan</text>
-            <text x="465" y="310" text-anchor="middle" class="month-en" style="display:none;">Feb</text>
-            <text x="600" y="310" text-anchor="middle" class="month-en" style="display:none;">Mar</text>
-            <text x="735" y="310" text-anchor="middle" class="month-en" style="display:none;">Apr</text>
-            <text x="860" y="310" text-anchor="middle" class="month-en" style="display:none;">May</text>
+            <text x="60"  y="310" text-anchor="middle">Nov</text>
+            <text x="195" y="310" text-anchor="middle">Dec</text>
+            <text x="330" y="310" text-anchor="middle">Jan</text>
+            <text x="465" y="310" text-anchor="middle">Feb</text>
+            <text x="600" y="310" text-anchor="middle">Mar</text>
+            <text x="735" y="310" text-anchor="middle">Apr</text>
+            <text x="860" y="310" text-anchor="middle">May</text>
           </g>
 
-          <!-- Scoping (blue) — nudged -4px so it sits visibly above Internal PM amber on shared values -->
+          <!-- Scoping (blue) -->
           <path class="pl-line" stroke="#3b82f6" d="M 60,246 L 195,246 L 330,216 L 465,216 L 600,186 L 735,186 L 860,156" />
           <g fill="#3b82f6">
             <circle class="pl-dot" cx="60"  cy="246" r="4"/><circle class="pl-dot" cx="195" cy="246" r="4"/>
@@ -610,7 +611,7 @@
             <circle class="pl-dot" cx="600" cy="160" r="4"/><circle class="pl-dot" cx="735" cy="130" r="4"/>
             <circle class="pl-dot" cx="860" cy="100" r="4"/>
           </g>
-          <!-- Neuralith / playground demos (green) — nudged +4px to clear baseline overlap with scoping start point -->
+          <!-- Neuralith / playground demos (green) -->
           <path class="pl-line" stroke="#10b981" d="M 60,284 L 195,284 L 330,284 L 465,254 L 600,224 L 735,194 L 860,164" />
           <g fill="#10b981">
             <circle class="pl-dot" cx="60"  cy="284" r="4"/><circle class="pl-dot" cx="195" cy="284" r="4"/>
@@ -618,7 +619,7 @@
             <circle class="pl-dot" cx="600" cy="224" r="4"/><circle class="pl-dot" cx="735" cy="194" r="4"/>
             <circle class="pl-dot" cx="860" cy="164" r="4"/>
           </g>
-          <!-- Internal PM & comms (amber) — kept on canonical grid -->
+          <!-- Internal PM & comms (amber) -->
           <path class="pl-line" stroke="#f59e0b" d="M 60,250 L 195,250 L 330,220 L 465,220 L 600,220 L 735,190 L 860,190" />
           <g fill="#f59e0b">
             <circle class="pl-dot" cx="60"  cy="250" r="4"/><circle class="pl-dot" cx="195" cy="250" r="4"/>
@@ -626,7 +627,7 @@
             <circle class="pl-dot" cx="600" cy="220" r="4"/><circle class="pl-dot" cx="735" cy="190" r="4"/>
             <circle class="pl-dot" cx="860" cy="190" r="4"/>
           </g>
-          <!-- Platform leverage & tooling (pink) — nudged +2px to separate from purple/scoping crossings -->
+          <!-- Platform leverage & tooling (pink) -->
           <path class="pl-line" stroke="#ec4899" d="M 60,282 L 195,252 L 330,252 L 465,222 L 600,192 L 735,162 L 860,132" />
           <g fill="#ec4899">
             <circle class="pl-dot" cx="60"  cy="282" r="4"/><circle class="pl-dot" cx="195" cy="252" r="4"/>
@@ -637,39 +638,39 @@
         </svg>
 
         <div class="pl-legend">
-          <div class="pl-legend-item"><span class="pl-legend-dot" style="background:#3b82f6;"></span><span class="bg">Scoping упражнения</span><span class="en">Scoping exercises</span></div>
-          <div class="pl-legend-item"><span class="pl-legend-dot" style="background:#a855f7;"></span><span class="bg">POC работа с клиенти и екип</span><span class="en">POC client work &amp; team ops</span></div>
-          <div class="pl-legend-item"><span class="pl-legend-dot" style="background:#10b981;"></span><span class="bg">Neuralith / playground демота</span><span class="en">Neuralith / playground demos</span></div>
-          <div class="pl-legend-item"><span class="pl-legend-dot" style="background:#f59e0b;"></span><span class="bg">Вътрешен PM и комуникация</span><span class="en">Internal PM &amp; comms</span></div>
-          <div class="pl-legend-item"><span class="pl-legend-dot" style="background:#ec4899;"></span><span class="bg">Platform leverage и tooling</span><span class="en">Platform leverage &amp; tooling</span></div>
+          <div class="pl-legend-item"><span class="pl-legend-dot" style="background:#3b82f6;"></span>Scoping exercises</div>
+          <div class="pl-legend-item"><span class="pl-legend-dot" style="background:#a855f7;"></span>POC client work &amp; team ops</div>
+          <div class="pl-legend-item"><span class="pl-legend-dot" style="background:#10b981;"></span>Neuralith / playground demos</div>
+          <div class="pl-legend-item"><span class="pl-legend-dot" style="background:#f59e0b;"></span>Internal PM &amp; comms</div>
+          <div class="pl-legend-item"><span class="pl-legend-dot" style="background:#ec4899;"></span>Platform leverage &amp; tooling</div>
         </div>
       </div>
 
       <div class="trend-row">
         <div class="trend">
           <div class="trend-stream">Scoping</div>
-          <div class="trend-value mono">~4<sup><span class="bg">/мес</span><span class="en">/mo</span></sup></div>
-          <div class="trend-delta up"><span class="bg">↑ 4 пъти спрямо ное</span><span class="en">↑ 4× vs Nov</span></div>
+          <div class="trend-value mono">~4<sup>/mo</sup></div>
+          <div class="trend-delta up">↑ 4× vs Nov</div>
         </div>
         <div class="trend">
-          <div class="trend-stream"><span class="bg">POC и екип</span><span class="en">POC + team</span></div>
-          <div class="trend-value mono">~6<sup><span class="bg">/мес</span><span class="en">/mo</span></sup></div>
-          <div class="trend-delta up"><span class="bg">↑ 6 пъти спрямо ное</span><span class="en">↑ 6× vs Nov</span></div>
+          <div class="trend-stream">POC + team</div>
+          <div class="trend-value mono">~6<sup>/mo</sup></div>
+          <div class="trend-delta up">↑ 6× vs Nov</div>
         </div>
         <div class="trend">
-          <div class="trend-stream"><span class="bg">Neuralith демота</span><span class="en">Neuralith demos</span></div>
-          <div class="trend-value mono">~4<sup><span class="bg">/мес</span><span class="en">/mo</span></sup></div>
-          <div class="trend-delta up"><span class="bg">нов поток от фев</span><span class="en">new stream Feb+</span></div>
+          <div class="trend-stream">Neuralith demos</div>
+          <div class="trend-value mono">~4<sup>/mo</sup></div>
+          <div class="trend-delta up">new stream Feb+</div>
         </div>
         <div class="trend">
-          <div class="trend-stream"><span class="bg">Вътрешен PM</span><span class="en">Internal PM</span></div>
-          <div class="trend-value mono">~3<sup><span class="bg">/мес</span><span class="en">/mo</span></sup></div>
-          <div class="trend-delta flat"><span class="bg">→ стабилно</span><span class="en">→ steady</span></div>
+          <div class="trend-stream">Internal PM</div>
+          <div class="trend-value mono">~3<sup>/mo</sup></div>
+          <div class="trend-delta flat">→ steady</div>
         </div>
         <div class="trend">
-          <div class="trend-stream"><span class="bg">Platform infra</span><span class="en">Platform infra</span></div>
-          <div class="trend-value mono">~5<sup><span class="bg">/мес</span><span class="en">/mo</span></sup></div>
-          <div class="trend-delta up"><span class="bg">↑ нараства</span><span class="en">↑ compounding</span></div>
+          <div class="trend-stream">Platform infra</div>
+          <div class="trend-value mono">~5<sup>/mo</sup></div>
+          <div class="trend-delta up">↑ compounding</div>
         </div>
       </div>
     </div>
@@ -679,41 +680,38 @@
   <section>
     <div class="container">
       <div class="section-head">
-        <div class="eyebrow"><span class="bg">Раздел 02 · Портфолио и разпределение</span><span class="en">Section 02 · Portfolio &amp; allocation</span></div>
-        <h2>
-          <span class="bg">15 engagements по <em>етап</em>, и как се разпределя времето</span>
-          <span class="en">15 engagements by <em>stage</em>, and how the time split lands</span>
-        </h2>
+        <div class="eyebrow">Section · Portfolio &amp; allocation</div>
+        <h2>15 engagements by <em>stage</em>, and how the time split lands</h2>
       </div>
 
       <div class="two-up">
         <div class="panel">
           <div class="panel-head">
-            <div class="panel-title"><span class="bg">Engagement портфолио по етап</span><span class="en">Engagement portfolio by stage</span></div>
+            <div class="panel-title">Engagement portfolio by stage</div>
             <div class="panel-caption mono">n = 15</div>
           </div>
           <div class="portfolio-row">
-            <div class="portfolio-label"><span class="bg">PoC / активни</span><span class="en">PoC / live</span></div>
+            <div class="portfolio-label">PoC / live</div>
             <div class="portfolio-bar"><div class="portfolio-bar-fill" style="background: var(--c-poc); width: 60%;"></div></div>
             <div class="portfolio-count">6</div>
           </div>
           <div class="portfolio-row">
-            <div class="portfolio-label"><span class="bg">Scoping / pre-sales</span><span class="en">Scoping / pre-sales</span></div>
+            <div class="portfolio-label">Scoping / pre-sales</div>
             <div class="portfolio-bar"><div class="portfolio-bar-fill" style="background: var(--c-scoping); width: 40%;"></div></div>
             <div class="portfolio-count">4</div>
           </div>
           <div class="portfolio-row">
-            <div class="portfolio-label"><span class="bg">Closed-won в ход</span><span class="en">Closed-won progressing</span></div>
+            <div class="portfolio-label">Closed-won progressing</div>
             <div class="portfolio-bar"><div class="portfolio-bar-fill" style="background: var(--good); width: 10%;"></div></div>
             <div class="portfolio-count">1</div>
           </div>
           <div class="portfolio-row">
-            <div class="portfolio-label"><span class="bg">Closed-lost / пауза</span><span class="en">Closed-lost / paused</span></div>
+            <div class="portfolio-label">Closed-lost / paused</div>
             <div class="portfolio-bar"><div class="portfolio-bar-fill" style="background: var(--text-muted); width: 30%;"></div></div>
             <div class="portfolio-count">3</div>
           </div>
           <div class="portfolio-row">
-            <div class="portfolio-label"><span class="bg">Леко проследяване</span><span class="en">Light-touch tracking</span></div>
+            <div class="portfolio-label">Light-touch tracking</div>
             <div class="portfolio-bar"><div class="portfolio-bar-fill" style="background: var(--c-ops); width: 15%;"></div></div>
             <div class="portfolio-count">1</div>
           </div>
@@ -721,8 +719,8 @@
 
         <div class="panel">
           <div class="panel-head">
-            <div class="panel-title"><span class="bg">Разпределение на времето</span><span class="en">Time allocation</span></div>
-            <div class="panel-caption mono"><span class="bg">SA работа : ops и tooling</span><span class="en">SA work : ops &amp; tooling</span></div>
+            <div class="panel-title">Time allocation</div>
+            <div class="panel-caption mono">SA work : ops &amp; tooling</div>
           </div>
           <div class="allocation-card">
             <svg class="allocation-svg" viewBox="0 0 100 100" aria-label="50/50 time split">
@@ -739,8 +737,8 @@
             </svg>
             <div class="allocation-text">
               <div class="allocation-rows">
-                <div class="allocation-row sa"><div><strong>~50%</strong> · <span class="bg">SA работа (припокриване с ролята)</span><span class="en">SA work (overlap with textbook role)</span></div></div>
-                <div class="allocation-row ops"><div><strong>~50%</strong> · <span class="bg">ops, tooling, infra (извън ролята)</span><span class="en">ops, tooling, infra (beyond the role)</span></div></div>
+                <div class="allocation-row sa"><div><strong>~50%</strong> · SA work (overlap with textbook role)</div></div>
+                <div class="allocation-row ops"><div><strong>~50%</strong> · ops, tooling, infra (beyond the role)</div></div>
               </div>
             </div>
           </div>
@@ -753,87 +751,89 @@
   <section>
     <div class="container">
       <div class="section-head">
-        <div class="eyebrow"><span class="bg">Раздел 03 · Доказателства</span><span class="en">Section 03 · Evidence</span></div>
-        <h2>
-          <span class="bg">Engagements-ите, които <em>минаха през мен</em></span>
-          <span class="en">The <em>engagements</em> that ran through me</span>
-        </h2>
-        <p class="section-sub bg">Подредени по активност, не по размер на сделката. Всеки ред е клиент, при който бях или SA, или tech lead, или човекът, който прави демо, или мостът между комерсиално и продуктово.</p>
-        <p class="section-sub en">Listed by activity, not by deal size. Each row is a client where I was either the SA, the tech lead, the demo builder, or the bridge between commercial and product.</p>
+        <div class="eyebrow">Section · Evidence</div>
+        <h2>The <em>engagements</em> that ran through me</h2>
+        <p class="section-sub">Listed by activity, not by deal size. Each row is a client where I was the SA, the tech lead, the demo builder, or the bridge between commercial and product.</p>
       </div>
 
       <div class="scoreboard">
         <div class="row head">
-          <div><span class="bg">Клиент</span><span class="en">Client</span></div>
-          <div class="col-role"><span class="bg">Роля</span><span class="en">My role</span></div>
-          <div class="col-stage"><span class="bg">Етап</span><span class="en">Stage</span></div>
-          <div class="col-outcome"><span class="bg">Резултат</span><span class="en">Outcome</span></div>
+          <div>Client</div>
+          <div class="col-role">My role</div>
+          <div class="col-stage">Stage</div>
+          <div class="col-outcome">Outcome</div>
         </div>
 
         <div class="row">
-          <div class="col-client">Heineken<small><span class="bg">FMCG, supply-chain extraction</span><span class="en">FMCG · supply-chain extraction</span></small></div>
-          <div class="col-role"><span class="bg">Scoping, POC, демо</span><span class="en">Scoping · POC · demo</span></div>
+          <div class="col-client">Heineken<small>FMCG · supply-chain extraction</small></div>
+          <div class="col-role">Scoping · POC · demo</div>
           <div class="col-stage">PoC</div>
-          <div class="col-outcome"><span class="badge live"><span class="bg">Активен</span><span class="en">Live</span></span></div>
+          <div class="col-outcome"><span class="badge live">Live</span></div>
         </div>
         <div class="row">
-          <div class="col-client">Aumovio<small><span class="bg">Automotive, contract extraction at scale</span><span class="en">Automotive · at-scale contract extraction</span></small></div>
-          <div class="col-role"><span class="bg">Tech lead, extractor V2</span><span class="en">Tech lead · extractor V2</span></div>
+          <div class="col-client">Aumovio<small>Automotive · at-scale contract extraction</small></div>
+          <div class="col-role">Tech lead · extractor V2</div>
           <div class="col-stage">PoC delivery</div>
-          <div class="col-outcome"><span class="badge live"><span class="bg">Активен</span><span class="en">Live</span></span></div>
+          <div class="col-outcome"><span class="badge won">99.6%</span></div>
         </div>
         <div class="row">
-          <div class="col-client">Deutsche Bahn · InfraGO<small><span class="bg">Жп, scoping демо</span><span class="en">Rail · scoping demo</span></small></div>
-          <div class="col-role"><span class="bg">Scoping, демо</span><span class="en">Scoping · demo</span></div>
-          <div class="col-stage"><span class="bg">Предложение</span><span class="en">Proposal due</span></div>
+          <div class="col-client">Deutsche Bahn · InfraGO<small>Rail · scoping demo</small></div>
+          <div class="col-role">Scoping · demo</div>
+          <div class="col-stage">Proposal due</div>
           <div class="col-outcome"><span class="badge won">96.6%</span></div>
         </div>
         <div class="row">
-          <div class="col-client">SMS Group<small><span class="bg">Стомана, диагностика и mechanical drawings</span><span class="en">Steel · diagnostics &amp; mechanical drawings</span></small></div>
-          <div class="col-role"><span class="bg">Демо, dry-run review</span><span class="en">Demo · dry-run review</span></div>
-          <div class="col-stage">PoC handover</div>
-          <div class="col-outcome"><span class="badge live"><span class="bg">Активен</span><span class="en">Live</span></span></div>
+          <div class="col-client">SMS Group<small>Steel · diagnostics &amp; mechanical drawings</small></div>
+          <div class="col-role">Demo · scoping · tech support</div>
+          <div class="col-stage">Full implementation</div>
+          <div class="col-outcome"><span class="badge won">Won</span></div>
         </div>
         <div class="row">
-          <div class="col-client">Postbank<small><span class="bg">Банка, миграция на процеси</span><span class="en">Banking · process migration</span></small></div>
+          <div class="col-client">Fresenius CMC<small>Pharma · eCTD dossier reconstruction</small></div>
+          <div class="col-role">Tech lead · reconstruct-and-diff PoC</div>
+          <div class="col-stage">Scoping → PoC</div>
+          <div class="col-outcome"><span class="badge live">Live</span></div>
+        </div>
+        <div class="row">
+          <div class="col-client">Postbank<small>Banking · process migration</small></div>
           <div class="col-role">Pre-scoping</div>
           <div class="col-stage">Discovery</div>
-          <div class="col-outcome"><span class="badge live"><span class="bg">Активен</span><span class="en">Live</span></span></div>
+          <div class="col-outcome"><span class="badge live">Live</span></div>
         </div>
         <div class="row">
-          <div class="col-client">Garrett<small><span class="bg">Automotive, мобилно MVP</span><span class="en">Automotive · mobile MVP</span></small></div>
-          <div class="col-role"><span class="bg">Демо build</span><span class="en">Demo build</span></div>
+          <div class="col-client">Garrett<small>Automotive · mobile MVP</small></div>
+          <div class="col-role">Demo build</div>
           <div class="col-stage">Verdict</div>
-          <div class="col-outcome"><span class="badge live"><span class="bg">Активен</span><span class="en">Live</span></span></div>
+          <div class="col-outcome"><span class="badge live">Live</span></div>
         </div>
         <div class="row">
-          <div class="col-client">T&amp;F · Paolo<small><span class="bg">Издателство, scoping презентация</span><span class="en">Publishing · scoping presentation</span></small></div>
+          <div class="col-client">T&amp;F · Paolo<small>Publishing · scoping presentation</small></div>
           <div class="col-role">Scoping</div>
-          <div class="col-stage"><span class="bg">Изчакване</span><span class="en">Awaiting</span></div>
-          <div class="col-outcome"><span class="badge live"><span class="bg">Активен</span><span class="en">Live</span></span></div>
+          <div class="col-stage">Deferred to Sep</div>
+          <div class="col-outcome"><span class="badge paused">Paused</span></div>
         </div>
         <div class="row">
-          <div class="col-client">Daikin / Haruka<small><span class="bg">Индустрия, scoping intro</span><span class="en">Industrial · scoping intro</span></small></div>
+          <div class="col-client">Daikin / Haruka<small>Industrial · scoping intro</small></div>
           <div class="col-role">Scoping support</div>
           <div class="col-stage">Discovery</div>
-          <div class="col-outcome"><span class="badge live"><span class="bg">Активен</span><span class="en">Live</span></span></div>
+          <div class="col-outcome"><span class="badge live">Live</span></div>
         </div>
         <div class="row">
-          <div class="col-client">Agrolimen<small><span class="bg">FMCG, вътрешен AI екип scoping</span><span class="en">FMCG · internal AI team scoping</span></small></div>
-          <div class="col-role"><span class="bg">Scoping, преизползваем темплейт</span><span class="en">Scoping · reusable template</span></div>
+          <div class="col-client">Agrolimen<small>FMCG · internal AI team scoping</small></div>
+          <div class="col-role">Scoping · reusable template</div>
           <div class="col-stage">Closed-lost</div>
-          <div class="col-outcome"><span class="badge paused"><span class="bg">Темплейт</span><span class="en">Template</span></span></div>
+          <div class="col-outcome"><span class="badge paused">Template</span></div>
         </div>
         <div class="row">
-          <div class="col-client">Nielsen / Christeyns<small><span class="bg">PoC разговори приключени</span><span class="en">PoC discussions concluded</span></small></div>
+          <div class="col-client">Nielsen / Christeyns<small>PoC discussions concluded</small></div>
           <div class="col-role">Scoping</div>
-          <div class="col-stage"><span class="bg">Приключен</span><span class="en">Concluded</span></div>
+          <div class="col-stage">Concluded</div>
           <div class="col-outcome"><span class="badge lost">Closed</span></div>
         </div>
         <div class="row">
-          <div class="col-client"><span class="bg">NHS, Welocalize, Cetin, Fresenius и други</span><span class="en">NHS · Welocalize · Cetin · Fresenius · others</span><small><span class="bg">Pipeline tracking, леко scoping, опортюнистично участие</span><span class="en">Pipeline tracking, light-touch scoping</span></small></div>
-          <div class="col-role"><span class="bg">Леко поддръжка</span><span class="en">Light support</span></div>
-          <div class="col-stage"><span class="bg">Различни</span><span class="en">Various</span></div>
+          <div class="col-client">NHS · Welocalize · Cetin · others<small>Pipeline tracking, light-touch scoping</small></div>
+          <div class="col-role">Light support</div>
+          <div class="col-stage">Various</div>
           <div class="col-outcome"><span class="badge lost">Tracked</span></div>
         </div>
       </div>
@@ -844,99 +844,166 @@
   <section>
     <div class="container">
       <div class="section-head">
-        <div class="eyebrow"><span class="bg">Раздел 04 · Преходът</span><span class="en">Section 04 · The transition</span></div>
-        <h2>
-          <span class="bg">От <em>Software Architect</em> към Solutions Architect, учебната крива</span>
-          <span class="en">From <em>Software Architect</em> to Solutions Architect, the learning curve</span>
-        </h2>
-        <p class="section-sub bg">Инженерната страна е силната, която нося. Комерсиалната е тази, в която още уча, и където Ванката беше най-ясен какво трябва да расте.</p>
-        <p class="section-sub en">The engineering side is the strength I came in with. The commercial side is where I'm still learning, and where Vankata has been clearest about what needs to grow.</p>
+        <div class="eyebrow">Section · The transition</div>
+        <h2>From <em>Software Architect</em> to Solutions Architect, the learning curve</h2>
+        <p class="section-sub">The engineering side is the strength I came in with. The commercial side is where I am still learning, and where Vankata has been clearest about what needs to grow.</p>
       </div>
 
       <div class="panel">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap: 24px;">
           <div>
-            <div style="font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); margin-bottom:14px;">
-              <span class="bg">Силна страна, какво нося</span><span class="en">Strong side · what I bring in</span>
-            </div>
+            <div style="font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); margin-bottom:14px;">Strong side · what I bring in</div>
             <ul class="gap-list" style="border-top:1px solid var(--border-soft);">
-              <li class="bg"><strong>System design</strong>, engagement folder convention, extractor V2 pipeline, deployment patterns</li>
-              <li class="en"><strong>System design</strong>, engagement folder convention, extractor V2 pipeline, deployment patterns</li>
-              <li class="bg"><strong>Изграждане на инфраструктура</strong>, която носи натрупване между сделките</li>
-              <li class="en"><strong>Building infrastructure</strong> that compounds across deals</li>
-              <li class="bg"><strong>Технически демота</strong>, DB InfraGO с 96.6% groundedness</li>
-              <li class="en"><strong>Technical demos</strong>, DB InfraGO landed at 96.6% groundedness</li>
-              <li class="bg"><strong>Stakeholder превод</strong>, когато разговорът е технически</li>
-              <li class="en"><strong>Stakeholder translation</strong> when the conversation is technical</li>
-              <li class="bg"><strong>Самостоятелна velocity</strong> върху platform работа</li>
-              <li class="en"><strong>Self-directed velocity</strong> on platform work</li>
+              <li><strong>System design</strong>, engagement folder convention, extractor V2 pipeline, deployment patterns</li>
+              <li><strong>Building infrastructure</strong> that compounds across deals</li>
+              <li><strong>Technical demos</strong>, DB InfraGO landed at 96.6% groundedness</li>
+              <li><strong>Stakeholder translation</strong> when the conversation is technical</li>
+              <li><strong>Self-directed velocity</strong> on platform work</li>
             </ul>
           </div>
           <div>
-            <div style="font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--ok); margin-bottom:14px;">
-              <span class="bg">Учебна страна, посоката за H2</span><span class="en">Learning side · the H2 growth edge</span>
-            </div>
+            <div style="font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--ok); margin-bottom:14px;">Learning side · the H2 growth edge</div>
             <ul class="gap-list" style="border-top:1px solid var(--border-soft);">
-              <li class="bg"><strong>Presence на комерсиални обаждания</strong>, ясно говорене когато стаята не е техническа (директна обратна връзка от Ванката)</li>
-              <li class="en"><strong>Commercial-call presence</strong>, speaking clearly when the room is non-technical (Vankata's direct feedback)</li>
-              <li class="bg"><strong>Framing в реално време</strong>, посланието да минава от първия път</li>
-              <li class="en"><strong>In-call framing</strong>, landing the message in one pass instead of needing follow-ups</li>
-              <li class="bg"><strong>Coverage по комерсиалните разговори</strong>, задържане на стаята когато Джордан или Стивън имат нужда от backup</li>
-              <li class="en"><strong>Coverage during commercial conversations</strong>, holding the room when Jordan or Steven need backup</li>
-              <li class="bg"><strong>Вербална прецизност под напрежение</strong>, мисфрейминга на 19 май около Хайнекен е скорошен пример</li>
-              <li class="en"><strong>Verbal precision under pressure</strong>, the May 19 Heineken misframe was an example of where this still wobbles</li>
-              <li class="bg"><strong>Четене на клиентската procurement динамика</strong> по-рано в разговора</li>
-              <li class="en"><strong>Reading client procurement dynamics</strong> earlier in the call</li>
+              <li><strong>Commercial-call presence</strong>, speaking clearly when the room is non-technical (Vankata's direct feedback)</li>
+              <li><strong>In-call framing</strong>, landing the message in one pass instead of needing follow-ups</li>
+              <li><strong>Coverage during commercial conversations</strong>, holding the room when Jordan or Steven need backup</li>
+              <li><strong>Verbal precision under pressure</strong>, the May 19 Heineken misframe is where this still wobbles</li>
+              <li><strong>Reading client procurement dynamics</strong> earlier in the call</li>
             </ul>
           </div>
         </div>
 
-        <div class="bg" style="margin-top:24px; padding:18px 22px; background: rgba(168, 85, 247, 0.06); border:1px solid rgba(168, 85, 247, 0.2); border-radius:10px; font-size:13.5px; color: var(--text-dim); line-height:1.7;">
-          <strong style="color:var(--c-poc); font-weight:600;">Как чета това, което Ванката каза:</strong> техническата работа е била по-лесната половина. Това, което превръща един SA от "полезен в стаята" в "движи сделката", е комерсиалното coverage. Да говориш с правилната увереност, да рамкираш на езика на слушателя, да задържиш presence-а когато разговорът стане adversarial. Това е изричната ми посока за растеж за H2.
-        </div>
-        <div class="en" style="margin-top:24px; padding:18px 22px; background: rgba(168, 85, 247, 0.06); border:1px solid rgba(168, 85, 247, 0.2); border-radius:10px; font-size:13.5px; color: var(--text-dim); line-height:1.7;">
-          <strong style="color:var(--c-poc); font-weight:600;">Vankata's framing, internalised:</strong> the technical work has been the easier half. What converts an SA from "useful in the room" to "moves the deal" is the commercial coverage: speaking with the right confidence, framing in the listener's language, holding presence when the conversation gets adversarial. That's the explicit growth area for H2.
+        <div style="margin-top:24px; padding:18px 22px; background: rgba(168, 85, 247, 0.06); border:1px solid rgba(168, 85, 247, 0.2); border-radius:10px; font-size:13.5px; color: var(--text-dim); line-height:1.7;">
+          <strong style="color:var(--c-poc); font-weight:600;">Vankata's framing, internalised:</strong> the technical work has been the easier half. What converts an SA from "useful in the room" to "moves the deal" is commercial coverage: speaking with the right confidence, framing in the listener's language, holding presence when the conversation gets adversarial. That is the explicit growth area for H2.
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Scorecard -->
+  <!-- Scorecard: 17 competencies + WHY -->
   <section>
     <div class="container">
       <div class="section-head">
-        <div class="eyebrow"><span class="bg">Раздел 05 · 17-те компетенции от формата</span><span class="en">Section 05 · The 17-competency self-review</span></div>
-        <h2>
-          <span class="bg">Честни <em>оценки</em> срещу въпросите на формата</span>
-          <span class="en">Honest <em>scores</em> against the form's questions</span>
-        </h2>
-        <p class="section-sub bg">Където формата приляга, оценявам директно. Където не приляга (code review на чужд код, shared codebase), маркирам N/A с бележка, вместо да си завишавам числата.</p>
-        <p class="section-sub en">Where the form fits, scored straight. Where it doesn't (code review of others, shared codebase), marked N/A with a note rather than inflated.</p>
+        <div class="eyebrow">Competencies assessment · the 17 form items + overall</div>
+        <h2>Honest <em>scores</em>, each with the reasoning behind it</h2>
+        <p class="section-sub">Scored 1 to 5 against the form's exact items. Where an item fits the SA reality, "code" is read as the extraction and automation systems I actually built. Where an item genuinely does not apply (reviewing others' code in a shared codebase), it is marked N/A rather than inflated.</p>
       </div>
 
       <div class="panel">
-        <div class="score-grid">
-          <div>
-            <div class="score-row"><div class="score-label"><span class="bg">Чист код</span><span class="en">Clean code</span></div><div class="score-mini-bar"><div class="score-mini-fill s4"></div></div><div class="score-num-sm">4</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Time estimation</span><span class="en">Time estimation</span></div><div class="score-mini-bar"><div class="score-mini-fill s3"></div></div><div class="score-num-sm">3</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Скорост на разработка</span><span class="en">Speed of development</span></div><div class="score-mini-bar"><div class="score-mini-fill s5"></div></div><div class="score-num-sm">5</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Code ethics / best practices</span><span class="en">Code ethics / best practices</span></div><div class="score-mini-bar"><div class="score-mini-fill s4"></div></div><div class="score-num-sm">4</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Архитектурни решения</span><span class="en">Architectural solutions</span></div><div class="score-mini-bar"><div class="score-mini-fill s4"></div></div><div class="score-num-sm">4</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Качество на кода (малко бъгове)</span><span class="en">Code quality (few bugs)</span></div><div class="score-mini-bar"><div class="score-mini-fill s4"></div></div><div class="score-num-sm">4</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Code ownership / reviews</span><span class="en">Code ownership / reviews</span></div><div class="score-mini-bar"><div class="score-mini-fill na"></div></div><div class="score-num-sm na">N/A</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Problem solving (без надзор)</span><span class="en">Problem solving (no supervision)</span></div><div class="score-mini-bar"><div class="score-mini-fill s5"></div></div><div class="score-num-sm">5</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Употреба на AI инструменти</span><span class="en">AI tools proficiency</span></div><div class="score-mini-bar"><div class="score-mini-fill s5"></div></div><div class="score-num-sm">5</div></div>
+        <div class="comp-group-label">Hard skills</div>
+        <div class="compression" style="margin: 0 0 20px;"><strong>How to read this block.</strong> I do not hand-author code, I vibecode: I direct AI to produce it and judge the result. So the items here are scored on what I actually own (steering, judging, shipping working systems), not on hand-writing lines. Where an item is purely about authoring craft, it is marked N/A rather than inflated.</div>
+        <div class="comp-grid">
+          <div class="comp flag">
+            <div class="comp-name">1 · Clean code</div>
+            <div class="comp-score na">N/A</div>
+            <div class="comp-why">Measures hand-authored code craft: modulation, self-explanatory lines, easy to debug. I vibecode, so I do not personally write the lines; I direct and judge the output. Marked N/A rather than scored against something I do not do.</div>
+            <div class="comp-pip"><div class="comp-pip-fill na"></div></div>
           </div>
-          <div>
-            <div class="score-row"><div class="score-label"><span class="bg">Самоусъвършенстване</span><span class="en">Self-development</span></div><div class="score-mini-bar"><div class="score-mini-fill s5"></div></div><div class="score-num-sm">5</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Самоорганизация</span><span class="en">Self-management</span></div><div class="score-mini-bar"><div class="score-mini-fill s4"></div></div><div class="score-num-sm">4</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Самостоятелност</span><span class="en">Independence</span></div><div class="score-mini-bar"><div class="score-mini-fill s5"></div></div><div class="score-num-sm">5</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Обучаемост</span><span class="en">Trainability</span></div><div class="score-mini-bar"><div class="score-mini-fill s4"></div></div><div class="score-num-sm">4</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Екипна култура</span><span class="en">Team culture</span></div><div class="score-mini-bar"><div class="score-mini-fill s4"></div></div><div class="score-num-sm">4</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Адаптивност</span><span class="en">Adaptability</span></div><div class="score-mini-bar"><div class="score-mini-fill s5"></div></div><div class="score-num-sm">5</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Принос към ценностите на компанията</span><span class="en">Contributing to company values</span></div><div class="score-mini-bar"><div class="score-mini-fill s4"></div></div><div class="score-num-sm">4</div></div>
-            <div class="score-row"><div class="score-label"><span class="bg">Driver на иновация</span><span class="en">Driver of innovation</span></div><div class="score-mini-bar"><div class="score-mini-fill s5"></div></div><div class="score-num-sm">5</div></div>
-            <div class="score-row"><div class="score-label"><strong><span class="bg">Цялостна оценка</span><span class="en">Overall</span></strong></div><div class="score-mini-bar"><div class="score-mini-fill s4"></div></div><div class="score-num-sm">4</div></div>
+          <div class="comp flag">
+            <div class="comp-name">2 · Time estimation</div>
+            <div class="comp-score">3<span class="of">/5</span></div>
+            <div class="comp-why">Single-day tasks I estimate well. Multi-week delivery across a shifting portfolio is where I under- or over-shoot. Honest weak spot, not a strength I will oversell.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s3"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">3 · Speed of development</div>
+            <div class="comp-score">5<span class="of">/5</span></div>
+            <div class="comp-why">AI-augmented workflow lets me ship a full extraction pipeline or a client demo in the time a stream normally takes to scope one. The 1.2-role coverage figure is the evidence.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s5"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">4 · Code ethics / best practices</div>
+            <div class="comp-score">4<span class="of">/5</span></div>
+            <div class="comp-why">Insist the AI-produced systems are reproducible and easy to deploy: model bake-offs with LLM-as-judge before committing a model, clean deployment patterns (Pyloth clone). Current on practices; light on formal CI/test rituals for a shared team codebase.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s4"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">5 · Architectural solutions</div>
+            <div class="comp-score">4<span class="of">/5</span></div>
+            <div class="comp-why">Designed the engagement-folder convention, the deployment shell, and the state/automation layer that a second SA could inherit. Architecture that compounds across deals, not one-off scripts.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s4"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">6 · Code quality (few bugs)</div>
+            <div class="comp-score">4<span class="of">/5</span></div>
+            <div class="comp-why">Judge quality by output, not by lines: pipelines run at scale (full 100-doc corpus) without silent failures, extraction verified against ground truth. Bugs surface, but I catch them before they reach a client.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s4"></div></div>
+          </div>
+          <div class="comp flag">
+            <div class="comp-name">7 · Code ownership / reviews</div>
+            <div class="comp-score na">N/A</div>
+            <div class="comp-why">I own my code end to end, but I do not review others' code or run shared test-coverage rituals; the SA work is solo, not team-codebase. Marked N/A rather than scored against a duty I do not hold.</div>
+            <div class="comp-pip"><div class="comp-pip-fill na"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">8 · Problem solving</div>
+            <div class="comp-score">5<span class="of">/5</span></div>
+            <div class="comp-why">Beat the alternative pipeline 99.6% vs 62.7% F1 on the same docs without direction. Solved GPU access, OCR corruption, and ground-truth reconciliation independently. This is my core strength.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s5"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">9 · AI tools proficiency</div>
+            <div class="comp-score">5<span class="of">/5</span></div>
+            <div class="comp-why">AI-augmented tooling is the whole reason one role covers 1.2 roles: model selection, prompt engineering, agentic automation, the Pyloth deployment clone. If any item on this form is a clear 5, it is this one.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s5"></div></div>
+          </div>
+        </div>
+
+        <div class="comp-group-label">Soft skills</div>
+        <div class="comp-grid">
+          <div class="comp">
+            <div class="comp-name">10 · Self-development</div>
+            <div class="comp-score">5<span class="of">/5</span></div>
+            <div class="comp-why">Taught myself the SA commercial motion from an engineering base, plus new OCR/LLM tooling as it shipped. Learning and applying new information fast is the habit that carried the half.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s5"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">11 · Self-management</div>
+            <div class="comp-score">4<span class="of">/5</span></div>
+            <div class="comp-why">Ran 15+ engagements without dropping threads, aided by a state/brief system I built for exactly this. Prioritisation across too many parallel hats is where discipline is tested.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s4"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">12 · Independence</div>
+            <div class="comp-score">5<span class="of">/5</span></div>
+            <div class="comp-why">Most of the platform leverage was built without being asked: I saw the need, scoped it, shipped it, then surfaced it. Initiative without prompting is the default mode, not the exception.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s5"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">13 · Trainability</div>
+            <div class="comp-score">4<span class="of">/5</span></div>
+            <div class="comp-why">Took Vankata's commercial-presence feedback without defensiveness and turned it into the explicit H2 plan. Room to grow on absorbing coaching in real time, mid-call, not just after.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s4"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">14 · Team culture</div>
+            <div class="comp-score">4<span class="of">/5</span></div>
+            <div class="comp-why">Reliable backup for Jordan and Steven on the technical half; prepped onboarding for the next SA. Cross-team ritual visibility is lighter than I would like, given the solo cadence.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s4"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">15 · Adaptability</div>
+            <div class="comp-score">5<span class="of">/5</span></div>
+            <div class="comp-why">Absorbed the Heineken pivot and the Garrett crunch without derailing other engagements. Last-minute scope changes are normal in scoping/demo work and I handle them.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s5"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">16 · Company values</div>
+            <div class="comp-score">4<span class="of">/5</span></div>
+            <div class="comp-why">Bias toward openness and publishing work so others benefit (shared tooling, onboarding docs). Transparent about my own gaps, including in this review. The written structural feedback to Vankata is the piece I owe.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s4"></div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-name">17 · Driver of innovation</div>
+            <div class="comp-score">5<span class="of">/5</span></div>
+            <div class="comp-why">The whole AI-augmented platform layer is an innovation nobody scoped for me; I proposed it, built it, and followed through to where a second SA can ride it. Ideas plus follow-through, not just ideas.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s5"></div></div>
+          </div>
+          <div class="comp" style="border-color: rgba(168,85,247,0.28);">
+            <div class="comp-name">Overall performance</div>
+            <div class="comp-score">4<span class="of">/5</span></div>
+            <div class="comp-why">Strong delivery and platform leverage, real breadth, one honest development edge (commercial-call presence) that is already the named H2 focus. A 4 that is genuinely earned reads better than a 5 I would have to defend.</div>
+            <div class="comp-pip"><div class="comp-pip-fill s4"></div></div>
           </div>
         </div>
       </div>
@@ -947,62 +1014,42 @@
   <section>
     <div class="container">
       <div class="section-head">
-        <div class="eyebrow"><span class="bg">Раздел 06 · За Сара · Процесна разлика</span><span class="en">Section 06 · For Sara · Process gap</span></div>
-        <h2>
-          <span class="bg">Какво мери формата сега и какво <em>трябва да мери</em> за SA ролята</span>
-          <span class="en">What the form measures vs. what an <em>SA role</em> should be measured on</span>
-        </h2>
-        <p class="section-sub bg">Формата е направена за software engineer-и. По-голямата част от 17-те въпроса са за код, който един SA в Iris рядко притежава. По-долу е сравнението.</p>
-        <p class="section-sub en">The form is built for software engineers. Most of the 17 items are about code an SA at IRIS rarely owns. Below: the side-by-side.</p>
+        <div class="eyebrow">For HR · process gap</div>
+        <h2>What the form measures vs. what an <em>SA role</em> should be measured on</h2>
+        <p class="section-sub">The form is built for software engineers. Most of the 17 items are about code an SA at IRIS rarely owns. Below is the side-by-side, offered as input, not complaint.</p>
       </div>
 
       <div class="gap-grid">
         <div class="gap-col measures">
           <div class="gap-col-head">
             <div class="gap-col-num">i.</div>
-            <div class="gap-col-title"><span class="bg">Какво мери формата днес</span><span class="en">What the form measures today</span></div>
+            <div class="gap-col-title">What the form measures today</div>
           </div>
           <ul class="gap-list">
-            <li class="bg"><span class="gap-text"><strong>Качество и модулност на кода</strong></span><span class="gap-score s4">4</span></li>
-            <li class="en"><span class="gap-text"><strong>Code quality &amp; modulation</strong></span><span class="gap-score s4">4</span></li>
-            <li class="bg"><span class="gap-text"><strong>Code reviews / shared codebase ownership</strong></span><span class="gap-score na">N/A</span></li>
-            <li class="en"><span class="gap-text"><strong>Code reviews / shared codebase ownership</strong></span><span class="gap-score na">N/A</span></li>
-            <li class="bg"><span class="gap-text"><strong>Dev speed и estimation</strong></span><span class="gap-score s4">4</span></li>
-            <li class="en"><span class="gap-text"><strong>Dev speed &amp; estimation</strong></span><span class="gap-score s4">4</span></li>
-            <li class="bg"><span class="gap-text"><strong>Архитектурни решения</strong> (общо)</span><span class="gap-score s4">4</span></li>
-            <li class="en"><span class="gap-text"><strong>Architectural solutions</strong> (generic)</span><span class="gap-score s4">4</span></li>
-            <li class="bg"><span class="gap-text"><strong>AI tools proficiency</strong> (на практика двоично)</span><span class="gap-score s5">5</span></li>
-            <li class="en"><span class="gap-text"><strong>AI tool proficiency</strong> (binary in practice)</span><span class="gap-score s5">5</span></li>
-            <li class="bg"><span class="gap-text"><strong>Общи soft skills</strong> (адаптивност, екип, иновация)</span><span class="gap-score s4">4</span></li>
-            <li class="en"><span class="gap-text"><strong>Generic soft skills</strong> (adaptability, team, innovation)</span><span class="gap-score s4">4</span></li>
+            <li><span class="gap-text"><strong>Code quality &amp; modulation</strong></span><span class="gap-score s4">4</span></li>
+            <li><span class="gap-text"><strong>Code reviews / shared codebase ownership</strong></span><span class="gap-score na">N/A</span></li>
+            <li><span class="gap-text"><strong>Dev speed &amp; estimation</strong></span><span class="gap-score s4">4</span></li>
+            <li><span class="gap-text"><strong>Architectural solutions</strong> (generic)</span><span class="gap-score s4">4</span></li>
+            <li><span class="gap-text"><strong>AI tool proficiency</strong> (binary in practice)</span><span class="gap-score s5">5</span></li>
+            <li><span class="gap-text"><strong>Generic soft skills</strong> (adaptability, team, innovation)</span><span class="gap-score s4">4</span></li>
           </ul>
         </div>
         <div class="gap-col missing">
           <div class="gap-col-head">
             <div class="gap-col-num">ii.</div>
-            <div class="gap-col-title"><span class="bg">Какво трябва да мери една SA роля</span><span class="en">What an SA role should also measure</span></div>
+            <div class="gap-col-title">What an SA role should also measure</div>
           </div>
           <ul class="gap-list">
-            <li class="bg"><span class="gap-text"><strong>Влияние върху сделката</strong>, дали сделката се движи напред заради SA участието</span><span class="gap-score s4">4</span></li>
-            <li class="en"><span class="gap-text"><strong>Deal influence</strong>, deals moved forward via SA involvement</span><span class="gap-score s4">4</span></li>
-            <li class="bg"><span class="gap-text"><strong>Точност на scoping-а</strong>, дали PoC скоупът отговаря на нуждата</span><span class="gap-score s4">4</span></li>
-            <li class="en"><span class="gap-text"><strong>Scoping accuracy</strong>, POC scope match to client need</span><span class="gap-score s4">4</span></li>
-            <li class="bg"><span class="gap-text"><strong>Конверсия от демо</strong>, дали демото движи сделката напред</span><span class="gap-score s4">4</span></li>
-            <li class="en"><span class="gap-text"><strong>Demo conversion</strong>, demo moves the deal forward</span><span class="gap-score s4">4</span></li>
-            <li class="bg"><span class="gap-text"><strong>Комерсиален и технически превод</strong>, качество на моста</span><span class="gap-score s3">3</span></li>
-            <li class="en"><span class="gap-text"><strong>Commercial &amp; technical translation</strong> quality</span><span class="gap-score s3">3</span></li>
-            <li class="bg"><span class="gap-text"><strong>Stakeholder навигация</strong> между sales, продукт, клиент</span><span class="gap-score s3">3</span></li>
-            <li class="en"><span class="gap-text"><strong>Stakeholder navigation</strong> across sales, product, client</span><span class="gap-score s3">3</span></li>
-            <li class="bg"><span class="gap-text"><strong>PoC delivery</strong> навреме и с качество</span><span class="gap-score s4">4</span></li>
-            <li class="en"><span class="gap-text"><strong>POC delivery</strong> on time and on quality</span><span class="gap-score s4">4</span></li>
-            <li class="bg"><span class="gap-text"><strong>Прехвърляне на знание</strong> и onboarding на следващия SA</span><span class="gap-score s4">4</span></li>
-            <li class="en"><span class="gap-text"><strong>Knowledge transfer</strong> &amp; onboarding the next SA</span><span class="gap-score s4">4</span></li>
-            <li class="bg"><span class="gap-text"><strong>Cross-engagement стратегия</strong> и подреждане на сделките</span><span class="gap-score s4">4</span></li>
-            <li class="en"><span class="gap-text"><strong>Cross-engagement strategy</strong> &amp; deal sequencing</span><span class="gap-score s4">4</span></li>
-            <li class="bg"><span class="gap-text"><strong>Platform leverage</strong>, инфраструктура, която носи натрупване</span><span class="gap-score s5">5</span></li>
-            <li class="en"><span class="gap-text"><strong>Platform leverage</strong>, infra that compounds across deals</span><span class="gap-score s5">5</span></li>
-            <li class="bg"><span class="gap-text"><strong>Клиентско доверие в Iris</strong> след срещата</span><span class="gap-score s3">3</span></li>
-            <li class="en"><span class="gap-text"><strong>Client-side brand</strong> after the meeting</span><span class="gap-score s3">3</span></li>
+            <li><span class="gap-text"><strong>Deal influence</strong>, deals moved forward via SA involvement</span><span class="gap-score s4">4</span></li>
+            <li><span class="gap-text"><strong>Scoping accuracy</strong>, POC scope match to client need</span><span class="gap-score s4">4</span></li>
+            <li><span class="gap-text"><strong>Demo conversion</strong>, demo moves the deal forward</span><span class="gap-score s4">4</span></li>
+            <li><span class="gap-text"><strong>Commercial &amp; technical translation</strong> quality</span><span class="gap-score s3">3</span></li>
+            <li><span class="gap-text"><strong>Stakeholder navigation</strong> across sales, product, client</span><span class="gap-score s3">3</span></li>
+            <li><span class="gap-text"><strong>POC delivery</strong> on time and on quality</span><span class="gap-score s4">4</span></li>
+            <li><span class="gap-text"><strong>Knowledge transfer</strong> &amp; onboarding the next SA</span><span class="gap-score s4">4</span></li>
+            <li><span class="gap-text"><strong>Cross-engagement strategy</strong> &amp; deal sequencing</span><span class="gap-score s4">4</span></li>
+            <li><span class="gap-text"><strong>Platform leverage</strong>, infra that compounds across deals</span><span class="gap-score s5">5</span></li>
+            <li><span class="gap-text"><strong>Client-side brand</strong> after the meeting</span><span class="gap-score s3">3</span></li>
           </ul>
         </div>
       </div>
@@ -1013,68 +1060,45 @@
   <section>
     <div class="container">
       <div class="section-head">
-        <div class="eyebrow"><span class="bg">Раздел 07 · Честен прочит</span><span class="en">Section 07 · Honest read</span></div>
-        <h2>
-          <span class="bg">Където <em>съм силен</em>, където съм разпънат, и къде има реални дупки</span>
-          <span class="en">Where I <em>excel</em>, where I'm stretched, where there are real gaps</span>
-        </h2>
+        <div class="eyebrow">Section · Honest read</div>
+        <h2>Where I <em>excel</em>, where I'm stretched, where there are real gaps</h2>
       </div>
 
       <div class="triad">
         <article class="triad-col strength">
           <div class="accent"></div>
-          <h3><span class="bg">Където съм силен</span><span class="en">Where I excel</span></h3>
+          <h3>Where I excel</h3>
           <ul>
-            <li class="bg"><strong>Самостоятелна velocity</strong> върху infra, която носи натрупване</li>
-            <li class="en"><strong>Self-directed velocity</strong> on infra that compounds</li>
-            <li class="bg"><strong>AI-augmented работа</strong></li>
-            <li class="en"><strong>AI-augmented work</strong></li>
-            <li class="bg"><strong>Scoping и демо</strong>, DB InfraGO с 96.6% groundedness в един цикъл</li>
-            <li class="en"><strong>Scoping &amp; demo</strong>, DB InfraGO at 96.6% groundedness in one cycle</li>
-            <li class="bg"><strong>Комерсиален и технически превод</strong> на живо по обажданията</li>
-            <li class="en"><strong>Commercial &amp; technical translation</strong> live on calls</li>
-            <li class="bg"><strong>Адаптивност под напрежение</strong>, Хайнекен pivot, Garrett crunch</li>
-            <li class="en"><strong>Adaptability under pressure</strong>, Heineken pivot, Garrett crunch</li>
-            <li class="bg"><strong>Документация като артефакт</strong></li>
-            <li class="en"><strong>Documentation as artefact</strong></li>
+            <li><strong>Self-directed velocity</strong> on infra that compounds</li>
+            <li><strong>AI-augmented work</strong></li>
+            <li><strong>Scoping &amp; demo</strong>, DB InfraGO at 96.6% groundedness in one cycle</li>
+            <li><strong>Commercial &amp; technical translation</strong> live on calls</li>
+            <li><strong>Adaptability under pressure</strong>, Heineken pivot, Garrett crunch</li>
+            <li><strong>Documentation as artefact</strong></li>
           </ul>
         </article>
 
         <article class="triad-col stretch">
           <div class="accent"></div>
-          <h3><span class="bg">Където съм разпънат</span><span class="en">Where I'm stretched</span></h3>
+          <h3>Where I'm stretched</h3>
           <ul>
-            <li class="bg"><strong>Многобройни роли</strong>, демо / scoping / PM / tech lead</li>
-            <li class="en"><strong>Multi-hat load</strong> across demo / scoping / PM / tech-lead</li>
-            <li class="bg"><strong>Multi-week delivery estimation</strong></li>
-            <li class="en"><strong>Multi-week delivery estimation</strong></li>
-            <li class="bg"><strong>Best-in-class</strong> в нито една дименсия, силен генералист по дизайн</li>
-            <li class="en"><strong>Best-in-class</strong> at any single dimension, generalist by design</li>
-            <li class="bg"><strong>Видимост в cross-team ритуалите</strong></li>
-            <li class="en"><strong>Cross-team rituals</strong> visibility</li>
-            <li class="bg"><strong>Структурирано менторство</strong>, нямам ежедневна managerial динамика</li>
-            <li class="en"><strong>Structured mentorship</strong>, no day-to-day manager dynamic</li>
-            <li class="bg"><strong>Осъзнатост за капацитета на tech екипа</strong></li>
-            <li class="en"><strong>Tech-team bandwidth awareness</strong></li>
+            <li><strong>Multi-hat load</strong> across demo / scoping / PM / tech-lead</li>
+            <li><strong>Multi-week delivery estimation</strong></li>
+            <li><strong>Best-in-class</strong> at any single dimension, generalist by design</li>
+            <li><strong>Cross-team rituals</strong> visibility</li>
+            <li><strong>Structured mentorship</strong>, no day-to-day manager dynamic</li>
+            <li><strong>Tech-team bandwidth awareness</strong></li>
           </ul>
         </article>
 
         <article class="triad-col gap">
           <div class="accent"></div>
-          <h3><span class="bg">Реални дупки</span><span class="en">Real gaps</span></h3>
+          <h3>Real gaps</h3>
           <ul>
-            <li class="bg"><strong>Вътрешни framing миси</strong>, RAG sync-а на 19 май уплаши Марти и Боби</li>
-            <li class="en"><strong>Internal framing misses</strong>, May 19 RAG-sync caused worry to Marti / Bobi</li>
-            <li class="bg"><strong>Структурна обратна връзка до Ванката в писмен вид</strong>, флагнато устно, не документирано</li>
-            <li class="en"><strong>Structural feedback to Vankata in writing</strong>, flagged verbally, not documented</li>
-            <li class="bg"><strong>Code review на чужд код</strong>, не го правя на практика</li>
-            <li class="en"><strong>Code review of others</strong>, not in practice</li>
-            <li class="bg"><strong>Formal RFP / RFI</strong> response craft</li>
-            <li class="en"><strong>Formal RFP / RFI</strong> response craft</li>
-            <li class="bg"><strong>Reference customer storytelling</strong>, case studies, изпипани декове</li>
-            <li class="en"><strong>Reference customer storytelling</strong>, case studies, polished decks</li>
-            <li class="bg"><strong>Competitive intelligence / battlecards</strong></li>
-            <li class="en"><strong>Competitive intelligence / battlecards</strong></li>
+            <li><strong>Internal framing misses</strong>, May 19 RAG-sync worried Marti / Bobi</li>
+            <li><strong>Structural feedback to Vankata in writing</strong>, flagged verbally, not documented</li>
+            <li><strong>Code review of others</strong>, not in practice</li>
+            <li><strong>Reference customer storytelling</strong>, case studies, polished decks</li>
           </ul>
         </article>
       </div>
@@ -1085,27 +1109,21 @@
   <section>
     <div class="container">
       <div class="forward">
-        <div class="eyebrow"><span class="bg">Раздел 08 · Напред</span><span class="en">Section 08 · Forward</span></div>
-        <h3>
-          <span class="bg">Ролята се измества. Растежният ръб е ясен. Инфраструктурата, за да го мащабираме, вече е изградена.</span>
-          <span class="en">The role is shifting. The growth edge is clear. The infrastructure to scale it is already built.</span>
-        </h3>
+        <div class="eyebrow">Section · Forward</div>
+        <h3>The role is shifting. The growth edge is clear. The infrastructure to scale it is already built.</h3>
 
         <div class="forward-rows">
           <div class="forward-row">
-            <div class="who"><span class="bg">За Ванката · мениджър</span><span class="en">For Vankata · manager</span></div>
-            <div class="bg"><strong>Обратната връзка за комерсиалното coverage е приета, и това е изричният фокус за H2.</strong> Бих искал структурирани repetitions. Да сядам като observer на повече от твоите обаждания, после да поемам сегменти със стендбай от теб, после да водя с retro след това. Техническата работа я нося. Комерсиалния мускул трябва да го построя с повторение до някой, който вече го прави добре.</div>
-            <div class="en"><strong>The commercial-coverage feedback is heard, and it's the explicit H2 focus.</strong> I'd value structured reps. Sitting in on more of your calls in observer mode first, then taking lead segments with you on standby, then leading with retro afterwards. The technical work I can carry. The commercial muscle I have to build through repetition with someone who already does it well.</div>
+            <div class="who">For Vankata · manager</div>
+            <div><strong>The commercial-coverage feedback is heard, and it is the explicit H2 focus.</strong> I would value structured reps: sitting in on more of your calls in observer mode first, then taking lead segments with you on standby, then leading with a retro afterwards. The technical work I can carry. The commercial muscle I have to build through repetition with someone who already does it well.</div>
           </div>
           <div class="forward-row">
-            <div class="who"><span class="bg">За Сара · HR</span><span class="en">For Sara · HR</span></div>
-            <div class="bg"><strong>На линия съм за обсъждане на следващата итерация на формата.</strong> AI-augmented year-long signal-а, който описа, е правилната посока. Раздел 06 може да даде материал за това как трябва да изглеждат новите SA компетенции конкретно за Iris.</div>
-            <div class="en"><strong>Happy to be a sounding board on the next iteration of the form.</strong> The AI-augmented year-long signal you described is the right direction. Section 06 above might be useful inputs for what the new SA competencies should look like for IRIS specifically.</div>
+            <div class="who">For Sara · HR</div>
+            <div><strong>Happy to be a sounding board on the next iteration of the form.</strong> The AI-augmented, year-long signal you described is the right direction. The gap-analysis section above might be useful input for what the SA competencies should look like for IRIS specifically.</div>
           </div>
           <div class="forward-row">
-            <div class="who"><span class="bg">За екипа</span><span class="en">For the team</span></div>
-            <div class="bg"><strong>Platform инвестицията стигна до точка, в която още един SA може да я яхне.</strong> Onboarding документът е готов (беше подготвен за Емин). Tooling-ът ги носи. Бутилката е оферта, не ramp.</div>
-            <div class="en"><strong>Platform investment is reaching the point where a second SA could ride it.</strong> The onboarding doc is ready (was prepared for Emin). The tooling carries them. The bottleneck is the offer, not the ramp.</div>
+            <div class="who">For the team</div>
+            <div><strong>Platform investment is reaching the point where a second SA could ride it.</strong> The onboarding doc is ready (was prepared for Emin). The tooling carries them. The bottleneck is the offer, not the ramp.</div>
           </div>
         </div>
       </div>
@@ -1114,41 +1132,11 @@
 
   <footer>
     <div class="container foot-inner">
-      <div><span class="bg">Изготвено 20 май 2026 · Иво Стефанов · За HR демо и разговор с екипа</span><span class="en">Drafted 2026-05-20 · Ivaylo Stefanov · For HR demo &amp; team conversation</span></div>
-      <div><a href="sa-overlap-venn.html"><span class="bg">→ Venn (SA припокриване)</span><span class="en">→ Role overlap (Venn)</span></a></div>
+      <div>Drafted 2026-05-20, updated 2026-07-03 · Ivaylo Stefanov · For HR demo &amp; team conversation</div>
+      <div><a href="sa-overlap-venn.html">→ Role overlap (Venn)</a></div>
     </div>
   </footer>
 
 </div>
-
-<script>
-  (function(){
-    var html = document.documentElement;
-    var buttons = document.querySelectorAll('.lang-btn');
-    var bgMonths = document.querySelectorAll('.month-bg');
-    var enMonths = document.querySelectorAll('.month-en');
-
-    function setLang(lang) {
-      html.setAttribute('lang', lang);
-      buttons.forEach(function(b){
-        b.classList.toggle('active', b.dataset.lang === lang);
-      });
-      bgMonths.forEach(function(m){ m.style.display = lang === 'bg' ? '' : 'none'; });
-      enMonths.forEach(function(m){ m.style.display = lang === 'en' ? '' : 'none'; });
-      try { localStorage.setItem('sa-dash-lang', lang); } catch(e){}
-    }
-
-    // Init from localStorage or default to BG
-    var saved = null;
-    try { saved = localStorage.getItem('sa-dash-lang'); } catch(e){}
-    setLang(saved === 'en' ? 'en' : 'bg');
-
-    buttons.forEach(function(b){
-      b.addEventListener('click', function(){
-        setLang(b.dataset.lang);
-      });
-    });
-  })();
-</script>
 </body>
 </html>
