@@ -10,7 +10,7 @@ What's wired, what's not, how to set up each on a fresh machine.
 | **Gmail** | ✅ wired | OAuth (claude.ai-hosted) | `_gmail_digest_protocol.md`, finding emails from contacts. |
 | **Google Drive** | ✅ wired | OAuth (claude.ai-hosted) | Reading client docs, finding shared files. **Note**: prefer the local Drive sync mount for bulk file ops (faster, no base64 bloat). See [memory/drive-sync-mount.md](../memory/drive-sync-mount.md). |
 | **Slack** | ✅ wired | OAuth | Channel history, DM search, transcript pulls. |
-| **Asana** | ✅ wired | OAuth (manual setup) | Reading Iris Commercial Engagements + Product Roadmap projects. See [memory/asana-mcp-oauth-setup.md](../memory/asana-mcp-oauth-setup.md) for the OAuth quirk. |
+| **Asana** | ✅ wired | OAuth (self-registering, v1 `/sse`) | Reading Iris Commercial Engagements + Product Roadmap projects. Setup + troubleshooting: [_asana_mcp_setup.md](../_asana_mcp_setup.md). |
 | **HubSpot** | ❌ blocked | OAuth | Pipeline/deal state. Blocked: no admin authorisation yet (`NEXT_PRIORITIES.md` OQ-1). |
 | **Canva** | ✅ wired | OAuth | Decks, brand templates. Used rarely; pull deck templates. |
 | **claude-mem** | ✅ (plugin, not MCP) | n/a | Memory search across sessions. |
@@ -35,9 +35,15 @@ These connect via OAuth in the Claude Code UI:
 
 For the personal account this is already done. For the Iris-issued account, redo the OAuth per server.
 
-### Asana (OAuth via pre-registered app)
+### Asana (self-registering OAuth)
 
-Asana's MCP OAuth flow has a registration quirk. See [memory/asana-mcp-oauth-setup.md](../memory/asana-mcp-oauth-setup.md) for the exact steps. Short version: pre-register the OAuth app in Asana developer console, paste client_id/client_secret into the MCP config, check "native app".
+```
+claude mcp add --transport sse asana https://mcp.asana.com/sse
+```
+
+Then `/mcp` → asana → Authenticate. No manual app needed.
+
+Use the **v1 `/sse`** endpoint, not `v2/mcp`. v2 delegates OAuth to `app.asana.com`, which publishes no `registration_endpoint`, so Claude Code can't self-register and fails with "does not support dynamic client registration". Full root cause, diagnostics, and cleanup steps: [_asana_mcp_setup.md](../_asana_mcp_setup.md).
 
 ### HubSpot
 
