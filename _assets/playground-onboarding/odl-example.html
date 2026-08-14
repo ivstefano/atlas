@@ -85,11 +85,9 @@ body{background:#e8e8ef;font-family:var(--font-poppins);color:var(--fg-1);paddin
   overflow:hidden;text-overflow:ellipsis}
 .fsub{font-size:10px;color:var(--fg-3);white-space:nowrap;overflow:hidden;
   text-overflow:ellipsis;margin-top:1px}
-.fbadges{flex:none;display:flex;gap:3px;align-items:center}
+.fbadges{display:flex;gap:4px;align-items:center;margin-top:4px;flex-wrap:wrap}
 .flang{font-family:var(--font-saira);font-size:8.5px;font-weight:700;letter-spacing:.05em;
-  background:var(--color-ai-tint);color:var(--fg-ai);border-radius:3px;padding:1px 4px}
-.fscan{font-family:var(--font-saira);font-size:8.5px;font-weight:700;letter-spacing:.05em;
-  background:#fff3e0;color:#8a5a12;border:1px solid #f0d5a8;border-radius:3px;padding:0 4px}
+  background:var(--color-ai-tint);color:var(--fg-ai);border-radius:3px;padding:1px 4px;flex:none}
 .odlcard{margin:6px;padding:11px 12px;border:1px solid var(--color-ai-border);
   border-radius:var(--radius-md);background:var(--color-ai-tint);cursor:pointer;box-shadow:var(--shadow-ai)}
 .odlcard .r1{display:flex;align-items:center;gap:7px}
@@ -142,9 +140,19 @@ table.odl tbody tr:hover td.pid{background:#fafbff}
 .lg{display:inline-block;font-family:var(--font-saira);font-size:8.5px;font-weight:700;
   letter-spacing:.05em;background:var(--color-ai-tint);color:var(--fg-ai);
   border-radius:3px;padding:1px 4px;margin-left:6px;vertical-align:middle}
-.sc{display:inline-block;font-family:var(--font-saira);font-size:8.5px;font-weight:700;
-  letter-spacing:.05em;background:#fff3e0;color:#8a5a12;border:1px solid #f0d5a8;
-  border-radius:3px;padding:0 4px;margin-left:4px;vertical-align:middle}
+/* Two vision states, deliberately different weight. "Fully scanned" is the harder
+   claim, so it is filled and warm; "visual" is quieter but still always present,
+   because every document in this corpus needed a vision model somewhere. */
+.bscan,.bvis{display:inline-flex;align-items:center;gap:3px;font-family:var(--font-saira);
+  font-size:8.5px;font-weight:700;letter-spacing:.04em;border-radius:3px;
+  padding:1px 5px;white-space:nowrap;flex:none;cursor:help}
+.bscan{background:#f0a52e;color:#3b2600;border:1px solid #d98f1c}
+.bvis{background:#fff;color:#5b6396;border:1px solid #d6d9ea}
+.bscan::before{content:"";width:5px;height:5px;border-radius:50%;background:#3b2600;
+  opacity:.55;flex:none}
+.bvis::before{content:"";width:5px;height:5px;border-radius:50%;border:1.2px solid #9aa1c8;
+  flex:none;box-sizing:border-box}
+.badgerow{display:inline-flex;gap:4px;margin-left:6px;vertical-align:middle}
 /* row-level click-through: what clients actually asked for */
 .opendoc{display:flex;align-items:center;gap:4px;font-family:var(--font-saira);font-size:9.5px;
   font-weight:500;letter-spacing:.03em;color:var(--fg-ai);margin-top:7px;opacity:0;
@@ -236,120 +244,106 @@ table.odl tbody tr:hover .opendoc{opacity:1}
         <div class="filecol">
           <div class="filehead">
             <div class="t">Dataset files</div>
-            <div class="d">14 patents · 6 languages · 7 offices</div>
+            <div class="d">14 patents · 6 languages · every one needed a vision model</div>
           </div>
           <div class="filelist">
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">TWI592499B.pdf</div>
-            <div class="fsub">Molten Al-Zn-Mg-Si Coated Steel Sheet and Manufa</div>
+            <div class="fbadges"><span class="flang">ZH</span><span class="bscan" title="No text layer anywhere. Every one of the 54 pages was read from the image.">Fully scanned · 54pp</span></div>
           </div>
-          <div class="fbadges"><span class="flang">ZH</span><span class="fscan">scan</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">JP6374864B2.pdf</div>
-            <div class="fsub">Flat Steel Material and Method for Manufacturing</div>
+            <div class="fbadges"><span class="flang">JA</span><span class="bvis" title="9 of 21 pages carry figures, tables or diagrams that only a vision model can read.">9pp visual</span></div>
           </div>
-          <div class="fbadges"><span class="flang">JA</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">KR102297297B1.pdf</div>
-            <div class="fsub">Aluminum-based Coated Steel with Excellent Corro</div>
+            <div class="fbadges"><span class="flang">KO</span><span class="bvis" title="3 of 13 pages carry figures, tables or diagrams that only a vision model can read.">3pp visual</span></div>
           </div>
-          <div class="fbadges"><span class="flang">KO</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">SA518391052B1.pdf</div>
-            <div class="fsub">Treatment of Kerogen in Subterranean Formations</div>
+            <div class="fbadges"><span class="flang">AR</span><span class="bscan" title="No text layer anywhere. Every one of the 59 pages was read from the image.">Fully scanned · 59pp</span></div>
           </div>
-          <div class="fbadges"><span class="flang">AR</span><span class="fscan">scan</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">CN115595499A.pdf</div>
-            <div class="fsub">High-strength hot-rolled acid-pickled enamel ste</div>
+            <div class="fbadges"><span class="flang">ZH</span><span class="bvis" title="3 of 7 pages carry figures, tables or diagrams that only a vision model can read.">3pp visual</span></div>
           </div>
-          <div class="fbadges"><span class="flang">ZH</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">JP5523373B2.pdf</div>
-            <div class="fsub">Hollow Steel Rod for Drilling and Manufacturing </div>
+            <div class="fbadges"><span class="flang">JA</span><span class="bvis" title="4 of 12 pages carry figures, tables or diagrams that only a vision model can read.">4pp visual</span></div>
           </div>
-          <div class="fbadges"><span class="flang">JA</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">JP6794630B2.pdf</div>
-            <div class="fsub">Electromagnetic Steel Plate and Method for Manuf</div>
+            <div class="fbadges"><span class="flang">JA</span><span class="bvis" title="7 of 18 pages carry figures, tables or diagrams that only a vision model can read.">7pp visual</span></div>
           </div>
-          <div class="fbadges"><span class="flang">JA</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">JPWO2020262063A1.pdf</div>
-            <div class="fsub">Manufacturing Method of Non-Oriented Electrical </div>
+            <div class="fbadges"><span class="flang">JA</span><span class="bvis" title="18 of 30 pages carry figures, tables or diagrams that only a vision model can read.">18pp visual</span></div>
           </div>
-          <div class="fbadges"><span class="flang">JA</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">EP2038445B1.pdf</div>
-            <div class="fsub">Duplex Stainless Steel</div>
+            <div class="fbadges"><span class="flang">FR</span><span class="bvis" title="5 of 25 pages carry figures, tables or diagrams that only a vision model can read.">5pp visual</span></div>
           </div>
-          <div class="fbadges"><span class="flang">FR</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">US11203795.pdf</div>
-            <div class="fsub">Ultra-High Strength Steel Plate Having Excellent</div>
+            <div class="fbadges"><span class="flang">EN</span><span class="bvis" title="17 of 17 pages carry figures, tables or diagrams that only a vision model can read.">17pp visual</span></div>
           </div>
-          <div class="fbadges"><span class="flang">EN</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">EP2356713B1.pdf</div>
-            <div class="fsub">Substrate Made of a Porous Metal or Metal Alloy,</div>
+            <div class="fbadges"><span class="flang">FR</span><span class="bvis" title="7 of 29 pages carry figures, tables or diagrams that only a vision model can read.">7pp visual</span></div>
           </div>
-          <div class="fbadges"><span class="flang">FR</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">SA522432530B1.pdf</div>
-            <div class="fsub">Apparatus, System and Method for Increasing Fric</div>
+            <div class="fbadges"><span class="flang">AR</span><span class="bscan" title="No text layer anywhere. Every one of the 44 pages was read from the image.">Fully scanned · 44pp</span></div>
           </div>
-          <div class="fbadges"><span class="flang">AR</span><span class="fscan">scan</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">CN120155710A.pdf</div>
-            <div class="fsub">U-Rib Plate Unit Welding Equipment Based on Smal</div>
+            <div class="fbadges"><span class="flang">ZH</span><span class="bvis" title="13 of 20 pages carry figures, tables or diagrams that only a vision model can read.">13pp visual</span></div>
           </div>
-          <div class="fbadges"><span class="flang">ZH</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">CN120292898A.pdf</div>
-            <div class="fsub">A Waste Heat Recovery Device for Galvanized Stee</div>
+            <div class="fbadges"><span class="flang">ZH</span><span class="bvis" title="18 of 27 pages carry figures, tables or diagrams that only a vision model can read.">18pp visual</span></div>
           </div>
-          <div class="fbadges"><span class="flang">ZH</span></div>
         </div>
           </div>
           <div class="odlcard">
@@ -373,9 +367,10 @@ table.odl tbody tr:hover .opendoc{opacity:1}
             <div class="claim">Fourteen filings in six languages, written to
             <em>one schema you can read</em>.</div>
             <p class="claimsub">Nobody had to open these documents. Each was read in its own
-            language, three of them from scans with no text layer, and the same facts were pulled
-            into the same columns in English, with units and thresholds made consistent.
-            What used to mean an engineer reading every filing by hand is now one table.
+            language and the same facts were pulled into the same columns in English, with units
+            and thresholds made consistent. <b>261 of the 376 pages carry figures,
+            tables or diagrams that only a vision model can read</b>, and 3 of the filings
+            have no text layer at all, so every page of those was read from the image.
             Under each value, in the filing's own script, is the text it was read from,
             copied exactly.</p>
 
@@ -384,20 +379,20 @@ table.odl tbody tr:hover .opendoc{opacity:1}
                 <table class="odl">
                   <thead><tr><th><span class="hn">Patent</span><span class="hd">Source filing and language</span></th><th><span class="hn">Material system</span><span class="hd">Alloy or material family</span></th><th><span class="hn">Key composition</span><span class="hd">Defining elements, normalised</span></th><th><span class="hn">Key property</span><span class="hd">Headline measured result, normalised</span></th><th><span class="hn">Process route</span><span class="hd">How it is made</span></th><th><span class="hn">Application</span><span class="hd">What it is used for</span></th></tr></thead>
                   <tbody>
-              <tr><td class="pid"><span class="pidv">TWI592499B</span><span class="lg">ZH</span><span class="sc">scan</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Al-Zn-Mg-Si coating on steel substrate</span></td><td><span class="val">Al 25-80%, Si 0.6-15%, Mg 0.1-25%, Zn remainder</span><span class="src" title="Verbatim from the source filing, as read by Axion">含有25質量%~80質量%的Al、超過0.6質 量%~15質量%的Si及超過0.1 質量%~25質量%的Mg，其餘部 分包含 Zn</span></td><td><span class="val">Superior corrosion resistance with Mg₂Si ≥1.0 wt%</span></td><td><span class="val">Molten dip coating with two-stage cooling protocol</span></td><td><span class="val">Building materials: roofs, walls, guardrails, conduits</span></td></tr>
-              <tr><td class="pid"><span class="pidv">JP6374864B2</span><span class="lg">JA</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-C-Mn-Si-Al-Cr-Nb steel</span></td><td><span class="val">C 0.12-0.18%, Mn 1.9-2.2%, Si 0.05-0.2%, Al 0.2-0.5%, Cr 0.05-0.2%, Nb 0.01-0.06%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0. 12-0. 18%； si:0. 05-0.2%； Mn: 1.9-2.2%； A 1:0. 2-0. 5% ； Cr: 0.0</span></td><td><span class="val">Tensile strength ≥ 780 MPa with elongation ≥ 14%</span><span class="src" title="Verbatim from the source filing, as read by Axion">Rm 少なくとも780MPa、特に最大9O0MPa、 A 8o 少なくとも 14%</span></td><td><span class="val">Hot rolling, coiling, cold rolling, continuous annealing, optional galvanizing</span></td><td><span class="val">Automotive body sheet and stampings</span></td></tr>
-              <tr><td class="pid"><span class="pidv">KR102297297B1</span><span class="lg">KO</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Al-Si coating on steel substrate</span></td><td><span class="val">C 0.18-0.25%, Si 0.1-0.5%, Mn 0.9-1.5%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0.18~0.25%, Si: 0.1~0.5%, Mn : 0.9~1.5%</span></td><td><span class="val">Tensile strength ≥ 1300 MPa with superior corrosion resistance</span><span class="src" title="Verbatim from the source filing, as read by Axion">인장강도 1300WPa 이상인 것이 바람직하다.</span></td><td><span class="val">Molten aluminum galvanizing with controlled cooling</span></td><td><span class="val">Hot press formed automotive structural components</span></td></tr>
-              <tr><td class="pid"><span class="pidv">SA518391052B1</span><span class="lg">AR</span><span class="sc">scan</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="val">Ammonium persulfate 0.00005-0.10 mol, sodium bromate 0.00005-0.20 mol</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">ويتراوح تركيز بيرسلفات الأمونيوم ما بين حوالي 0.00005 مول وحوالي 0.10 </span></td><td><span class="val">Kerogen rank reduction improves fracture propagation</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">خفض رتبة مادة عضوية، مثل كيروجين kerogen ، في تكوين جوفي</span></td><td><span class="val">Dual-oxidizer injection into subterranean formations</span></td><td><span class="val">Oil and gas extraction from shale formations</span></td></tr>
-              <tr><td class="pid"><span class="pidv">CN115595499A</span><span class="lg">ZH</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-C-Mn-Ti-B steel</span></td><td><span class="val">C 0.08-0.20%, Mn 0.80-1.80%, S 0.010-0.035%, Ti 0.04-0.09%, B 0.0005-0.0040%</span></td><td><span class="val">Tensile strength 650-800 MPa, hydrogen permeation time ≥25 min</span><span class="src" title="Verbatim from the source filing, as read by Axion">抗拉强度 650~800MPa、延伸率≥23.0%，氢渗透时间达 25min以上</span></td><td><span class="val">Controlled rolling, controlled cooling, acid pickling</span></td><td><span class="val">Enamel-coated tank bodies for water treatment</span></td></tr>
-              <tr><td class="pid"><span class="pidv">JP5523373B2</span><span class="lg">JA</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">High-chromium low-nickel steel alloy</span></td><td><span class="val">C 0.20-0.80%, Cr 2.00-5.00%, Mo 0.20-0.80%, Ni &lt;0.50%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0.20~0.80% Si: 0.10～0.50% Mn: 0.10~1.00% P：=0.015% S：=0.050% Cu： = </span></td><td><span class="val">Minimum hardness 300 HV, impact value ≥15 J/cm²</span><span class="src" title="Verbatim from the source filing, as read by Axion">硬さの最小値が300HV以上であること</span></td><td><span class="val">Induction harden threaded portion, friction pressure weld</span></td><td><span class="val">Drilling rod for mining and tunnel excavation</span></td></tr>
-              <tr><td class="pid"><span class="pidv">JP6794630B2</span><span class="lg">JA</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Si-Al-Mn/Ni α-Fe transformation</span></td><td><span class="val">Si 2.0-4.5%, Al &lt;0.1%, Mn/Ni 2.0-6.0% total</span><span class="src" title="Verbatim from the source filing, as read by Axion">S i：2.0質量%以上4.5 質量％以下、A1：0．1質量%未満、Mn及びNiより選択される元素のうち1種以上 ：合計で2．0質量%以上6</span></td><td><span class="val">{100}&lt;011&gt; texture ratio 30-200, dislocation 2×10¹⁵/m²</span></td><td><span class="val">Hot roll, rapid cool, cold roll 88%+, anneal</span></td><td><span class="val">Motor cores, transformers, generators</span></td></tr>
-              <tr><td class="pid"><span class="pidv">JPWO2020262063A1</span><span class="lg">JA</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Si-Al-Mn steel with controlled Zn and S</span></td><td><span class="val">Si 2.8-6.5%, Al 0.3-4%, Mn 0.05-2.0%, C ≤0.005%</span></td><td><span class="val">Yield stress ≥480 MPa; iron loss W₁₀/₄₀₀ ≤8+20t W/kg</span><span class="src" title="Verbatim from the source filing, as read by Axion">上記仕上焼鈍後の鋼板の降伏応力を480MPa以上とすることを特徴とする</span></td><td><span class="val">Hot rolling, annealing, cold rolling, finish annealing</span></td><td><span class="val">Motor cores for electric vehicles and motors</span></td></tr>
-              <tr><td class="pid"><span class="pidv">EP2038445B1</span><span class="lg">FR</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Cr-Ni duplex stainless steel</span></td><td><span class="val">Cr 21-25%, Ni 1-2.95%, N 0.16-0.28%</span><span class="src" title="Verbatim from the source filing, as read by Axion">21%≤ Cr≤ 25% 1 % ≤ Ni ≤ 2,95% 0,16 % ≤ N ≤ 0,28 %</span></td><td><span class="val">Yield strength 400-450 MPa annealed state</span></td><td><span class="val">Hot rolling at 1150-1280°C, heat treatment 900-1100°C</span></td><td><span class="val">Structural elements for chemical and energy installations</span></td></tr>
-              <tr><td class="pid"><span class="pidv">US11203795</span><span class="lg">EN</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Manganese-based steel with retained austenite</span></td><td><span class="val">C 0.04-0.17%, Mn 4-10%, Si ≤2%</span></td><td><span class="val">Tensile strength ≥1200 MPa, TS×EL ≥25000 MPa%</span></td><td><span class="val">Hot roll, coil, heat treat, cold roll, anneal</span></td><td><span class="val">Lightweight automotive body components</span></td></tr>
-              <tr><td class="pid"><span class="pidv">EP2356713B1</span><span class="lg">FR</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Iron, chromium, nickel, stainless steels, aluminum-containing alloys</span></td><td><span class="null">not stated</span></td><td><span class="val">Porosity gradient 25-65% high-porosity, 10-40% low-porosity layer</span><span class="src" title="Verbatim from the source filing, as read by Axion">une porosité entre 20 et 75%</span></td><td><span class="val">Press-sintering with partial oxidation of metal powder layers</span></td><td><span class="val">Metal-supported SOFC and HTE cells</span></td></tr>
-              <tr><td class="pid"><span class="pidv">SA522432530B1</span><span class="lg">AR</span><span class="sc">scan</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Reinforced polymer, ultra-high molecular weight polyethylene</span></td><td><span class="null">not stated</span></td><td><span class="val">Tensile strength approximately 333,000 newtons per cable</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">قوة قصوى تبلغ 333000 نيوتن</span></td><td><span class="val">Subsurface cable insertion and mechanical interlocking without trenching</span></td><td><span class="val">Subsurface protection for oil and gas pipelines</span></td></tr>
-              <tr><td class="pid"><span class="pidv">CN120155710A</span><span class="lg">ZH</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="null">not stated</span></td><td><span class="val">Improved welding precision on curved U-rib inner surfaces</span><span class="src" title="Verbatim from the source filing, as read by Axion">提高U肋 内部两侧的焊接精准度</span></td><td><span class="val">Articulated support arm with self-guiding spherical structures</span></td><td><span class="val">Bridge steel box girder U-rib welding</span></td></tr>
-              <tr><td class="pid"><span class="pidv">CN120292898A</span><span class="lg">ZH</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="null">not stated</span></td><td><span class="val">Energy consumption reduction 15-25%</span></td><td><span class="val">Heat exchange tube with rotating valve plates creating turbulent flow</span></td><td><span class="val">Waste heat recovery in galvanized steel production</span></td></tr>
+              <tr><td class="pid"><span class="pidv">TWI592499B</span><span class="lg">ZH</span><span class="badgerow"><span class="bscan" title="No text layer anywhere. Every one of the 54 pages was read from the image.">Fully scanned · 54pp</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Al-Zn-Mg-Si coating on steel substrate</span></td><td><span class="val">Al 25-80%, Si 0.6-15%, Mg 0.1-25%, Zn remainder</span><span class="src" title="Verbatim from the source filing, as read by Axion">含有25質量%~80質量%的Al、超過0.6質 量%~15質量%的Si及超過0.1 質量%~25質量%的Mg，其餘部 分包含 Zn</span></td><td><span class="val">Superior corrosion resistance with Mg₂Si ≥1.0 wt%</span></td><td><span class="val">Molten dip coating with two-stage cooling protocol</span></td><td><span class="val">Building materials: roofs, walls, guardrails, conduits</span></td></tr>
+              <tr><td class="pid"><span class="pidv">JP6374864B2</span><span class="lg">JA</span><span class="badgerow"><span class="bvis" title="9 of 21 pages carry figures, tables or diagrams that only a vision model can read.">9pp visual</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-C-Mn-Si-Al-Cr-Nb steel</span></td><td><span class="val">C 0.12-0.18%, Mn 1.9-2.2%, Si 0.05-0.2%, Al 0.2-0.5%, Cr 0.05-0.2%, Nb 0.01-0.06%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0. 12-0. 18%； si:0. 05-0.2%； Mn: 1.9-2.2%； A 1:0. 2-0. 5% ； Cr: 0.0</span></td><td><span class="val">Tensile strength ≥ 780 MPa with elongation ≥ 14%</span><span class="src" title="Verbatim from the source filing, as read by Axion">Rm 少なくとも780MPa、特に最大9O0MPa、 A 8o 少なくとも 14%</span></td><td><span class="val">Hot rolling, coiling, cold rolling, continuous annealing, optional galvanizing</span></td><td><span class="val">Automotive body sheet and stampings</span></td></tr>
+              <tr><td class="pid"><span class="pidv">KR102297297B1</span><span class="lg">KO</span><span class="badgerow"><span class="bvis" title="3 of 13 pages carry figures, tables or diagrams that only a vision model can read.">3pp visual</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Al-Si coating on steel substrate</span></td><td><span class="val">C 0.18-0.25%, Si 0.1-0.5%, Mn 0.9-1.5%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0.18~0.25%, Si: 0.1~0.5%, Mn : 0.9~1.5%</span></td><td><span class="val">Tensile strength ≥ 1300 MPa with superior corrosion resistance</span><span class="src" title="Verbatim from the source filing, as read by Axion">인장강도 1300WPa 이상인 것이 바람직하다.</span></td><td><span class="val">Molten aluminum galvanizing with controlled cooling</span></td><td><span class="val">Hot press formed automotive structural components</span></td></tr>
+              <tr><td class="pid"><span class="pidv">SA518391052B1</span><span class="lg">AR</span><span class="badgerow"><span class="bscan" title="No text layer anywhere. Every one of the 59 pages was read from the image.">Fully scanned · 59pp</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="val">Ammonium persulfate 0.00005-0.10 mol, sodium bromate 0.00005-0.20 mol</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">ويتراوح تركيز بيرسلفات الأمونيوم ما بين حوالي 0.00005 مول وحوالي 0.10 </span></td><td><span class="val">Kerogen rank reduction improves fracture propagation</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">خفض رتبة مادة عضوية، مثل كيروجين kerogen ، في تكوين جوفي</span></td><td><span class="val">Dual-oxidizer injection into subterranean formations</span></td><td><span class="val">Oil and gas extraction from shale formations</span></td></tr>
+              <tr><td class="pid"><span class="pidv">CN115595499A</span><span class="lg">ZH</span><span class="badgerow"><span class="bvis" title="3 of 7 pages carry figures, tables or diagrams that only a vision model can read.">3pp visual</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-C-Mn-Ti-B steel</span></td><td><span class="val">C 0.08-0.20%, Mn 0.80-1.80%, S 0.010-0.035%, Ti 0.04-0.09%, B 0.0005-0.0040%</span></td><td><span class="val">Tensile strength 650-800 MPa, hydrogen permeation time ≥25 min</span><span class="src" title="Verbatim from the source filing, as read by Axion">抗拉强度 650~800MPa、延伸率≥23.0%，氢渗透时间达 25min以上</span></td><td><span class="val">Controlled rolling, controlled cooling, acid pickling</span></td><td><span class="val">Enamel-coated tank bodies for water treatment</span></td></tr>
+              <tr><td class="pid"><span class="pidv">JP5523373B2</span><span class="lg">JA</span><span class="badgerow"><span class="bvis" title="4 of 12 pages carry figures, tables or diagrams that only a vision model can read.">4pp visual</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">High-chromium low-nickel steel alloy</span></td><td><span class="val">C 0.20-0.80%, Cr 2.00-5.00%, Mo 0.20-0.80%, Ni &lt;0.50%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0.20~0.80% Si: 0.10～0.50% Mn: 0.10~1.00% P：=0.015% S：=0.050% Cu： = </span></td><td><span class="val">Minimum hardness 300 HV, impact value ≥15 J/cm²</span><span class="src" title="Verbatim from the source filing, as read by Axion">硬さの最小値が300HV以上であること</span></td><td><span class="val">Induction harden threaded portion, friction pressure weld</span></td><td><span class="val">Drilling rod for mining and tunnel excavation</span></td></tr>
+              <tr><td class="pid"><span class="pidv">JP6794630B2</span><span class="lg">JA</span><span class="badgerow"><span class="bvis" title="7 of 18 pages carry figures, tables or diagrams that only a vision model can read.">7pp visual</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Si-Al-Mn/Ni α-Fe transformation</span></td><td><span class="val">Si 2.0-4.5%, Al &lt;0.1%, Mn/Ni 2.0-6.0% total</span><span class="src" title="Verbatim from the source filing, as read by Axion">S i：2.0質量%以上4.5 質量％以下、A1：0．1質量%未満、Mn及びNiより選択される元素のうち1種以上 ：合計で2．0質量%以上6</span></td><td><span class="val">{100}&lt;011&gt; texture ratio 30-200, dislocation 2×10¹⁵/m²</span></td><td><span class="val">Hot roll, rapid cool, cold roll 88%+, anneal</span></td><td><span class="val">Motor cores, transformers, generators</span></td></tr>
+              <tr><td class="pid"><span class="pidv">JPWO2020262063A1</span><span class="lg">JA</span><span class="badgerow"><span class="bvis" title="18 of 30 pages carry figures, tables or diagrams that only a vision model can read.">18pp visual</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Si-Al-Mn steel with controlled Zn and S</span></td><td><span class="val">Si 2.8-6.5%, Al 0.3-4%, Mn 0.05-2.0%, C ≤0.005%</span></td><td><span class="val">Yield stress ≥480 MPa; iron loss W₁₀/₄₀₀ ≤8+20t W/kg</span><span class="src" title="Verbatim from the source filing, as read by Axion">上記仕上焼鈍後の鋼板の降伏応力を480MPa以上とすることを特徴とする</span></td><td><span class="val">Hot rolling, annealing, cold rolling, finish annealing</span></td><td><span class="val">Motor cores for electric vehicles and motors</span></td></tr>
+              <tr><td class="pid"><span class="pidv">EP2038445B1</span><span class="lg">FR</span><span class="badgerow"><span class="bvis" title="5 of 25 pages carry figures, tables or diagrams that only a vision model can read.">5pp visual</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Cr-Ni duplex stainless steel</span></td><td><span class="val">Cr 21-25%, Ni 1-2.95%, N 0.16-0.28%</span><span class="src" title="Verbatim from the source filing, as read by Axion">21%≤ Cr≤ 25% 1 % ≤ Ni ≤ 2,95% 0,16 % ≤ N ≤ 0,28 %</span></td><td><span class="val">Yield strength 400-450 MPa annealed state</span></td><td><span class="val">Hot rolling at 1150-1280°C, heat treatment 900-1100°C</span></td><td><span class="val">Structural elements for chemical and energy installations</span></td></tr>
+              <tr><td class="pid"><span class="pidv">US11203795</span><span class="lg">EN</span><span class="badgerow"><span class="bvis" title="17 of 17 pages carry figures, tables or diagrams that only a vision model can read.">17pp visual</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Manganese-based steel with retained austenite</span></td><td><span class="val">C 0.04-0.17%, Mn 4-10%, Si ≤2%</span></td><td><span class="val">Tensile strength ≥1200 MPa, TS×EL ≥25000 MPa%</span></td><td><span class="val">Hot roll, coil, heat treat, cold roll, anneal</span></td><td><span class="val">Lightweight automotive body components</span></td></tr>
+              <tr><td class="pid"><span class="pidv">EP2356713B1</span><span class="lg">FR</span><span class="badgerow"><span class="bvis" title="7 of 29 pages carry figures, tables or diagrams that only a vision model can read.">7pp visual</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Iron, chromium, nickel, stainless steels, aluminum-containing alloys</span></td><td><span class="null">not stated</span></td><td><span class="val">Porosity gradient 25-65% high-porosity, 10-40% low-porosity layer</span><span class="src" title="Verbatim from the source filing, as read by Axion">une porosité entre 20 et 75%</span></td><td><span class="val">Press-sintering with partial oxidation of metal powder layers</span></td><td><span class="val">Metal-supported SOFC and HTE cells</span></td></tr>
+              <tr><td class="pid"><span class="pidv">SA522432530B1</span><span class="lg">AR</span><span class="badgerow"><span class="bscan" title="No text layer anywhere. Every one of the 44 pages was read from the image.">Fully scanned · 44pp</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Reinforced polymer, ultra-high molecular weight polyethylene</span></td><td><span class="null">not stated</span></td><td><span class="val">Tensile strength approximately 333,000 newtons per cable</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">قوة قصوى تبلغ 333000 نيوتن</span></td><td><span class="val">Subsurface cable insertion and mechanical interlocking without trenching</span></td><td><span class="val">Subsurface protection for oil and gas pipelines</span></td></tr>
+              <tr><td class="pid"><span class="pidv">CN120155710A</span><span class="lg">ZH</span><span class="badgerow"><span class="bvis" title="13 of 20 pages carry figures, tables or diagrams that only a vision model can read.">13pp visual</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="null">not stated</span></td><td><span class="val">Improved welding precision on curved U-rib inner surfaces</span><span class="src" title="Verbatim from the source filing, as read by Axion">提高U肋 内部两侧的焊接精准度</span></td><td><span class="val">Articulated support arm with self-guiding spherical structures</span></td><td><span class="val">Bridge steel box girder U-rib welding</span></td></tr>
+              <tr><td class="pid"><span class="pidv">CN120292898A</span><span class="lg">ZH</span><span class="badgerow"><span class="bvis" title="18 of 27 pages carry figures, tables or diagrams that only a vision model can read.">18pp visual</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="null">not stated</span></td><td><span class="val">Energy consumption reduction 15-25%</span></td><td><span class="val">Heat exchange tube with rotating valve plates creating turbulent flow</span></td><td><span class="val">Waste heat recovery in galvanized steel production</span></td></tr>
                   </tbody>
                 </table>
               </div>
