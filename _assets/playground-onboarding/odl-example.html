@@ -7,18 +7,39 @@
 <title>Axion ODL — preview panel mock</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#e8e8ef;font-family:var(--font-poppins);color:var(--fg-1);padding:32px 32px 70px}
-.wrap{max-width:1640px;margin:0 auto}
-.pagehead h1{font-family:var(--font-saira);font-size:26px;font-weight:600;letter-spacing:-.01em}
-.pagehead p{color:var(--fg-2);font-size:14.5px;margin-top:7px;max-width:96ch;line-height:1.6}
+body{background:#e8e8ef;font-family:var(--font-poppins);color:var(--fg-1);padding:30px 30px 64px}
+.wrap{max-width:1680px;margin:0 auto}
+.pagehead h1{font-family:var(--font-saira);font-size:25px;font-weight:600;letter-spacing:-.01em}
+.pagehead p{color:var(--fg-2);font-size:14px;margin-top:7px;max-width:100ch;line-height:1.6}
 .optlabel{font-family:var(--font-saira);font-size:11px;font-weight:500;text-transform:uppercase;
-  letter-spacing:.05em;color:var(--fg-ai);margin:34px 0 8px;display:flex;align-items:center;gap:10px}
+  letter-spacing:.05em;color:var(--fg-ai);margin:30px 0 8px;display:flex;align-items:center;gap:10px}
 .optlabel::after{content:"";flex:1;height:1px;background:var(--border-1)}
 
-/* ---------- app shell (matches index.html) ---------- */
+/* what the design is answering: the client evidence, kept outside the mock */
+.why{margin-top:18px;padding:15px 17px;background:#fff;border:1px solid var(--border-1);
+  border-radius:var(--radius-lg)}
+.whyh{font-family:var(--font-saira);font-size:11px;font-weight:600;text-transform:uppercase;
+  letter-spacing:.05em;color:var(--fg-3);margin-bottom:12px}
+.whygrid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.whygrid .w{padding:0 15px;border-right:1px solid var(--border-1)}
+.whygrid .w:first-child{padding-left:0}
+.whygrid .w:last-child{border-right:none;padding-right:0}
+.whygrid .q{font-size:12.5px;line-height:1.5;color:var(--fg-1)}
+.whygrid .hl{color:var(--fg-ai);font-weight:500}
+.whygrid .a{font-family:var(--font-saira);font-size:10px;font-weight:500;text-transform:uppercase;
+  letter-spacing:.04em;color:var(--fg-ai);margin-top:7px}
+.whygrid .d{font-size:11.5px;line-height:1.5;color:var(--fg-2);margin-top:7px;
+  padding-top:7px;border-top:1px solid var(--border-1)}
+.whyfoot{font-size:12px;color:var(--fg-2);line-height:1.55;margin-top:13px;padding-top:11px;
+  border-top:1px solid var(--border-1)}
+.whyfoot b{color:var(--fg-1)}
+@media(max-width:1100px){.whygrid{grid-template-columns:repeat(2,1fr);gap:15px}
+  .whygrid .w{border-right:none;padding:0}}
+
+/* ---------- app shell ---------- */
 .shell{display:flex;background:var(--bg-page);border-radius:var(--radius-xl);overflow:hidden;
   box-shadow:var(--shadow-3);border:1px solid var(--border-1)}
-.side{width:220px;flex:none;background:linear-gradient(rgba(3,6,20,.8),rgba(52,56,165,.8)),var(--color-blue-ocean-100);
+.side{width:214px;flex:none;background:linear-gradient(rgba(3,6,20,.8),rgba(52,56,165,.8)),var(--color-blue-ocean-100);
   padding:16px 12px;display:flex;flex-direction:column;gap:3px}
 .brand{display:flex;align-items:center;gap:9px;padding:6px 8px 18px}
 .brand .mark{width:26px;height:26px;border-radius:7px;background:var(--color-ai-accent);flex:none;
@@ -44,21 +65,19 @@ body{background:#e8e8ef;font-family:var(--font-poppins);color:var(--fg-1);paddin
 .crumb b{color:var(--fg-1);font-weight:600}
 .spacer{flex:1}
 .guide{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--fg-2)}
-.guide .sw{width:30px;height:17px;border-radius:999px;background:var(--color-ai-accent);
-  position:relative}
+.guide .sw{width:30px;height:17px;border-radius:999px;background:var(--color-ai-accent);position:relative}
 .guide .sw::after{content:"";position:absolute;width:13px;height:13px;border-radius:50%;
   background:#fff;top:2px;right:2px}
 
-/* ---------- workspace: file column + preview pane ---------- */
+/* ---------- workspace ---------- */
 .work{display:flex;flex:1;min-height:0}
-.filecol{width:290px;flex:none;border-right:1px solid var(--border-1);background:var(--bg-card);
+.filecol{width:272px;flex:none;border-right:1px solid var(--border-1);background:var(--bg-card);
   display:flex;flex-direction:column}
 .filehead{padding:13px 15px 11px;border-bottom:1px solid var(--border-1)}
 .filehead .t{font-family:var(--font-saira);font-size:13px;font-weight:600}
 .filehead .d{font-size:11px;color:var(--fg-3);margin-top:2px}
 .filelist{overflow-y:auto;flex:1;padding:6px}
-.frow{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:var(--radius-sm);
-  cursor:pointer}
+.frow{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:var(--radius-sm);cursor:pointer}
 .frow:hover{background:var(--color-ai-card)}
 .fico{width:17px;height:17px;stroke:var(--fg-3);fill:none;stroke-width:1.5;flex:none}
 .fmeta{min-width:0;flex:1}
@@ -71,11 +90,8 @@ body{background:#e8e8ef;font-family:var(--font-poppins);color:var(--fg-1);paddin
   background:var(--color-ai-tint);color:var(--fg-ai);border-radius:3px;padding:1px 4px}
 .fscan{font-family:var(--font-saira);font-size:8.5px;font-weight:700;letter-spacing:.05em;
   background:#fff3e0;color:#8a5a12;border:1px solid #f0d5a8;border-radius:3px;padding:0 4px}
-
-/* the ODL entry point: sits under the file list, the "cherry on top" */
 .odlcard{margin:6px;padding:11px 12px;border:1px solid var(--color-ai-border);
-  border-radius:var(--radius-md);background:var(--color-ai-tint);cursor:pointer;
-  box-shadow:var(--shadow-ai)}
+  border-radius:var(--radius-md);background:var(--color-ai-tint);cursor:pointer;box-shadow:var(--shadow-ai)}
 .odlcard .r1{display:flex;align-items:center;gap:7px}
 .odlcard svg{width:15px;height:15px;stroke:var(--fg-ai);fill:none;stroke-width:1.7;flex:none}
 .odlcard .n{font-family:var(--font-saira);font-size:12px;font-weight:600;color:var(--color-ai-text-10)}
@@ -83,53 +99,53 @@ body{background:#e8e8ef;font-family:var(--font-poppins);color:var(--fg-1);paddin
   text-transform:uppercase;letter-spacing:.05em;color:var(--fg-ai)}
 .odlcard .d{font-size:10.5px;color:var(--color-ai-text-10);opacity:.8;margin-top:4px;line-height:1.45}
 
-/* preview pane */
+/* ---------- preview pane ---------- */
 .preview{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--bg-page)}
 .pvbar{display:flex;align-items:center;gap:12px;padding:9px 16px;background:var(--bg-card);
   border-bottom:1px solid var(--border-1);flex:none}
 .pvtitle{font-family:var(--font-saira);font-size:13px;font-weight:600}
 .pvtitle .sub{font-weight:400;color:var(--fg-3);margin-left:8px;font-size:11.5px}
-.pager{font-family:var(--font-mono);font-size:11px;color:var(--fg-3);
-  border:1px solid var(--border-1);border-radius:var(--radius-sm);padding:3px 9px}
 .close{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--fg-2);cursor:pointer;
   border:1px solid var(--border-1);border-radius:var(--radius-sm);padding:4px 10px;background:#fff}
 .close svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2}
-.toolbar{display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--bg-card);
-  border-bottom:1px solid var(--border-1);flex:none;flex-wrap:wrap}
-.tool{font-family:var(--font-saira);font-size:10.5px;font-weight:500;letter-spacing:.03em;
-  padding:4px 10px;border-radius:var(--radius-pill);border:1px solid var(--border-1);
-  color:var(--fg-2);background:#fff;cursor:pointer}
-.tool.on{background:var(--color-ai-accent);border-color:var(--color-ai-accent);color:#fff}
-.tool .c{opacity:.65;margin-left:4px}
+.pvbody{flex:1;overflow:auto;padding:18px}
 
-/* the ODL itself */
-.pvbody{flex:1;overflow:auto;padding:16px}
-.odlhead{margin-bottom:13px}
-.odlhead h2{font-family:var(--font-saira);font-size:17px;font-weight:600;letter-spacing:-.005em}
-.odlhead p{font-size:12.5px;color:var(--fg-2);margin-top:4px;line-height:1.55;max-width:104ch}
-.strip{display:flex;border:1px solid var(--border-1);border-radius:var(--radius-md);
-  overflow:hidden;background:#fff;margin:11px 0 14px;flex-wrap:wrap}
-.strip div{flex:1;min-width:104px;padding:9px 13px;border-right:1px solid var(--border-1)}
-.strip div:last-child{border-right:none}
-.strip .n{font-family:var(--font-saira);font-size:17px;font-weight:600}
-.strip .l{font-family:var(--font-saira);font-size:9.5px;font-weight:500;text-transform:uppercase;
-  letter-spacing:.05em;color:var(--fg-3);margin-top:1px}
+/* the claim, stated once, in plain words */
+.claim{font-family:var(--font-saira);font-size:21px;font-weight:600;line-height:1.3;
+  letter-spacing:-.01em;max-width:64ch}
+.claim em{font-style:normal;color:var(--fg-ai)}
+.claimsub{font-size:13px;color:var(--fg-2);margin-top:9px;line-height:1.6;max-width:92ch}
+
+/* the legend that teaches the dual line, placed before the table */
+.legend{display:flex;align-items:center;gap:14px;margin:16px 0 12px;padding:11px 14px;
+  background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-md)}
+.legend .demo{flex:none;padding:7px 11px;border:1px dashed var(--color-ai-border);
+  border-radius:var(--radius-sm);background:var(--color-ai-tint)}
+.legend .demo .val{display:block;font-size:12px;color:#333a5e}
+.legend .demo .src{display:block;font-family:var(--font-mono);font-size:10.5px;color:#8a5a12;
+  margin-top:3px}
+.legend .txt{font-size:12.5px;color:var(--fg-2);line-height:1.55}
+.legend .txt b{color:var(--fg-1)}
+
 .tblcard{background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);
   overflow:hidden;box-shadow:var(--shadow-2)}
-.tblscroll{overflow-x:auto;max-height:560px;overflow-y:auto}
-table.odl{width:100%;border-collapse:collapse;font-size:11.5px;min-width:1480px}
-table.odl th{background:var(--color-ai-tint);text-align:left;padding:9px 12px;vertical-align:top;
+.tblscroll{overflow:auto;max-height:600px}
+table.odl{width:100%;border-collapse:collapse;font-size:12px;min-width:1280px}
+table.odl th{background:var(--color-ai-tint);text-align:left;padding:9px 13px;vertical-align:top;
   border-bottom:1px solid #c9cde6;position:sticky;top:0;z-index:2}
 .hn{display:block;font-family:var(--font-saira);font-size:10px;font-weight:600;
   text-transform:uppercase;letter-spacing:.05em;color:var(--color-ai-text-10)}
 .hd{display:block;font-size:9.5px;color:var(--fg-3);margin-top:2px;font-weight:400;
   text-transform:none;letter-spacing:0}
-table.odl td{padding:9px 12px;border-bottom:1px solid #eef0f7;vertical-align:top;
-  line-height:1.48;color:#333a5e}
+table.odl td{padding:10px 13px;border-bottom:1px solid #eef0f7;vertical-align:top;
+  line-height:1.45;color:#333a5e}
 table.odl tr:last-child td{border-bottom:none}
 table.odl tbody tr:hover td{background:#fafbff}
-td.mono{font-family:var(--font-mono);font-size:10.5px;color:var(--fg-2);
-  font-variant-numeric:tabular-nums}
+.val{display:block}
+/* the source fragment: verbatim, in the filing's own script */
+.src{display:block;font-family:var(--font-mono);font-size:10.5px;color:#8a5a12;
+  margin-top:5px;padding-top:5px;border-top:1px dotted #e4d6bc;line-height:1.5;
+  word-break:break-word}
 .pid{white-space:nowrap;position:sticky;left:0;background:#fff;z-index:1;
   border-right:1px solid #eef0f7}
 table.odl tbody tr:hover td.pid{background:#fafbff}
@@ -140,13 +156,18 @@ table.odl tbody tr:hover td.pid{background:#fafbff}
 .sc{display:inline-block;font-family:var(--font-saira);font-size:8.5px;font-weight:700;
   letter-spacing:.05em;background:#fff3e0;color:#8a5a12;border:1px solid #f0d5a8;
   border-radius:3px;padding:0 4px;margin-left:4px;vertical-align:middle}
+/* row-level click-through: what clients actually asked for */
+.opendoc{display:flex;align-items:center;gap:4px;font-family:var(--font-saira);font-size:9.5px;
+  font-weight:500;letter-spacing:.03em;color:var(--fg-ai);margin-top:7px;opacity:0;
+  transition:opacity var(--motion-base) var(--ease-in-out)}
+.opendoc svg{width:9px;height:9px;stroke:currentColor;fill:none;stroke-width:2.2}
+table.odl tbody tr:hover .opendoc{opacity:1}
 .null{color:#c3c7dd;font-style:italic}
-.foot{display:flex;align-items:center;gap:14px;padding:10px 13px;border-top:1px solid var(--border-1);
-  background:#fcfcfe;flex-wrap:wrap}
-.foot .t{font-size:11.5px;color:var(--fg-2)}
-.foot .t b{color:var(--fg-1)}
+.foot{padding:10px 14px;border-top:1px solid var(--border-1);background:#fcfcfe;
+  font-size:11.5px;color:var(--fg-2)}
+.foot b{color:var(--fg-1)}
 .note{font-size:12px;color:var(--fg-2);line-height:1.6;margin-top:13px;padding-left:12px;
-  border-left:2px solid #dfe2f0;max-width:104ch}
+  border-left:2px solid #dfe2f0;max-width:100ch}
 .note b{color:var(--fg-1)}
 .note + .note{margin-top:9px}
 @media(max-width:980px){.filecol{display:none}}
@@ -155,11 +176,46 @@ table.odl tbody tr:hover td.pid{background:#fafbff}
 <div class="wrap">
   <div class="pagehead">
     <h1>Axion ODL in the preview panel</h1>
-    <p>The same panel that shows a single file's artifacts, but holding the
-    <b>Operational Data Layer</b>: one row per document, the same columns for all of them.
-    Everything before this point in the demo is per document. This is the moment the visitor
-    sees that it was done to every file, and that the results line up.
-    All values are real output from the 14-patent process-manufacturing dataset.</p>
+    <p>The same panel that shows one file's artifacts, holding the
+    <b>Operational Data Layer</b> instead: one row per document, the same columns for all of them.
+    Real output from the 14-patent process-manufacturing dataset.</p>
+
+    <div class="why">
+      <div class="whyh">Designed against what four clients actually said</div>
+      <div class="whygrid">
+        <div class="w">
+          <div class="q">&ldquo;People know only the PDFs. They don't believe a platform until you
+          click and show them the document.&rdquo;</div>
+          <div class="a">SMS Group · engineering SME</div>
+          <div class="d">Every row opens the filing it came from, and each value shows the
+          verbatim source text it was read from.</div>
+        </div>
+        <div class="w">
+          <div class="q">&ldquo;A table like this is excellent material to convince people. They
+          can check: yes, that's what's written inside, that's what's extracted. Fits.&rdquo;</div>
+          <div class="a">Deutsche Bahn · Head of Algorithms</div>
+          <div class="d">The table is built to be checked, not admired. The round trip to the
+          source is the point.</div>
+        </div>
+        <div class="w">
+          <div class="q">&ldquo;Somebody manually has to sit there typing it all into an Excel
+          file. Four months in, still not finished.&rdquo;</div>
+          <div class="a">Aumovio · Head of Sales Intelligence</div>
+          <div class="d">The headline says what the table replaces: reading every document by
+          hand. Not how many pages were processed.</div>
+        </div>
+        <div class="w">
+          <div class="q">&ldquo;I see it goes a lot deeper into actually comparing. That's
+          great.&rdquo; <span class="hl">Their only &ldquo;Awesome&rdquo; of the call.</span></div>
+          <div class="a">Agrolimen · Digital Transformation</div>
+          <div class="d">Value lands when documents become comparable, so the columns are the
+          same for all 14 and the differences are readable down each one.</div>
+        </div>
+      </div>
+      <div class="whyfoot">Two things all four asked for and neither is here by accident:
+      <b>traceability to source</b>, and <b>flagging over guessing</b>, which is why empty cells
+      say &ldquo;not stated&rdquo; instead of being filled in.</div>
+    </div>
   </div>
 
   <div class="optlabel">Preview panel — corpus-wide ODL</div>
@@ -191,54 +247,22 @@ table.odl tbody tr:hover td.pid{background:#fafbff}
         <div class="filecol">
           <div class="filehead">
             <div class="t">Dataset files</div>
-            <div class="d">14 patents · 376 pages · 6 languages</div>
+            <div class="d">14 patents · 6 languages · 7 offices</div>
           </div>
           <div class="filelist">
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">TWI592499B.pdf</div>
-            <div class="fsub">Molten Al-Zn-Mg-Si Coated Steel Sheet and Manufactur</div>
+            <div class="fsub">Molten Al-Zn-Mg-Si Coated Steel Sheet and Manufa</div>
           </div>
           <div class="fbadges"><span class="flang">ZH</span><span class="fscan">scan</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
-            <div class="fname">CN115595499A.pdf</div>
-            <div class="fsub">High-strength hot-rolled acid-pickled enamel steel s</div>
-          </div>
-          <div class="fbadges"><span class="flang">ZH</span></div>
-        </div>
-        <div class="frow">
-          <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
-          <div class="fmeta">
-            <div class="fname">JP5523373B2.pdf</div>
-            <div class="fsub">Hollow Steel Rod for Drilling and Manufacturing Meth</div>
-          </div>
-          <div class="fbadges"><span class="flang">JA</span></div>
-        </div>
-        <div class="frow">
-          <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
-          <div class="fmeta">
             <div class="fname">JP6374864B2.pdf</div>
-            <div class="fsub">Flat Steel Material and Method for Manufacturing Fla</div>
-          </div>
-          <div class="fbadges"><span class="flang">JA</span></div>
-        </div>
-        <div class="frow">
-          <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
-          <div class="fmeta">
-            <div class="fname">JP6794630B2.pdf</div>
-            <div class="fsub">Electromagnetic Steel Plate and Method for Manufactu</div>
-          </div>
-          <div class="fbadges"><span class="flang">JA</span></div>
-        </div>
-        <div class="frow">
-          <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
-          <div class="fmeta">
-            <div class="fname">JPWO2020262063A1.pdf</div>
-            <div class="fsub">Manufacturing Method of Non-Oriented Electrical Stee</div>
+            <div class="fsub">Flat Steel Material and Method for Manufacturing</div>
           </div>
           <div class="fbadges"><span class="flang">JA</span></div>
         </div>
@@ -246,9 +270,49 @@ table.odl tbody tr:hover td.pid{background:#fafbff}
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">KR102297297B1.pdf</div>
-            <div class="fsub">Aluminum-based Coated Steel with Excellent Corrosion</div>
+            <div class="fsub">Aluminum-based Coated Steel with Excellent Corro</div>
           </div>
           <div class="fbadges"><span class="flang">KO</span></div>
+        </div>
+        <div class="frow">
+          <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
+          <div class="fmeta">
+            <div class="fname">SA518391052B1.pdf</div>
+            <div class="fsub">Treatment of Kerogen in Subterranean Formations</div>
+          </div>
+          <div class="fbadges"><span class="flang">AR</span><span class="fscan">scan</span></div>
+        </div>
+        <div class="frow">
+          <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
+          <div class="fmeta">
+            <div class="fname">CN115595499A.pdf</div>
+            <div class="fsub">High-strength hot-rolled acid-pickled enamel ste</div>
+          </div>
+          <div class="fbadges"><span class="flang">ZH</span></div>
+        </div>
+        <div class="frow">
+          <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
+          <div class="fmeta">
+            <div class="fname">JP5523373B2.pdf</div>
+            <div class="fsub">Hollow Steel Rod for Drilling and Manufacturing </div>
+          </div>
+          <div class="fbadges"><span class="flang">JA</span></div>
+        </div>
+        <div class="frow">
+          <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
+          <div class="fmeta">
+            <div class="fname">JP6794630B2.pdf</div>
+            <div class="fsub">Electromagnetic Steel Plate and Method for Manuf</div>
+          </div>
+          <div class="fbadges"><span class="flang">JA</span></div>
+        </div>
+        <div class="frow">
+          <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
+          <div class="fmeta">
+            <div class="fname">JPWO2020262063A1.pdf</div>
+            <div class="fsub">Manufacturing Method of Non-Oriented Electrical </div>
+          </div>
+          <div class="fbadges"><span class="flang">JA</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
@@ -262,7 +326,7 @@ table.odl tbody tr:hover td.pid{background:#fafbff}
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">US11203795.pdf</div>
-            <div class="fsub">Ultra-High Strength Steel Plate Having Excellent For</div>
+            <div class="fsub">Ultra-High Strength Steel Plate Having Excellent</div>
           </div>
           <div class="fbadges"><span class="flang">EN</span></div>
         </div>
@@ -270,15 +334,23 @@ table.odl tbody tr:hover td.pid{background:#fafbff}
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">EP2356713B1.pdf</div>
-            <div class="fsub">Substrate Made of a Porous Metal or Metal Alloy, Its</div>
+            <div class="fsub">Substrate Made of a Porous Metal or Metal Alloy,</div>
           </div>
           <div class="fbadges"><span class="flang">FR</span></div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
+            <div class="fname">SA522432530B1.pdf</div>
+            <div class="fsub">Apparatus, System and Method for Increasing Fric</div>
+          </div>
+          <div class="fbadges"><span class="flang">AR</span><span class="fscan">scan</span></div>
+        </div>
+        <div class="frow">
+          <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
+          <div class="fmeta">
             <div class="fname">CN120155710A.pdf</div>
-            <div class="fsub">U-Rib Plate Unit Welding Equipment Based on Small Ra</div>
+            <div class="fsub">U-Rib Plate Unit Welding Equipment Based on Smal</div>
           </div>
           <div class="fbadges"><span class="flang">ZH</span></div>
         </div>
@@ -286,25 +358,9 @@ table.odl tbody tr:hover td.pid{background:#fafbff}
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">CN120292898A.pdf</div>
-            <div class="fsub">A Waste Heat Recovery Device for Galvanized Steel Pl</div>
+            <div class="fsub">A Waste Heat Recovery Device for Galvanized Stee</div>
           </div>
           <div class="fbadges"><span class="flang">ZH</span></div>
-        </div>
-        <div class="frow">
-          <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
-          <div class="fmeta">
-            <div class="fname">SA518391052B1.pdf</div>
-            <div class="fsub">Treatment of Kerogen in Subterranean Formations</div>
-          </div>
-          <div class="fbadges"><span class="flang">AR</span><span class="fscan">scan</span></div>
-        </div>
-        <div class="frow">
-          <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
-          <div class="fmeta">
-            <div class="fname">SA522432530B1.pdf</div>
-            <div class="fsub">Apparatus, System and Method for Increasing Friction</div>
-          </div>
-          <div class="fbadges"><span class="flang">AR</span><span class="fscan">scan</span></div>
         </div>
           </div>
           <div class="odlcard">
@@ -321,75 +377,62 @@ table.odl tbody tr:hover td.pid{background:#fafbff}
           <div class="pvbar">
             <div class="pvtitle">Operational Data Layer<span class="sub">Process Manufacturing · 14 documents</span></div>
             <div class="spacer"></div>
-            <div class="pager">14 / 14 rows</div>
             <div class="close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>Close preview</div>
-          </div>
-          <div class="toolbar">
-            <span class="tool on">All fields<span class="c">8</span></span>
-            <span class="tool">Composition</span>
-            <span class="tool">Process</span>
-            <span class="tool">Properties</span>
-            <span class="tool">Bibliographic</span>
-            <div class="spacer"></div>
-            <span class="tool">Export CSV</span>
           </div>
 
           <div class="pvbody">
-            <div class="odlhead">
-              <h2>Every document, the same columns</h2>
-              <p>Fourteen filings from seven patent offices, in six languages, three of them
-              scanned with no text layer at all. Each was read independently and written into
-              the same schema, so the corpus can be compared, filtered and searched as one table.</p>
-            </div>
+            <div class="claim">Fourteen filings in six languages, written to
+            <em>one schema you can read</em>.</div>
+            <p class="claimsub">Nobody had to open these documents. Each was read in its own
+            language, three of them from scans with no text layer, and the same facts were pulled
+            into the same columns in English, with units and thresholds made consistent.
+            What used to mean an engineer reading every filing by hand is now one table.</p>
 
-            <div class="strip">
-              <div><div class="n">14</div><div class="l">Documents</div></div>
-              <div><div class="n">6</div><div class="l">Languages</div></div>
-              <div><div class="n">7</div><div class="l">Patent offices</div></div>
-              <div><div class="n">157</div><div class="l">Scanned pages</div></div>
-              <div><div class="n">337</div><div class="l">Artifacts</div></div>
-              <div><div class="n">298</div><div class="l">Chart points</div></div>
+            <div class="legend">
+              <div class="demo">
+                <span class="val">Tensile strength ≥ 780 MPa</span>
+                <span class="src">引張強度Rmが少なくとも780MPa</span>
+              </div>
+              <div class="txt"><b>Every value shows its origin.</b> The top line is the normalised
+              English fact. Below it, in the filing's own script, is the text Axion actually read,
+              copied exactly, OCR quirks and all. Nothing here was typed by a person.</div>
             </div>
 
             <div class="tblcard">
               <div class="tblscroll">
                 <table class="odl">
-                  <thead><tr><th><span class="hn">Patent</span><span class="hd">Source filing, office and language</span></th><th><span class="hn">Material system</span><span class="hd">Alloy or material family</span></th><th><span class="hn">Key composition</span><span class="hd">Defining elements, ranges as filed</span></th><th><span class="hn">Key property</span><span class="hd">Headline measured result</span></th><th><span class="hn">Process route</span><span class="hd">How it is made</span></th><th><span class="hn">Process conditions</span><span class="hd">Temperatures, times, rates</span></th><th><span class="hn">Application</span><span class="hd">What it is used for</span></th><th><span class="hn">Assignee</span><span class="hd">Owner on the filing</span></th></tr></thead>
+                  <thead><tr><th><span class="hn">Patent</span><span class="hd">Source filing and language</span></th><th><span class="hn">Material system</span><span class="hd">Alloy or material family</span></th><th><span class="hn">Key composition</span><span class="hd">Defining elements, normalised</span></th><th><span class="hn">Key property</span><span class="hd">Headline measured result, normalised</span></th><th><span class="hn">Process route</span><span class="hd">How it is made</span></th><th><span class="hn">Application</span><span class="hd">What it is used for</span></th></tr></thead>
                   <tbody>
-            <tr><td class="pid"><span class="pidv">TWI592499B</span><span class="lg" title="Chinese">ZH</span><span class="sc" title="No text layer, read by OCR">scan</span></td><td>Al-Zn-Mg-Si coating on steel substrate</td><td class="mono">Al 25-80%, Si 0.6-15%, Mg 0.1-25%, Zn remainder</td><td class="mono">Superior corrosion resistance with Mg₂Si ≥1.0 wt%</td><td>Molten dip coating with two-stage cooling protocol</td><td class="mono">Cool &lt;10°C/s to bath-50°C, then cool ≥10°C/s to 380°C</td><td>Building materials: roofs, walls, guardrails, conduits</td><td>JFE Steel Corporation</td></tr>
-            <tr><td class="pid"><span class="pidv">CN115595499A</span><span class="lg" title="Chinese">ZH</span></td><td>Fe-C-Mn-Ti-B steel</td><td class="mono">C 0.08-0.20%, Mn 0.80-1.80%, S 0.010-0.035%, Ti 0.04-0.09%, B 0.0005-0.0040%</td><td class="mono">Tensile strength 650-800 MPa, hydrogen permeation time ≥25 min</td><td>Controlled rolling, controlled cooling, acid pickling</td><td class="mono">Finish rolling 800-885°C, cooling 5-40°C/s, acid pickle 60-95°C</td><td>Enamel-coated tank bodies for water treatment</td><td>Handan Iron and Steel Group Co., Ltd.</td></tr>
-            <tr><td class="pid"><span class="pidv">JP5523373B2</span><span class="lg" title="Japanese">JA</span></td><td>High-chromium low-nickel steel alloy</td><td class="mono">C 0.20-0.80%, Cr 2.00-5.00%, Mo 0.20-0.80%, Ni &lt;0.50%</td><td class="mono">Minimum hardness 300 HV, impact value ≥15 J/cm²</td><td>Induction harden threaded portion, friction pressure weld</td><td class="mono">Induction hardening 30 kHz, 270 kW; friction weld 870 rpm, 12 kgf/mm²</td><td>Drilling rod for mining and tunnel excavation</td><td>Mitsubishi Materials Corporation, Daido Special Steel</td></tr>
-            <tr><td class="pid"><span class="pidv">JP6374864B2</span><span class="lg" title="Japanese">JA</span></td><td>Fe-C-Mn-Si-Al-Cr-Nb steel</td><td class="mono">C 0.12-0.18%, Mn 1.9-2.2%, Si 0.05-0.2%, Al 0.2-0.5%, Cr 0.05-0.2%, Nb 0.01-0.06%</td><td class="mono">Tensile strength ≥ 780 MPa with elongation ≥ 14%</td><td>Hot rolling, coiling, cold rolling, continuous annealing, optional galvanizing</td><td class="mono">Hot roll 1000-1300°C initial, 840-950°C final; anneal 750-870°C for 8-260s; cool 0.5-110 K/s</td><td>Automotive body sheet and stampings</td><td>ThyssenKrupp Steel Europe AG</td></tr>
-            <tr><td class="pid"><span class="pidv">JP6794630B2</span><span class="lg" title="Japanese">JA</span></td><td>Fe-Si-Al-Mn/Ni α-Fe transformation</td><td class="mono">Si 2.0-4.5%, Al &lt;0.1%, Mn/Ni 2.0-6.0% total</td><td class="mono">{100}&lt;011&gt; texture ratio 30-200, dislocation 2×10¹⁵/m²</td><td>Hot roll, rapid cool, cold roll 88%+, anneal</td><td class="mono">Cool &gt;200°C/sec to 250°C, finish anneal</td><td>Motor cores, transformers, generators</td><td>Nippon Steel Corporation</td></tr>
-            <tr><td class="pid"><span class="pidv">JPWO2020262063A1</span><span class="lg" title="Japanese">JA</span></td><td>Fe-Si-Al-Mn steel with controlled Zn and S</td><td class="mono">Si 2.8-6.5%, Al 0.3-4%, Mn 0.05-2.0%, C ≤0.005%</td><td class="mono">Yield stress ≥480 MPa; iron loss W₁₀/₄₀₀ ≤8+20t W/kg</td><td>Hot rolling, annealing, cold rolling, finish annealing</td><td class="mono">Finish anneal 700-900°C; strain relief anneal 780-950°C, N₂ ≤30 vol%, dew point ≤-20°C</td><td>Motor cores for electric vehicles and motors</td><td>JFE Steel Corporation</td></tr>
-            <tr><td class="pid"><span class="pidv">KR102297297B1</span><span class="lg" title="Korean">KO</span></td><td>Fe-Al-Si coating on steel substrate</td><td class="mono">C 0.18-0.25%, Si 0.1-0.5%, Mn 0.9-1.5%</td><td class="mono">Tensile strength ≥ 1300 MPa with superior corrosion resistance</td><td>Molten aluminum galvanizing with controlled cooling</td><td class="mono">Cool 3-25°C/s; heat treat 800-1000°C for 3-20 min</td><td>Hot press formed automotive structural components</td><td>POSCO</td></tr>
-            <tr><td class="pid"><span class="pidv">EP2038445B1</span><span class="lg" title="French">FR</span></td><td>Fe-Cr-Ni duplex stainless steel</td><td class="mono">Cr 21-25%, Ni 1-2.95%, N 0.16-0.28%</td><td class="mono">Yield strength 400-450 MPa annealed state</td><td>Hot rolling at 1150-1280°C, heat treatment 900-1100°C</td><td class="mono">Heat treatment 900-1100°C, air quenching 0.1-2.7°C/s</td><td>Structural elements for chemical and energy installations</td><td>INDUSTEEL CREUSOT, UGITECH</td></tr>
-            <tr><td class="pid"><span class="pidv">US11203795</span><span class="lg" title="English">EN</span></td><td>Manganese-based steel with retained austenite</td><td class="mono">C 0.04-0.17%, Mn 4-10%, Si ≤2%</td><td class="mono">Tensile strength ≥1200 MPa, TS×EL ≥25000 MPa%</td><td>Hot roll, coil, heat treat, cold roll, anneal</td><td class="mono">Secondary anneal 550-620°C ≥30 min</td><td>Lightweight automotive body components</td><td>POSCO</td></tr>
-            <tr><td class="pid"><span class="pidv">EP2356713B1</span><span class="lg" title="French">FR</span></td><td>Iron, chromium, nickel, stainless steels, aluminum-containing alloys</td><td class="mono"><span class="null">not stated</span></td><td class="mono">Porosity gradient 25-65% high-porosity, 10-40% low-porosity layer</td><td>Press-sintering with partial oxidation of metal powder layers</td><td class="mono">Sintering 600-1600°C, 2-10 hours; partial oxidation 600-1600°C, 1-20 minutes</td><td>Metal-supported SOFC and HTE cells</td><td>Commissariat à l&#x27;Énergie Atomique et aux Énergies Alternatives</td></tr>
-            <tr><td class="pid"><span class="pidv">CN120155710A</span><span class="lg" title="Chinese">ZH</span></td><td><span class="null">not stated</span></td><td class="mono"><span class="null">not stated</span></td><td class="mono">Improved welding precision on curved U-rib inner surfaces</td><td>Articulated support arm with self-guiding spherical structures</td><td class="mono"><span class="null">not stated</span></td><td>Bridge steel box girder U-rib welding</td><td><span class="null">not stated</span></td></tr>
-            <tr><td class="pid"><span class="pidv">CN120292898A</span><span class="lg" title="Chinese">ZH</span></td><td><span class="null">not stated</span></td><td class="mono"><span class="null">not stated</span></td><td class="mono">Energy consumption reduction 15-25%</td><td>Heat exchange tube with rotating valve plates creating turbulent flow</td><td class="mono">Flow rate 20-40 m³/hour, temperature differential 40-60°C</td><td>Waste heat recovery in galvanized steel production</td><td>Shandong Xingyonguan New Materials Co., Ltd.; Shandong Changyu Iron and Steel Co., Ltd.</td></tr>
-            <tr><td class="pid"><span class="pidv">SA518391052B1</span><span class="lg" title="Arabic">AR</span><span class="sc" title="No text layer, read by OCR">scan</span></td><td><span class="null">not stated</span></td><td class="mono">Ammonium persulfate 0.00005-0.10 mol, sodium bromate 0.00005-0.20 mol</td><td class="mono">Kerogen rank reduction improves fracture propagation</td><td>Dual-oxidizer injection into subterranean formations</td><td class="mono">Composition injected during hydraulic fracturing operations</td><td>Oil and gas extraction from shale formations</td><td>Saudi Aramco</td></tr>
-            <tr><td class="pid"><span class="pidv">SA522432530B1</span><span class="lg" title="Arabic">AR</span><span class="sc" title="No text layer, read by OCR">scan</span></td><td>Reinforced polymer, ultra-high molecular weight polyethylene</td><td class="mono"><span class="null">not stated</span></td><td class="mono">Tensile strength approximately 333,000 newtons per cable</td><td>Subsurface cable insertion and mechanical interlocking without trenching</td><td class="mono">Cable deployed at specified subsurface depths via tractor-mounted tool</td><td>Subsurface protection for oil and gas pipelines</td><td>Saudi Arabian Oil Company</td></tr>
+              <tr><td class="pid"><span class="pidv">TWI592499B</span><span class="lg">ZH</span><span class="sc">scan</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Al-Zn-Mg-Si coating on steel substrate</span></td><td><span class="val">Al 25-80%, Si 0.6-15%, Mg 0.1-25%, Zn remainder</span><span class="src" title="Verbatim from the source filing, as read by Axion">含有25質量%~80質量%的Al、超過0.6質 量%~15質量%的Si及超過0.1 質量%~25質量%的Mg，其餘部 分包含 Zn</span></td><td><span class="val">Superior corrosion resistance with Mg₂Si ≥1.0 wt%</span></td><td><span class="val">Molten dip coating with two-stage cooling protocol</span></td><td><span class="val">Building materials: roofs, walls, guardrails, conduits</span></td></tr>
+              <tr><td class="pid"><span class="pidv">JP6374864B2</span><span class="lg">JA</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-C-Mn-Si-Al-Cr-Nb steel</span></td><td><span class="val">C 0.12-0.18%, Mn 1.9-2.2%, Si 0.05-0.2%, Al 0.2-0.5%, Cr 0.05-0.2%, Nb 0.01-0.06%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0. 12-0. 18%； si:0. 05-0.2%； Mn: 1.9-2.2%； A 1:0. 2-0. 5% ； Cr: 0.0</span></td><td><span class="val">Tensile strength ≥ 780 MPa with elongation ≥ 14%</span><span class="src" title="Verbatim from the source filing, as read by Axion">Rm 少なくとも780MPa、特に最大9O0MPa、 A 8o 少なくとも 14%</span></td><td><span class="val">Hot rolling, coiling, cold rolling, continuous annealing, optional galvanizing</span></td><td><span class="val">Automotive body sheet and stampings</span></td></tr>
+              <tr><td class="pid"><span class="pidv">KR102297297B1</span><span class="lg">KO</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Al-Si coating on steel substrate</span></td><td><span class="val">C 0.18-0.25%, Si 0.1-0.5%, Mn 0.9-1.5%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0.18~0.25%, Si: 0.1~0.5%, Mn : 0.9~1.5%</span></td><td><span class="val">Tensile strength ≥ 1300 MPa with superior corrosion resistance</span><span class="src" title="Verbatim from the source filing, as read by Axion">인장강도 1300WPa 이상인 것이 바람직하다.</span></td><td><span class="val">Molten aluminum galvanizing with controlled cooling</span></td><td><span class="val">Hot press formed automotive structural components</span></td></tr>
+              <tr><td class="pid"><span class="pidv">SA518391052B1</span><span class="lg">AR</span><span class="sc">scan</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="val">Ammonium persulfate 0.00005-0.10 mol, sodium bromate 0.00005-0.20 mol</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">ويتراوح تركيز بيرسلفات الأمونيوم ما بين حوالي 0.00005 مول وحوالي 0.10 </span></td><td><span class="val">Kerogen rank reduction improves fracture propagation</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">خفض رتبة مادة عضوية، مثل كيروجين kerogen ، في تكوين جوفي</span></td><td><span class="val">Dual-oxidizer injection into subterranean formations</span></td><td><span class="val">Oil and gas extraction from shale formations</span></td></tr>
+              <tr><td class="pid"><span class="pidv">CN115595499A</span><span class="lg">ZH</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-C-Mn-Ti-B steel</span></td><td><span class="val">C 0.08-0.20%, Mn 0.80-1.80%, S 0.010-0.035%, Ti 0.04-0.09%, B 0.0005-0.0040%</span></td><td><span class="val">Tensile strength 650-800 MPa, hydrogen permeation time ≥25 min</span><span class="src" title="Verbatim from the source filing, as read by Axion">抗拉强度 650~800MPa、延伸率≥23.0%，氢渗透时间达 25min以上</span></td><td><span class="val">Controlled rolling, controlled cooling, acid pickling</span></td><td><span class="val">Enamel-coated tank bodies for water treatment</span></td></tr>
+              <tr><td class="pid"><span class="pidv">JP5523373B2</span><span class="lg">JA</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">High-chromium low-nickel steel alloy</span></td><td><span class="val">C 0.20-0.80%, Cr 2.00-5.00%, Mo 0.20-0.80%, Ni &lt;0.50%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0.20~0.80% Si: 0.10～0.50% Mn: 0.10~1.00% P：=0.015% S：=0.050% Cu： = </span></td><td><span class="val">Minimum hardness 300 HV, impact value ≥15 J/cm²</span><span class="src" title="Verbatim from the source filing, as read by Axion">硬さの最小値が300HV以上であること</span></td><td><span class="val">Induction harden threaded portion, friction pressure weld</span></td><td><span class="val">Drilling rod for mining and tunnel excavation</span></td></tr>
+              <tr><td class="pid"><span class="pidv">JP6794630B2</span><span class="lg">JA</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Si-Al-Mn/Ni α-Fe transformation</span></td><td><span class="val">Si 2.0-4.5%, Al &lt;0.1%, Mn/Ni 2.0-6.0% total</span><span class="src" title="Verbatim from the source filing, as read by Axion">S i：2.0質量%以上4.5 質量％以下、A1：0．1質量%未満、Mn及びNiより選択される元素のうち1種以上 ：合計で2．0質量%以上6</span></td><td><span class="val">{100}&lt;011&gt; texture ratio 30-200, dislocation 2×10¹⁵/m²</span></td><td><span class="val">Hot roll, rapid cool, cold roll 88%+, anneal</span></td><td><span class="val">Motor cores, transformers, generators</span></td></tr>
+              <tr><td class="pid"><span class="pidv">JPWO2020262063A1</span><span class="lg">JA</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Si-Al-Mn steel with controlled Zn and S</span></td><td><span class="val">Si 2.8-6.5%, Al 0.3-4%, Mn 0.05-2.0%, C ≤0.005%</span></td><td><span class="val">Yield stress ≥480 MPa; iron loss W₁₀/₄₀₀ ≤8+20t W/kg</span><span class="src" title="Verbatim from the source filing, as read by Axion">上記仕上焼鈍後の鋼板の降伏応力を480MPa以上とすることを特徴とする</span></td><td><span class="val">Hot rolling, annealing, cold rolling, finish annealing</span></td><td><span class="val">Motor cores for electric vehicles and motors</span></td></tr>
+              <tr><td class="pid"><span class="pidv">EP2038445B1</span><span class="lg">FR</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Cr-Ni duplex stainless steel</span></td><td><span class="val">Cr 21-25%, Ni 1-2.95%, N 0.16-0.28%</span><span class="src" title="Verbatim from the source filing, as read by Axion">21%≤ Cr≤ 25% 1 % ≤ Ni ≤ 2,95% 0,16 % ≤ N ≤ 0,28 %</span></td><td><span class="val">Yield strength 400-450 MPa annealed state</span></td><td><span class="val">Hot rolling at 1150-1280°C, heat treatment 900-1100°C</span></td><td><span class="val">Structural elements for chemical and energy installations</span></td></tr>
+              <tr><td class="pid"><span class="pidv">US11203795</span><span class="lg">EN</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Manganese-based steel with retained austenite</span></td><td><span class="val">C 0.04-0.17%, Mn 4-10%, Si ≤2%</span></td><td><span class="val">Tensile strength ≥1200 MPa, TS×EL ≥25000 MPa%</span></td><td><span class="val">Hot roll, coil, heat treat, cold roll, anneal</span></td><td><span class="val">Lightweight automotive body components</span></td></tr>
+              <tr><td class="pid"><span class="pidv">EP2356713B1</span><span class="lg">FR</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Iron, chromium, nickel, stainless steels, aluminum-containing alloys</span></td><td><span class="null">not stated</span></td><td><span class="val">Porosity gradient 25-65% high-porosity, 10-40% low-porosity layer</span><span class="src" title="Verbatim from the source filing, as read by Axion">une porosité entre 20 et 75%</span></td><td><span class="val">Press-sintering with partial oxidation of metal powder layers</span></td><td><span class="val">Metal-supported SOFC and HTE cells</span></td></tr>
+              <tr><td class="pid"><span class="pidv">SA522432530B1</span><span class="lg">AR</span><span class="sc">scan</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Reinforced polymer, ultra-high molecular weight polyethylene</span></td><td><span class="null">not stated</span></td><td><span class="val">Tensile strength approximately 333,000 newtons per cable</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">قوة قصوى تبلغ 333000 نيوتن</span></td><td><span class="val">Subsurface cable insertion and mechanical interlocking without trenching</span></td><td><span class="val">Subsurface protection for oil and gas pipelines</span></td></tr>
+              <tr><td class="pid"><span class="pidv">CN120155710A</span><span class="lg">ZH</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="null">not stated</span></td><td><span class="val">Improved welding precision on curved U-rib inner surfaces</span><span class="src" title="Verbatim from the source filing, as read by Axion">提高U肋 内部两侧的焊接精准度</span></td><td><span class="val">Articulated support arm with self-guiding spherical structures</span></td><td><span class="val">Bridge steel box girder U-rib welding</span></td></tr>
+              <tr><td class="pid"><span class="pidv">CN120292898A</span><span class="lg">ZH</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="null">not stated</span></td><td><span class="val">Energy consumption reduction 15-25%</span></td><td><span class="val">Heat exchange tube with rotating valve plates creating turbulent flow</span></td><td><span class="val">Waste heat recovery in galvanized steel production</span></td></tr>
                   </tbody>
                 </table>
               </div>
-              <div class="foot">
-                <div class="t"><b>Patent</b> column stays pinned while the rest scroll.
-                <b>14/14</b> rows carry a measured property;
-                <b>10/14</b> carry a composition.</div>
-              </div>
+              <div class="foot"><b>Hover any row</b> to open the filing it came from.
+              Source text shown for <b>16</b> values across
+              <b>12</b> documents.</div>
             </div>
 
-            <p class="note"><b>Why some cells say "not stated".</b> Four of the fourteen are
-            equipment or process filings rather than material filings: bridge-girder welding,
-            waste-heat recovery, and two oil-and-gas patents. They have no alloy composition to
-            extract, so the cell is left empty rather than filled with a guess. The columns that
-            apply to every document are populated for every document.</p>
+            <p class="note"><b>Where a source line is missing</b>, the value was assembled from
+            several places in the document rather than one quotable passage, so no single fragment
+            would be honest. The value stands; the shortcut to proving it does not.</p>
 
-            <p class="note"><b>The numbers are checkable.</b> For JP6374864B2 the filing states
-            <span style="font-family:var(--font-mono);font-size:10.5px">C 0.12-0.18%, Mn 1.9-2.2%</span>
-            and a tensile strength of at least 780 MPa at 14% elongation, in Japanese.
-            Open the PDF and every value in that row is on the page.</p>
+            <p class="note"><b>Where a cell says "not stated"</b>, the document genuinely does not
+            say. Four of the fourteen are equipment or process filings, bridge-girder welding,
+            waste-heat recovery and two oil-and-gas patents, so they have no alloy composition.
+            Empty beats guessed.</p>
           </div>
         </div>
       </div>
