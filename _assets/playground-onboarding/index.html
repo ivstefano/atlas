@@ -103,6 +103,12 @@ table.out td.mono{font-family:var(--font-mono);font-size:9px;color:var(--fg-2)}
 .paneh .sn{font-family:var(--font-aber),monospace;font-size:9px;font-weight:700;color:var(--fg-ai);
   background:var(--color-ai-tint);border-radius:4px;padding:2px 5px;margin-right:7px;letter-spacing:.04em}
 .pcap .hi{color:var(--fg-ai);font-weight:600}
+.mono .lg{display:inline-block;font-family:var(--font-saira);font-size:7.5px;font-weight:700;
+  letter-spacing:.05em;background:var(--color-ai-tint);color:var(--fg-ai);border-radius:3px;
+  padding:1px 4px;margin-left:5px;vertical-align:middle}
+.mono .sc{display:inline-block;font-family:var(--font-saira);font-size:7.5px;font-weight:700;
+  letter-spacing:.05em;background:#fff3e0;color:#8a5a12;border:1px solid #f0d5a8;border-radius:3px;
+  padding:0 3px;margin-left:3px;vertical-align:middle}
 .scanflag{display:inline-block;font-family:var(--font-aber),monospace;font-size:8.5px;
   background:#fff3e0;color:#8a5a12;border:1px solid #f0d5a8;border-radius:4px;padding:2px 6px;margin-top:7px}
 /* routing lanes */
@@ -292,20 +298,19 @@ table.out td.mono{font-family:var(--font-mono);font-size:9px;color:var(--fg-2)}
           <div class="paneh"><span class="sn">03</span>What you get</div>
           <table class="out">
             <tr><th>Patent</th><th>Material system</th><th>Key composition</th><th>Key property</th></tr>
-            <tr><td class="mono">CN115595499A</td><td>Fe-C-Mn-Ti-B steel</td><td>C 0.08-0.20%, Mn 0.80-1.80%, …</td><td>Tensile strength 650-800 MPa,…</td></tr>
-            <tr><td class="mono">EP2038445B1</td><td>Fe-Cr-Ni duplex stain…</td><td>Cr 21-25%, Ni 1-2.95%, N 0.16…</td><td>Yield strength 400-450 MPa an…</td></tr>
-            <tr><td class="mono">JP5523373B2</td><td>High-chromium low-nic…</td><td>C 0.20-0.80%, Cr 2.00-5.00%, …</td><td>Minimum hardness 300 HV, impa…</td></tr>
-            <tr><td class="mono">JP6374864B2</td><td>Fe-C-Mn-Si-Al-Cr-Nb s…</td><td>C 0.12-0.18%, Mn 1.9-2.2%, Si…</td><td>Tensile strength &gt;= 780 MP…</td></tr>
-            <tr><td class="mono">JP6794630B2</td><td>Fe-Si-Al-Mn/Ni α-Fe t…</td><td>Si 2.0-4.5%, Al &lt;0.1%, Mn/…</td><td>{100}&lt;011&gt; texture rati…</td></tr>
-            <tr><td class="mono">JPWO2020262063A1</td><td>Fe-Si-Al-Mn steel wit…</td><td>Si 2.8-6.5%, Al 0.3-4%, Mn 0.…</td><td>Yield stress &ge;480 MPa; iro…</td></tr>
-            <tr><td class="mono">KR102297297B1</td><td>Fe-Al-Si coating on s…</td><td>C 0.18-0.25%, Si 0.1-0.5%, Mn…</td><td>Tensile strength &gt;= 1300 M…</td></tr>
-            <tr><td class="mono">SA518391052B1</td><td><span style="color:#b9bed6">—</span></td><td>Ammonium persulfate 0.00005-0…</td><td>Kerogen rank reduction improv…</td></tr>
-            <tr><td class="mono">TWI592499B</td><td>Al-Zn-Mg-Si coating o…</td><td>Al 25-80%, Si 0.6-15%, Mg 0.1…</td><td>Superior corrosion resistance…</td></tr>
-            <tr><td class="mono">US11203795</td><td>Manganese-based steel…</td><td>C 0.04-0.17%, Mn 4-10%, Si &l…</td><td>Tensile strength &ge;1200 MPa…</td></tr>
-            <tr><td class="mono">CN120155710A</td><td><span style="color:#b9bed6">—</span></td><td><span style="color:#b9bed6">—</span></td><td>Improved welding precision on…</td></tr>
-            <tr><td class="mono">CN120292898A</td><td><span style="color:#b9bed6">—</span></td><td><span style="color:#b9bed6">—</span></td><td>Energy consumption reduction …</td></tr>
+            <tr><td class="mono">TWI592499B<span class="lg">ZH</span><span class="sc">scan</span></td><td>Al-Zn-Mg-Si coating on …</td><td>Al 25-80%, Si 0.6-15%, Mg 0.1…</td><td>Superior corrosion resistance…</td></tr>
+            <tr><td class="mono">CN115595499A<span class="lg">ZH</span></td><td>Fe-C-Mn-Ti-B steel</td><td>C 0.08-0.20%, Mn 0.80-1.80%, …</td><td>Tensile strength 650-800 MPa,…</td></tr>
+            <tr><td class="mono">JP5523373B2<span class="lg">JA</span></td><td>High-chromium low-nicke…</td><td>C 0.20-0.80%, Cr 2.00-5.00%, …</td><td>Minimum hardness 300 HV, impa…</td></tr>
+            <tr><td class="mono">JP6374864B2<span class="lg">JA</span></td><td>Fe-C-Mn-Si-Al-Cr-Nb ste…</td><td>C 0.12-0.18%, Mn 1.9-2.2%, Si…</td><td>Tensile strength &gt;= 780 MP…</td></tr>
+            <tr><td class="mono">JP6794630B2<span class="lg">JA</span></td><td>Fe-Si-Al-Mn/Ni α-Fe tra…</td><td>Si 2.0-4.5%, Al &lt;0.1%, Mn/…</td><td>{100}&lt;011&gt; texture rati…</td></tr>
+            <tr><td class="mono">JPWO2020262063A1<span class="lg">JA</span></td><td>Fe-Si-Al-Mn steel with …</td><td>Si 2.8-6.5%, Al 0.3-4%, Mn 0.…</td><td>Yield stress &ge;480 MPa; iro…</td></tr>
+            <tr><td class="mono">KR102297297B1<span class="lg">KO</span></td><td>Fe-Al-Si coating on ste…</td><td>C 0.18-0.25%, Si 0.1-0.5%, Mn…</td><td>Tensile strength &gt;= 1300 M…</td></tr>
+            <tr><td class="mono">EP2038445B1<span class="lg">FR</span></td><td>Fe-Cr-Ni duplex stainle…</td><td>Cr 21-25%, Ni 1-2.95%, N 0.16…</td><td>Yield strength 400-450 MPa an…</td></tr>
+            <tr><td class="mono">US11203795<span class="lg">EN</span></td><td>Manganese-based steel w…</td><td>C 0.04-0.17%, Mn 4-10%, Si &l…</td><td>Tensile strength &ge;1200 MPa…</td></tr>
+            <tr><td class="mono">SA518391052B1<span class="lg">AR</span><span class="sc">scan</span></td><td><span style="color:#c3c7dd">—</span></td><td>Ammonium persulfate 0.00005-0…</td><td>Kerogen rank reduction improv…</td></tr>
+            <tr><td class="mono">SA522432530B1<span class="lg">AR</span><span class="sc">scan</span></td><td>Reinforced polymer, ult…</td><td><span style="color:#c3c7dd">—</span></td><td>Tensile strength approximatel…</td></tr>
           </table>
-          <div class="pcap">The whole corpus as <span class="hi">one structured dataset</span> — ready for analysis, search, RAG and your own models</div>
+          <div class="pcap">Six languages, three scripts, scans and digital — <span class="hi">one schema, same units</span>. Ready for analysis, search, RAG and your own models</div>
         </div>
       </div>
 
@@ -431,20 +436,19 @@ table.out td.mono{font-family:var(--font-mono);font-size:9px;color:var(--fg-2)}
           <div class="paneh"><span class="sn">03</span>What you get</div>
           <table class="out">
             <tr><th>Patent</th><th>Material system</th><th>Key composition</th><th>Key property</th></tr>
-            <tr><td class="mono">CN115595499A</td><td>Fe-C-Mn-Ti-B steel</td><td>C 0.08-0.20%, Mn 0.80-1.80%, …</td><td>Tensile strength 650-800 MPa,…</td></tr>
-            <tr><td class="mono">EP2038445B1</td><td>Fe-Cr-Ni duplex stain…</td><td>Cr 21-25%, Ni 1-2.95%, N 0.16…</td><td>Yield strength 400-450 MPa an…</td></tr>
-            <tr><td class="mono">JP5523373B2</td><td>High-chromium low-nic…</td><td>C 0.20-0.80%, Cr 2.00-5.00%, …</td><td>Minimum hardness 300 HV, impa…</td></tr>
-            <tr><td class="mono">JP6374864B2</td><td>Fe-C-Mn-Si-Al-Cr-Nb s…</td><td>C 0.12-0.18%, Mn 1.9-2.2%, Si…</td><td>Tensile strength &gt;= 780 MP…</td></tr>
-            <tr><td class="mono">JP6794630B2</td><td>Fe-Si-Al-Mn/Ni α-Fe t…</td><td>Si 2.0-4.5%, Al &lt;0.1%, Mn/…</td><td>{100}&lt;011&gt; texture rati…</td></tr>
-            <tr><td class="mono">JPWO2020262063A1</td><td>Fe-Si-Al-Mn steel wit…</td><td>Si 2.8-6.5%, Al 0.3-4%, Mn 0.…</td><td>Yield stress &ge;480 MPa; iro…</td></tr>
-            <tr><td class="mono">KR102297297B1</td><td>Fe-Al-Si coating on s…</td><td>C 0.18-0.25%, Si 0.1-0.5%, Mn…</td><td>Tensile strength &gt;= 1300 M…</td></tr>
-            <tr><td class="mono">SA518391052B1</td><td><span style="color:#b9bed6">—</span></td><td>Ammonium persulfate 0.00005-0…</td><td>Kerogen rank reduction improv…</td></tr>
-            <tr><td class="mono">TWI592499B</td><td>Al-Zn-Mg-Si coating o…</td><td>Al 25-80%, Si 0.6-15%, Mg 0.1…</td><td>Superior corrosion resistance…</td></tr>
-            <tr><td class="mono">US11203795</td><td>Manganese-based steel…</td><td>C 0.04-0.17%, Mn 4-10%, Si &l…</td><td>Tensile strength &ge;1200 MPa…</td></tr>
-            <tr><td class="mono">CN120155710A</td><td><span style="color:#b9bed6">—</span></td><td><span style="color:#b9bed6">—</span></td><td>Improved welding precision on…</td></tr>
-            <tr><td class="mono">CN120292898A</td><td><span style="color:#b9bed6">—</span></td><td><span style="color:#b9bed6">—</span></td><td>Energy consumption reduction …</td></tr>
+            <tr><td class="mono">TWI592499B<span class="lg">ZH</span><span class="sc">scan</span></td><td>Al-Zn-Mg-Si coating on …</td><td>Al 25-80%, Si 0.6-15%, Mg 0.1…</td><td>Superior corrosion resistance…</td></tr>
+            <tr><td class="mono">CN115595499A<span class="lg">ZH</span></td><td>Fe-C-Mn-Ti-B steel</td><td>C 0.08-0.20%, Mn 0.80-1.80%, …</td><td>Tensile strength 650-800 MPa,…</td></tr>
+            <tr><td class="mono">JP5523373B2<span class="lg">JA</span></td><td>High-chromium low-nicke…</td><td>C 0.20-0.80%, Cr 2.00-5.00%, …</td><td>Minimum hardness 300 HV, impa…</td></tr>
+            <tr><td class="mono">JP6374864B2<span class="lg">JA</span></td><td>Fe-C-Mn-Si-Al-Cr-Nb ste…</td><td>C 0.12-0.18%, Mn 1.9-2.2%, Si…</td><td>Tensile strength &gt;= 780 MP…</td></tr>
+            <tr><td class="mono">JP6794630B2<span class="lg">JA</span></td><td>Fe-Si-Al-Mn/Ni α-Fe tra…</td><td>Si 2.0-4.5%, Al &lt;0.1%, Mn/…</td><td>{100}&lt;011&gt; texture rati…</td></tr>
+            <tr><td class="mono">JPWO2020262063A1<span class="lg">JA</span></td><td>Fe-Si-Al-Mn steel with …</td><td>Si 2.8-6.5%, Al 0.3-4%, Mn 0.…</td><td>Yield stress &ge;480 MPa; iro…</td></tr>
+            <tr><td class="mono">KR102297297B1<span class="lg">KO</span></td><td>Fe-Al-Si coating on ste…</td><td>C 0.18-0.25%, Si 0.1-0.5%, Mn…</td><td>Tensile strength &gt;= 1300 M…</td></tr>
+            <tr><td class="mono">EP2038445B1<span class="lg">FR</span></td><td>Fe-Cr-Ni duplex stainle…</td><td>Cr 21-25%, Ni 1-2.95%, N 0.16…</td><td>Yield strength 400-450 MPa an…</td></tr>
+            <tr><td class="mono">US11203795<span class="lg">EN</span></td><td>Manganese-based steel w…</td><td>C 0.04-0.17%, Mn 4-10%, Si &l…</td><td>Tensile strength &ge;1200 MPa…</td></tr>
+            <tr><td class="mono">SA518391052B1<span class="lg">AR</span><span class="sc">scan</span></td><td><span style="color:#c3c7dd">—</span></td><td>Ammonium persulfate 0.00005-0…</td><td>Kerogen rank reduction improv…</td></tr>
+            <tr><td class="mono">SA522432530B1<span class="lg">AR</span><span class="sc">scan</span></td><td>Reinforced polymer, ult…</td><td><span style="color:#c3c7dd">—</span></td><td>Tensile strength approximatel…</td></tr>
           </table>
-          <div class="pcap">The whole corpus as <span class="hi">one structured dataset</span> — ready for analysis, search, RAG and your own models</div>
+          <div class="pcap">Six languages, three scripts, scans and digital — <span class="hi">one schema, same units</span>. Ready for analysis, search, RAG and your own models</div>
         </div>
       </div>
 
@@ -538,20 +542,19 @@ table.out td.mono{font-family:var(--font-mono);font-size:9px;color:var(--fg-2)}
           <div class="paneh"><span class="sn">03</span>What you get</div>
           <table class="out">
             <tr><th>Patent</th><th>Material system</th><th>Key composition</th><th>Key property</th></tr>
-            <tr><td class="mono">CN115595499A</td><td>Fe-C-Mn-Ti-B steel</td><td>C 0.08-0.20%, Mn 0.80-1.80%, …</td><td>Tensile strength 650-800 MPa,…</td></tr>
-            <tr><td class="mono">EP2038445B1</td><td>Fe-Cr-Ni duplex stain…</td><td>Cr 21-25%, Ni 1-2.95%, N 0.16…</td><td>Yield strength 400-450 MPa an…</td></tr>
-            <tr><td class="mono">JP5523373B2</td><td>High-chromium low-nic…</td><td>C 0.20-0.80%, Cr 2.00-5.00%, …</td><td>Minimum hardness 300 HV, impa…</td></tr>
-            <tr><td class="mono">JP6374864B2</td><td>Fe-C-Mn-Si-Al-Cr-Nb s…</td><td>C 0.12-0.18%, Mn 1.9-2.2%, Si…</td><td>Tensile strength &gt;= 780 MP…</td></tr>
-            <tr><td class="mono">JP6794630B2</td><td>Fe-Si-Al-Mn/Ni α-Fe t…</td><td>Si 2.0-4.5%, Al &lt;0.1%, Mn/…</td><td>{100}&lt;011&gt; texture rati…</td></tr>
-            <tr><td class="mono">JPWO2020262063A1</td><td>Fe-Si-Al-Mn steel wit…</td><td>Si 2.8-6.5%, Al 0.3-4%, Mn 0.…</td><td>Yield stress &ge;480 MPa; iro…</td></tr>
-            <tr><td class="mono">KR102297297B1</td><td>Fe-Al-Si coating on s…</td><td>C 0.18-0.25%, Si 0.1-0.5%, Mn…</td><td>Tensile strength &gt;= 1300 M…</td></tr>
-            <tr><td class="mono">SA518391052B1</td><td><span style="color:#b9bed6">—</span></td><td>Ammonium persulfate 0.00005-0…</td><td>Kerogen rank reduction improv…</td></tr>
-            <tr><td class="mono">TWI592499B</td><td>Al-Zn-Mg-Si coating o…</td><td>Al 25-80%, Si 0.6-15%, Mg 0.1…</td><td>Superior corrosion resistance…</td></tr>
-            <tr><td class="mono">US11203795</td><td>Manganese-based steel…</td><td>C 0.04-0.17%, Mn 4-10%, Si &l…</td><td>Tensile strength &ge;1200 MPa…</td></tr>
-            <tr><td class="mono">CN120155710A</td><td><span style="color:#b9bed6">—</span></td><td><span style="color:#b9bed6">—</span></td><td>Improved welding precision on…</td></tr>
-            <tr><td class="mono">CN120292898A</td><td><span style="color:#b9bed6">—</span></td><td><span style="color:#b9bed6">—</span></td><td>Energy consumption reduction …</td></tr>
+            <tr><td class="mono">TWI592499B<span class="lg">ZH</span><span class="sc">scan</span></td><td>Al-Zn-Mg-Si coating on …</td><td>Al 25-80%, Si 0.6-15%, Mg 0.1…</td><td>Superior corrosion resistance…</td></tr>
+            <tr><td class="mono">CN115595499A<span class="lg">ZH</span></td><td>Fe-C-Mn-Ti-B steel</td><td>C 0.08-0.20%, Mn 0.80-1.80%, …</td><td>Tensile strength 650-800 MPa,…</td></tr>
+            <tr><td class="mono">JP5523373B2<span class="lg">JA</span></td><td>High-chromium low-nicke…</td><td>C 0.20-0.80%, Cr 2.00-5.00%, …</td><td>Minimum hardness 300 HV, impa…</td></tr>
+            <tr><td class="mono">JP6374864B2<span class="lg">JA</span></td><td>Fe-C-Mn-Si-Al-Cr-Nb ste…</td><td>C 0.12-0.18%, Mn 1.9-2.2%, Si…</td><td>Tensile strength &gt;= 780 MP…</td></tr>
+            <tr><td class="mono">JP6794630B2<span class="lg">JA</span></td><td>Fe-Si-Al-Mn/Ni α-Fe tra…</td><td>Si 2.0-4.5%, Al &lt;0.1%, Mn/…</td><td>{100}&lt;011&gt; texture rati…</td></tr>
+            <tr><td class="mono">JPWO2020262063A1<span class="lg">JA</span></td><td>Fe-Si-Al-Mn steel with …</td><td>Si 2.8-6.5%, Al 0.3-4%, Mn 0.…</td><td>Yield stress &ge;480 MPa; iro…</td></tr>
+            <tr><td class="mono">KR102297297B1<span class="lg">KO</span></td><td>Fe-Al-Si coating on ste…</td><td>C 0.18-0.25%, Si 0.1-0.5%, Mn…</td><td>Tensile strength &gt;= 1300 M…</td></tr>
+            <tr><td class="mono">EP2038445B1<span class="lg">FR</span></td><td>Fe-Cr-Ni duplex stainle…</td><td>Cr 21-25%, Ni 1-2.95%, N 0.16…</td><td>Yield strength 400-450 MPa an…</td></tr>
+            <tr><td class="mono">US11203795<span class="lg">EN</span></td><td>Manganese-based steel w…</td><td>C 0.04-0.17%, Mn 4-10%, Si &l…</td><td>Tensile strength &ge;1200 MPa…</td></tr>
+            <tr><td class="mono">SA518391052B1<span class="lg">AR</span><span class="sc">scan</span></td><td><span style="color:#c3c7dd">—</span></td><td>Ammonium persulfate 0.00005-0…</td><td>Kerogen rank reduction improv…</td></tr>
+            <tr><td class="mono">SA522432530B1<span class="lg">AR</span><span class="sc">scan</span></td><td>Reinforced polymer, ult…</td><td><span style="color:#c3c7dd">—</span></td><td>Tensile strength approximatel…</td></tr>
           </table>
-          <div class="pcap">The whole corpus as <span class="hi">one structured dataset</span> — ready for analysis, search, RAG and your own models</div>
+          <div class="pcap">Six languages, three scripts, scans and digital — <span class="hi">one schema, same units</span>. Ready for analysis, search, RAG and your own models</div>
         </div>
       </div>
 
