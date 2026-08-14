@@ -100,28 +100,27 @@ table.out td.mono{font-family:var(--font-mono);font-size:9px;color:var(--fg-2)}
    Vankata's steer was that the input side should "reek of complexity", so this
    pane is deliberately unruly: overlapping, rotated, mixed kinds, some of it
    unreadable. It is the mess a real portfolio arrives as, not a tidy stack. */
-.pane.before.messy{background:#0d1030;filter:none;position:relative;overflow:hidden}
-.pane.before.messy .paneh{color:rgba(231,237,253,.5)}
-.pane.before.messy .paneh .sn{background:rgba(62,76,213,.3);color:#aab3f0}
+.pane.before.messy{background:var(--color-surface-container);filter:none;
+  position:relative;overflow:hidden}
 .pile{position:relative;height:250px;margin-top:2px}
-.sc-item{position:absolute;background:#151a3d;border:1px solid #2b3268;border-radius:4px;
-  padding:5px 6px;width:78px;box-shadow:0 3px 10px rgba(0,0,0,.45)}
-.sc-tag{font-family:var(--font-mono);font-size:6px;letter-spacing:.06em;color:#7c86c8;
+.sc-item{position:absolute;background:#fff;border:1px solid #d9dbe8;border-radius:4px;
+  padding:5px 6px;width:78px;box-shadow:0 2px 7px rgba(20,24,60,.13)}
+.sc-tag{font-family:var(--font-mono);font-size:6px;letter-spacing:.06em;color:#9298b8;
   margin-bottom:3px}
-.sc-tag.warn{color:#e0a24a}
-.sc-body{font-size:6px;color:#5f68a4;line-height:1.4}
-.sc-body.cjk,.sc-item .cjk{color:#98a1de;font-size:7px}
-.pile .ln{height:2.5px;background:#262d5e;border-radius:2px;margin:2.5px 0}
+.sc-tag.warn{color:#8a5a12}
+.sc-body{font-size:6px;color:#8b90ad;line-height:1.4}
+.sc-body.cjk,.sc-item .cjk{color:#5a5a78;font-size:7px}
+.pile .ln{height:2.5px;background:#dcdce8;border-radius:2px;margin:2.5px 0}
 .pile .ln.s{width:55%}.pile .ln.m{width:78%}
 .sc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
 .sc-grid.sm{grid-template-columns:repeat(4,1fr)}
-.sc-grid i{height:5px;background:#2b3268;border-radius:1px}
-.sc-item svg{width:100%;height:26px;stroke:#5b67c4;fill:none;stroke-width:1.4}
-.sc-item.chart svg polyline{stroke:#7b86e0}
-.sc-item.chart svg polyline.b{stroke:#3f4784}
-.sc-item.fig svg{stroke:#6a74c0}
-.sc-item.scan{border-color:#6b4a1c;background:#1d1730}
-.sc-x{font-family:var(--font-mono);font-size:5.5px;color:#e0a24a;margin-top:3px}
+.sc-grid i{height:5px;background:#e2e4ef;border-radius:1px}
+.sc-item svg{width:100%;height:26px;stroke:#a8adc6;fill:none;stroke-width:1.4}
+.sc-item.chart svg polyline{stroke:#8d94bd}
+.sc-item.chart svg polyline.b{stroke:#c3c7dd}
+.sc-item.fig svg{stroke:#a8adc6}
+.sc-item.scan{border-color:#f0d5a8;background:#fffaf2}
+.sc-x{font-family:var(--font-mono);font-size:5.5px;color:#8a5a12;margin-top:3px}
 /* scattered, rotated, overlapping: no grid, on purpose */
 .i1{left:2%;top:2%;transform:rotate(-6deg)}
 .i2{left:31%;top:0;transform:rotate(3deg);z-index:3}
@@ -133,8 +132,8 @@ table.out td.mono{font-family:var(--font-mono);font-size:9px;color:var(--fg-2)}
 .i8{left:30%;top:60%;transform:rotate(5deg)}
 .i9{left:60%;top:64%;transform:rotate(-4deg);z-index:2}
 .i10{left:22%;top:44%;transform:rotate(8deg);width:62px;opacity:.85}
-.speck{position:absolute;background:#1e2450;border:1px solid #2b3268;border-radius:2px;
-  width:9px;height:11px}
+.speck{position:absolute;background:#fff;border:1px solid #dcdce8;border-radius:2px;
+  width:9px;height:11px;box-shadow:0 1px 3px rgba(20,24,60,.08)}
 .s1{left:24%;top:16%;transform:rotate(12deg)}
 .s2{left:54%;top:22%;transform:rotate(-14deg)}
 .s3{left:88%;top:19%;transform:rotate(7deg)}
@@ -144,10 +143,8 @@ table.out td.mono{font-family:var(--font-mono);font-size:9px;color:var(--fg-2)}
 .s7{left:47%;top:82%;transform:rotate(10deg)}
 .s8{left:80%;top:84%;transform:rotate(-12deg)}
 .s9{left:92%;top:70%;transform:rotate(5deg)}
-.pilecap{font-size:10px;line-height:1.5;color:rgba(231,237,253,.62);margin-top:10px}
-.pilecap b{color:#fff;font-weight:600}
-.pane.before.messy .pcap{color:rgba(231,237,253,.38)}
-.pane.before.messy .pcap .hi{color:#8f9ae8}
+.pilecap{font-size:10px;line-height:1.5;color:var(--fg-2);margin-top:10px}
+.pilecap b{color:var(--fg-1);font-weight:600}
 /* ---------- A+C hybrid: three-panel hero with a routing middle ---------- */
 .split3{display:grid;grid-template-columns:1fr auto 1.25fr auto 1fr;gap:0;align-items:stretch;
   border:1px solid var(--border-1);border-radius:var(--radius-lg);overflow:hidden;background:var(--bg-card)}
