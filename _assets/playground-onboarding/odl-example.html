@@ -71,7 +71,7 @@ body{background:#e8e8ef;font-family:var(--font-poppins);color:var(--fg-1);paddin
 
 /* ---------- workspace ---------- */
 .work{display:flex;flex:1;min-height:0}
-.filecol{width:310px;flex:none;border-right:1px solid var(--border-1);background:var(--bg-card);
+.filecol{width:255px;flex:none;border-right:1px solid var(--border-1);background:var(--bg-card);
   display:flex;flex-direction:column}
 .filehead{padding:13px 15px 11px;border-bottom:1px solid var(--border-1)}
 .filehead .t{font-family:var(--font-saira);font-size:13px;font-weight:600}
@@ -85,10 +85,10 @@ body{background:#e8e8ef;font-family:var(--font-poppins);color:var(--fg-1);paddin
   overflow:hidden;text-overflow:ellipsis}
 .fsub{font-size:10px;color:var(--fg-3);white-space:nowrap;overflow:hidden;
   text-overflow:ellipsis;margin-top:1px}
-.fbadges{display:flex;gap:4px;align-items:center;margin-top:5px;flex-wrap:wrap}
 .flang{font-family:var(--font-saira);font-size:9px;font-weight:700;letter-spacing:.05em;
   background:var(--color-ai-tint);color:var(--fg-ai);border-radius:var(--radius-sm);
   padding:2px 6px;flex:none}
+.pidbadges{display:flex;gap:4px;align-items:center;margin-top:6px;flex-wrap:wrap}
 .odlcard{margin:6px;padding:11px 12px;border:1px solid var(--color-ai-border);
   border-radius:var(--radius-md);background:var(--color-ai-tint);cursor:pointer;box-shadow:var(--shadow-ai)}
 .odlcard .r1{display:flex;align-items:center;gap:7px}
@@ -134,7 +134,17 @@ table.odl tbody tr:hover td{background:#fafbff}
 .src{display:block;font-family:var(--font-mono);font-size:10.5px;color:#8a5a12;
   margin-top:5px;padding-top:5px;border-top:1px dotted #e4d6bc;line-height:1.5;
   word-break:break-word}
-.pid{white-space:nowrap;position:sticky;left:0;background:#fff;z-index:1;
+/* Per-cell provenance: names the source kinds this value was assembled from.
+   Deliberately quiet, it annotates the value rather than competing with it. */
+.prov{display:inline-flex;align-items:center;gap:4px;margin-top:7px;
+  font-family:var(--font-saira);font-size:8.5px;font-weight:600;letter-spacing:.03em;
+  color:#5b6396;background:#f4f5fb;border:1px solid #e2e5f2;border-radius:var(--radius-sm);
+  padding:2px 6px;cursor:help;white-space:nowrap}
+.prov svg{width:9px;height:9px;stroke:var(--fg-ai);fill:none;stroke-width:1.9;flex:none}
+.prov .pn{font-family:var(--font-mono);font-size:8px;color:#fff;background:var(--fg-ai);
+  border-radius:2px;padding:0 3px;margin-left:1px}
+table.odl tbody tr:hover .prov{background:#fff;border-color:#cfd5ee}
+.pid{position:sticky;left:0;background:#fff;z-index:1;min-width:172px;
   border-right:1px solid #eef0f7}
 table.odl tbody tr:hover td.pid{background:#fafbff}
 .pidv{font-family:var(--font-mono);font-size:11px;color:var(--fg-ai)}
@@ -239,105 +249,105 @@ table.odl tbody tr:hover .opendoc{opacity:1}
         <div class="filecol">
           <div class="filehead">
             <div class="t">Dataset files</div>
-            <div class="d">14 patents · 6 languages · every one needed a vision model</div>
+            <div class="d">14 patents · 6 languages · 7 offices</div>
           </div>
           <div class="filelist">
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">TWI592499B.pdf</div>
-            <div class="fbadges"><span class="flang">ZH</span><span class="bscan" title="No text layer anywhere. All 54 pages were read from the image."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Scanned images only · read 54 pages</span></div>
+            <div class="fsub">Molten Al-Zn-Mg-Si Coated Steel Sheet and Ma</div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">JP6374864B2.pdf</div>
-            <div class="fbadges"><span class="flang">JA</span><span class="bvis" title="9 of 21 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images · read 9 of 21 visually</span></div>
+            <div class="fsub">Flat Steel Material and Method for Manufactu</div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">KR102297297B1.pdf</div>
-            <div class="fbadges"><span class="flang">KO</span><span class="bvis" title="3 of 13 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images · read 3 of 13 visually</span></div>
+            <div class="fsub">Aluminum-based Coated Steel with Excellent C</div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">SA518391052B1.pdf</div>
-            <div class="fbadges"><span class="flang">AR</span><span class="bscan" title="No text layer anywhere. All 59 pages were read from the image."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Scanned images only · read 59 pages</span></div>
+            <div class="fsub">Treatment of Kerogen in Subterranean Formati</div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">CN115595499A.pdf</div>
-            <div class="fbadges"><span class="flang">ZH</span><span class="bvis" title="3 of 7 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images · read 3 of 7 visually</span></div>
+            <div class="fsub">High-strength hot-rolled acid-pickled enamel</div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">JP5523373B2.pdf</div>
-            <div class="fbadges"><span class="flang">JA</span><span class="bvis" title="4 of 12 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images · read 4 of 12 visually</span></div>
+            <div class="fsub">Hollow Steel Rod for Drilling and Manufactur</div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">JP6794630B2.pdf</div>
-            <div class="fbadges"><span class="flang">JA</span><span class="bvis" title="7 of 18 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images · read 7 of 18 visually</span></div>
+            <div class="fsub">Electromagnetic Steel Plate and Method for M</div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">JPWO2020262063A1.pdf</div>
-            <div class="fbadges"><span class="flang">JA</span><span class="bvis" title="18 of 30 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images · read 18 of 30 visually</span></div>
+            <div class="fsub">Manufacturing Method of Non-Oriented Electri</div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">EP2038445B1.pdf</div>
-            <div class="fbadges"><span class="flang">FR</span><span class="bvis" title="5 of 25 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images · read 5 of 25 visually</span></div>
+            <div class="fsub">Duplex Stainless Steel</div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">US11203795.pdf</div>
-            <div class="fbadges"><span class="flang">EN</span><span class="bvis" title="17 of 17 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images · read 17 of 17 visually</span></div>
+            <div class="fsub">Ultra-High Strength Steel Plate Having Excel</div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">EP2356713B1.pdf</div>
-            <div class="fbadges"><span class="flang">FR</span><span class="bvis" title="7 of 29 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images · read 7 of 29 visually</span></div>
+            <div class="fsub">Substrate Made of a Porous Metal or Metal Al</div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">SA522432530B1.pdf</div>
-            <div class="fbadges"><span class="flang">AR</span><span class="bscan" title="No text layer anywhere. All 44 pages were read from the image."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Scanned images only · read 44 pages</span></div>
+            <div class="fsub">Apparatus, System and Method for Increasing </div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">CN120155710A.pdf</div>
-            <div class="fbadges"><span class="flang">ZH</span><span class="bvis" title="13 of 20 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images · read 13 of 20 visually</span></div>
+            <div class="fsub">U-Rib Plate Unit Welding Equipment Based on </div>
           </div>
         </div>
         <div class="frow">
           <svg class="fico" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
           <div class="fmeta">
             <div class="fname">CN120292898A.pdf</div>
-            <div class="fbadges"><span class="flang">ZH</span><span class="bvis" title="18 of 27 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images · read 18 of 27 visually</span></div>
+            <div class="fsub">A Waste Heat Recovery Device for Galvanized </div>
           </div>
         </div>
           </div>
@@ -372,28 +382,210 @@ table.odl tbody tr:hover .opendoc{opacity:1}
             <div class="tblcard">
               <div class="tblscroll">
                 <table class="odl">
-                  <thead><tr><th><span class="hn">Patent</span><span class="hd">Source filing and language</span></th><th><span class="hn">Material system</span><span class="hd">Alloy or material family</span></th><th><span class="hn">Key composition</span><span class="hd">Defining elements, normalised</span></th><th><span class="hn">Key property</span><span class="hd">Headline measured result, normalised</span></th><th><span class="hn">Process route</span><span class="hd">How it is made</span></th><th><span class="hn">Application</span><span class="hd">What it is used for</span></th></tr></thead>
+                  <thead><tr><th><span class="hn">Patent</span><span class="hd">Source filing, language and how it had to be read</span></th><th><span class="hn">Material system</span><span class="hd">Alloy or material family</span></th><th><span class="hn">Key composition</span><span class="hd">Defining elements, normalised</span></th><th><span class="hn">Key property</span><span class="hd">Headline measured result, normalised</span></th><th><span class="hn">Process route</span><span class="hd">How it is made</span></th><th><span class="hn">Application</span><span class="hd">What it is used for</span></th></tr></thead>
                   <tbody>
-              <tr><td class="pid"><span class="pidv">TWI592499B</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Al-Zn-Mg-Si coating on steel substrate</span></td><td><span class="val">Al 25-80%, Si 0.6-15%, Mg 0.1-25%, Zn remainder</span><span class="src" title="Verbatim from the source filing, as read by Axion">含有25質量%~80質量%的Al、超過0.6質 量%~15質量%的Si及超過0.1 質量%~25質量%的Mg，其餘部 分包含 Zn</span></td><td><span class="val">Superior corrosion resistance with Mg₂Si ≥1.0 wt%</span></td><td><span class="val">Molten dip coating with two-stage cooling protocol</span></td><td><span class="val">Building materials: roofs, walls, guardrails, conduits</span></td></tr>
-              <tr><td class="pid"><span class="pidv">JP6374864B2</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-C-Mn-Si-Al-Cr-Nb steel</span></td><td><span class="val">C 0.12-0.18%, Mn 1.9-2.2%, Si 0.05-0.2%, Al 0.2-0.5%, Cr 0.05-0.2%, Nb 0.01-0.06%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0. 12-0. 18%； si:0. 05-0.2%； Mn: 1.9-2.2%； A 1:0. 2-0. 5% ； Cr: 0.0</span></td><td><span class="val">Tensile strength ≥ 780 MPa with elongation ≥ 14%</span><span class="src" title="Verbatim from the source filing, as read by Axion">Rm 少なくとも780MPa、特に最大9O0MPa、 A 8o 少なくとも 14%</span></td><td><span class="val">Hot rolling, coiling, cold rolling, continuous annealing, optional galvanizing</span></td><td><span class="val">Automotive body sheet and stampings</span></td></tr>
-              <tr><td class="pid"><span class="pidv">KR102297297B1</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Al-Si coating on steel substrate</span></td><td><span class="val">C 0.18-0.25%, Si 0.1-0.5%, Mn 0.9-1.5%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0.18~0.25%, Si: 0.1~0.5%, Mn : 0.9~1.5%</span></td><td><span class="val">Tensile strength ≥ 1300 MPa with superior corrosion resistance</span><span class="src" title="Verbatim from the source filing, as read by Axion">인장강도 1300WPa 이상인 것이 바람직하다.</span></td><td><span class="val">Molten aluminum galvanizing with controlled cooling</span></td><td><span class="val">Hot press formed automotive structural components</span></td></tr>
-              <tr><td class="pid"><span class="pidv">SA518391052B1</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="val">Ammonium persulfate 0.00005-0.10 mol, sodium bromate 0.00005-0.20 mol</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">ويتراوح تركيز بيرسلفات الأمونيوم ما بين حوالي 0.00005 مول وحوالي 0.10 </span></td><td><span class="val">Kerogen rank reduction improves fracture propagation</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">خفض رتبة مادة عضوية، مثل كيروجين kerogen ، في تكوين جوفي</span></td><td><span class="val">Dual-oxidizer injection into subterranean formations</span></td><td><span class="val">Oil and gas extraction from shale formations</span></td></tr>
-              <tr><td class="pid"><span class="pidv">CN115595499A</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-C-Mn-Ti-B steel</span></td><td><span class="val">C 0.08-0.20%, Mn 0.80-1.80%, S 0.010-0.035%, Ti 0.04-0.09%, B 0.0005-0.0040%</span></td><td><span class="val">Tensile strength 650-800 MPa, hydrogen permeation time ≥25 min</span><span class="src" title="Verbatim from the source filing, as read by Axion">抗拉强度 650~800MPa、延伸率≥23.0%，氢渗透时间达 25min以上</span></td><td><span class="val">Controlled rolling, controlled cooling, acid pickling</span></td><td><span class="val">Enamel-coated tank bodies for water treatment</span></td></tr>
-              <tr><td class="pid"><span class="pidv">JP5523373B2</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">High-chromium low-nickel steel alloy</span></td><td><span class="val">C 0.20-0.80%, Cr 2.00-5.00%, Mo 0.20-0.80%, Ni &lt;0.50%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0.20~0.80% Si: 0.10～0.50% Mn: 0.10~1.00% P：=0.015% S：=0.050% Cu： = </span></td><td><span class="val">Minimum hardness 300 HV, impact value ≥15 J/cm²</span><span class="src" title="Verbatim from the source filing, as read by Axion">硬さの最小値が300HV以上であること</span></td><td><span class="val">Induction harden threaded portion, friction pressure weld</span></td><td><span class="val">Drilling rod for mining and tunnel excavation</span></td></tr>
-              <tr><td class="pid"><span class="pidv">JP6794630B2</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Si-Al-Mn/Ni α-Fe transformation</span></td><td><span class="val">Si 2.0-4.5%, Al &lt;0.1%, Mn/Ni 2.0-6.0% total</span><span class="src" title="Verbatim from the source filing, as read by Axion">S i：2.0質量%以上4.5 質量％以下、A1：0．1質量%未満、Mn及びNiより選択される元素のうち1種以上 ：合計で2．0質量%以上6</span></td><td><span class="val">{100}&lt;011&gt; texture ratio 30-200, dislocation 2×10¹⁵/m²</span></td><td><span class="val">Hot roll, rapid cool, cold roll 88%+, anneal</span></td><td><span class="val">Motor cores, transformers, generators</span></td></tr>
-              <tr><td class="pid"><span class="pidv">JPWO2020262063A1</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Si-Al-Mn steel with controlled Zn and S</span></td><td><span class="val">Si 2.8-6.5%, Al 0.3-4%, Mn 0.05-2.0%, C ≤0.005%</span></td><td><span class="val">Yield stress ≥480 MPa; iron loss W₁₀/₄₀₀ ≤8+20t W/kg</span><span class="src" title="Verbatim from the source filing, as read by Axion">上記仕上焼鈍後の鋼板の降伏応力を480MPa以上とすることを特徴とする</span></td><td><span class="val">Hot rolling, annealing, cold rolling, finish annealing</span></td><td><span class="val">Motor cores for electric vehicles and motors</span></td></tr>
-              <tr><td class="pid"><span class="pidv">EP2038445B1</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Cr-Ni duplex stainless steel</span></td><td><span class="val">Cr 21-25%, Ni 1-2.95%, N 0.16-0.28%</span><span class="src" title="Verbatim from the source filing, as read by Axion">21%≤ Cr≤ 25% 1 % ≤ Ni ≤ 2,95% 0,16 % ≤ N ≤ 0,28 %</span></td><td><span class="val">Yield strength 400-450 MPa annealed state</span></td><td><span class="val">Hot rolling at 1150-1280°C, heat treatment 900-1100°C</span></td><td><span class="val">Structural elements for chemical and energy installations</span></td></tr>
-              <tr><td class="pid"><span class="pidv">US11203795</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Manganese-based steel with retained austenite</span></td><td><span class="val">C 0.04-0.17%, Mn 4-10%, Si ≤2%</span></td><td><span class="val">Tensile strength ≥1200 MPa, TS×EL ≥25000 MPa%</span></td><td><span class="val">Hot roll, coil, heat treat, cold roll, anneal</span></td><td><span class="val">Lightweight automotive body components</span></td></tr>
-              <tr><td class="pid"><span class="pidv">EP2356713B1</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Iron, chromium, nickel, stainless steels, aluminum-containing alloys</span></td><td><span class="null">not stated</span></td><td><span class="val">Porosity gradient 25-65% high-porosity, 10-40% low-porosity layer</span><span class="src" title="Verbatim from the source filing, as read by Axion">une porosité entre 20 et 75%</span></td><td><span class="val">Press-sintering with partial oxidation of metal powder layers</span></td><td><span class="val">Metal-supported SOFC and HTE cells</span></td></tr>
-              <tr><td class="pid"><span class="pidv">SA522432530B1</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Reinforced polymer, ultra-high molecular weight polyethylene</span></td><td><span class="null">not stated</span></td><td><span class="val">Tensile strength approximately 333,000 newtons per cable</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">قوة قصوى تبلغ 333000 نيوتن</span></td><td><span class="val">Subsurface cable insertion and mechanical interlocking without trenching</span></td><td><span class="val">Subsurface protection for oil and gas pipelines</span></td></tr>
-              <tr><td class="pid"><span class="pidv">CN120155710A</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="null">not stated</span></td><td><span class="val">Improved welding precision on curved U-rib inner surfaces</span><span class="src" title="Verbatim from the source filing, as read by Axion">提高U肋 内部两侧的焊接精准度</span></td><td><span class="val">Articulated support arm with self-guiding spherical structures</span></td><td><span class="val">Bridge steel box girder U-rib welding</span></td></tr>
-              <tr><td class="pid"><span class="pidv">CN120292898A</span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="null">not stated</span></td><td><span class="val">Energy consumption reduction 15-25%</span></td><td><span class="val">Heat exchange tube with rotating valve plates creating turbulent flow</span></td><td><span class="val">Waste heat recovery in galvanized steel production</span></td></tr>
+              <tr><td class="pid"><span class="pidv">TWI592499B</span><span class="pidbadges"><span class="flang">ZH</span><span class="bscan" title="No text layer anywhere. All 54 pages were read from the image."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Scanned pages only</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Al-Zn-Mg-Si coating on steel substrate</span><span class="prov" title="The core compositional invention is defined in the abstract and claim summary, and the experimental tables list specific compositions of examples versus comparative examples showing that only samples meeting these bounds achieve the target properties.
+
+Text · Abstract / Spec [0010] (p9): States the compositional ranges and the formula (1) M_Mg/(M_Si−0.6) &gt; 1.7 as the invention&#x27;s gist
+Table · Table ~1 (p30): Lists Al, Si, Mg contents of tested coating baths/films used to validate the composition range
+Table · Table ~2 (p31): Continues composition data with corresponding M_Mg/(M_Si−0.6) values marking inventive vs comparative examples
+Table · Table ~5 (p36): Additional compositional dataset confirming which compositions satisfy formula (1)"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">4</span></span></td><td><span class="val">Al 25-80%, Si 0.6-15%, Mg 0.1-25%, Zn remainder</span><span class="src" title="Verbatim from the source filing, as read by Axion">含有25質量%~80質量%的Al、超過0.6質 量%~15質量%的Si及超過0.1 質量%~25質量%的Mg，其餘部 分包含 Zn</span><span class="prov" title="The core compositional invention is defined in the abstract and claim summary, and the experimental tables list specific compositions of examples versus comparative examples showing that only samples meeting these bounds achieve the target properties.
+
+Text · Abstract / Spec [0010] (p9): States the compositional ranges and the formula (1) M_Mg/(M_Si−0.6) &gt; 1.7 as the invention&#x27;s gist
+Table · Table ~1 (p30): Lists Al, Si, Mg contents of tested coating baths/films used to validate the composition range
+Table · Table ~2 (p31): Continues composition data with corresponding M_Mg/(M_Si−0.6) values marking inventive vs comparative examples
+Table · Table ~5 (p36): Additional compositional dataset confirming which compositions satisfy formula (1)"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">4</span></span></td><td><span class="val">Superior corrosion resistance with Mg₂Si ≥1.0 wt%</span><span class="prov" title="The mechanism-based claim that Mg₂Si content controls corrosion behavior is described in the specification and quantified in the experimental tables reporting Mg₂Si wt%, area ratio and XRD intensity ratios alongside corrosion test results.
+
+Text · Spec [0009]-[0013] (p9): Explains that Mg₂Si dissolves first in interdendritic regions and defines the Mg₂Si content/area/XRD thresholds
+Table · Table ~3 (p32): Reports Mg₂Si content, area ratio and XRD intensity ratios for the samples
+Table · Table ~6 (p37): Additional Mg₂Si characterization data for further experimental series"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">Molten dip coating with two-stage cooling protocol</span></td><td><span class="val">Building materials: roofs, walls, guardrails, conduits</span></td></tr>
+              <tr><td class="pid"><span class="pidv">JP6374864B2</span><span class="pidbadges"><span class="flang">JA</span><span class="bvis" title="9 of 21 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-C-Mn-Si-Al-Cr-Nb steel</span><span class="prov" title="The claimed composition is defined in the claims, described in the background/summary as avoiding expensive Mo, and exemplified in the experimental composition tables.
+
+Text · Claim 1 (p1): Defines the required alloy ranges of C, Si, Mn, Al, Cr, Nb and impurity limits
+Text · Spec [0004],[0008] (p3): States motivation: avoiding Mo whose price fluctuates while maintaining mechanical properties
+Table · Table ~1 (p13): Lists chemical compositions of the inventive steel melts within the claimed ranges"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">C 0.12-0.18%, Mn 1.9-2.2%, Si 0.05-0.2%, Al 0.2-0.5%, Cr 0.05-0.2%, Nb 0.01-0.06%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0. 12-0. 18%； si:0. 05-0.2%； Mn: 1.9-2.2%； A 1:0. 2-0. 5% ； Cr: 0.0</span><span class="prov" title="The claimed composition is defined in the claims, described in the background/summary as avoiding expensive Mo, and exemplified in the experimental composition tables.
+
+Text · Claim 1 (p1): Defines the required alloy ranges of C, Si, Mn, Al, Cr, Nb and impurity limits
+Text · Spec [0004],[0008] (p3): States motivation: avoiding Mo whose price fluctuates while maintaining mechanical properties
+Table · Table ~1 (p13): Lists chemical compositions of the inventive steel melts within the claimed ranges"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">Tensile strength ≥ 780 MPa with elongation ≥ 14%</span><span class="src" title="Verbatim from the source filing, as read by Axion">Rm 少なくとも780MPa、特に最大9O0MPa、 A 8o 少なくとも 14%</span><span class="prov" title="The mechanical property requirement is set in Claim 5 and demonstrated in the mechanical test result tables.
+
+Text · Claim 5 (p2): Defines the minimum yield strength, tensile strength, elongation, n-value, and BH2
+Table · Table ~7 (p18): Lists measured tensile properties of the inventive steels
+Table · Table ~8 (p19): Provides further mechanical test data confirming the property targets"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">Hot rolling, coiling, cold rolling, continuous annealing, optional galvanizing</span><span class="prov" title="The process window is defined in Claim 6 and illustrated by the time-temperature profile diagrams and the process parameter tables.
+
+Text · Claim 6 (p2): Specifies the full sequence of hot rolling, coiling, cold rolling, and annealing parameters
+Chart · Figure 2 (time-temperature diagram) (p20): Illustrates the thermal history/annealing profile of the process
+Chart · Figure (T vs t with TV&lt;TG, TV=TG regions) (p20): Schematically shows the temperature profile options during processing
+Table · Table ~4 (p15): Reports hot rolling and coiling parameter values used in trials
+Table · Table ~5 (p16): Reports annealing (preheating, holding, cooling) parameters applied"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table + chart<span class="pn">5</span></span></td><td><span class="val">Automotive body sheet and stampings</span></td></tr>
+              <tr><td class="pid"><span class="pidv">KR102297297B1</span><span class="pidbadges"><span class="flang">KO</span><span class="bvis" title="3 of 13 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Al-Si coating on steel substrate</span><span class="prov" title="The claims define the alloyed-layer microstructure, the specification/text describe the heating conditions that produce it, and cross-sectional micrographs together with STEM-DF elemental analysis show the Si-enriched intermediate layer.
+
+Text · Claim 9 (p4): Defines the Fe-Al alloyed coating layer with Si-enriched intermediate layer of average grain size ≤2 μm
+Text · Claims 10–11 (p4): Specifies Si content (7–14 wt%) and thickness fraction (5–30%) of the intermediate layer
+Text · Claim 12 (p4): Specifies the heating condition (800–1000°C, 3–20 min, controlled heating rate at 600–700°C) producing the alloyed layer
+Image · Cross-sectional micrographs (a) and (b) (p12): Show the Fe-Al alloyed coating layer with the Si-enriched intermediate layer after heat treatment
+Image · Cross-sectional micrograph of multi-layer coating (p13): Optical micrograph identifying the intermediate layer within the Fe-Al alloyed coating
+Table · STEM-DF micrograph with elemental composition (p13): Confirms Si enrichment (7–14 wt%) in the intermediate layer via point-analysis composition data
+Table · Table ~5 (p12): Tabulated intermediate-layer grain size, Si content, and thickness fraction for inventive vs. comparative examples"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table + image<span class="pn">7</span></span></td><td><span class="val">C 0.18-0.25%, Si 0.1-0.5%, Mn 0.9-1.5%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0.18~0.25%, Si: 0.1~0.5%, Mn : 0.9~1.5%</span><span class="prov" title="The composition specification is stated identically in the independent claims and the summary of invention, and tabulated for the tested heats.
+
+Text · Claim 1 (p3): Defines the substrate steel composition ranges
+Text · Spec [0016] (p6): Repeats and explains the substrate composition ranges
+Table · Table ~1 (p11): Lists chemical compositions of the substrate steels tested in the examples"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">Tensile strength ≥ 1300 MPa with superior corrosion resistance</span><span class="src" title="Verbatim from the source filing, as read by Axion">인장강도 1300WPa 이상인 것이 바람직하다.</span><span class="prov" title="The stated technical objective in the specification is quantitatively supported by comparative corrosion-resistance evaluation tables of inventive versus comparative examples.
+
+Text · Spec [0010]-[0012] (Problem to be Solved) (p6): States the goal of remarkably improved corrosion resistance before and after hot forming
+Table · Table ~3 (p11): Comparative corrosion-resistance results for the as-coated Al-based steel
+Table · Table ~4 (p11): Comparative corrosion-resistance results for the alloyed coated steel after hot press forming"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">Molten aluminum galvanizing with controlled cooling</span><span class="prov" title="The claims and specification define the microstructural criterion for the as-coated product, and cross-sectional micrographs of the coated steel visually confirm the refined Al-Si precipitates in the Al-based coating layer.
+
+Text · Claim 1 (p3): Specifies that the Al-based coating layer includes Al-Si precipitated phases with average particle size of 4 μm or less
+Text · Claim 8 (p4): Specifies the manufacturing condition (cooling at 3–8.9°C/s after coating) that produces the fine Al-Si precipitates
+Image · Cross-sectional micrograph (Fig. 2, representative figure) (p1): Shows the layered coating structure of the Al-based coated steel with the fine Al-Si precipitates
+Table · Table ~1 (p11): Tabulated data on Al-Si precipitate particle size vs. cooling rate for inventive and comparative examples"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table + image<span class="pn">4</span></span></td><td><span class="val">Hot press formed automotive structural components</span></td></tr>
+              <tr><td class="pid"><span class="pidv">SA518391052B1</span><span class="pidbadges"><span class="flang">AR</span><span class="bscan" title="No text layer anywhere. All 59 pages were read from the image."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Scanned pages only</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="val">Ammonium persulfate 0.00005-0.10 mol, sodium bromate 0.00005-0.20 mol</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">ويتراوح تركيز بيرسلفات الأمونيوم ما بين حوالي 0.00005 مول وحوالي 0.10 </span><span class="prov" title="The abstract, detailed description, and process flow diagram all describe the same core method of placing a persulfate+bromate composition into a formation to degrade kerogen.
+
+Text · Abstract, page 2 (p2): States the method places a composition comprising a first oxidizer (persulfate) and a second oxidizer (bromate) into the formation
+Text · Description, pages 5-6 (p6): Specifies ammonium persulfate (0.00005–1.00 mol) plus sodium bromate (0.00005–2.00 mol) as the preferred oxidizer combination
+Chart · Figure (process flow) page 54 (p54): Flowchart depicting the sequential hydraulic fracturing method applying the oxidizer composition to treat kerogen"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + chart<span class="pn">3</span></span></td><td><span class="val">Kerogen rank reduction improves fracture propagation</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">خفض رتبة مادة عضوية، مثل كيروجين kerogen ، في تكوين جوفي</span><span class="prov" title="The abstract, detailed description, and process flow diagram all describe the same core method of placing a persulfate+bromate composition into a formation to degrade kerogen.
+
+Text · Abstract, page 2 (p2): States the method places a composition comprising a first oxidizer (persulfate) and a second oxidizer (bromate) into the formation
+Text · Description, pages 5-6 (p6): Specifies ammonium persulfate (0.00005–1.00 mol) plus sodium bromate (0.00005–2.00 mol) as the preferred oxidizer combination
+Chart · Figure (process flow) page 54 (p54): Flowchart depicting the sequential hydraulic fracturing method applying the oxidizer composition to treat kerogen"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + chart<span class="pn">3</span></span></td><td><span class="val">Dual-oxidizer injection into subterranean formations</span><span class="prov" title="The abstract, detailed description, and process flow diagram all describe the same core method of placing a persulfate+bromate composition into a formation to degrade kerogen.
+
+Text · Abstract, page 2 (p2): States the method places a composition comprising a first oxidizer (persulfate) and a second oxidizer (bromate) into the formation
+Text · Description, pages 5-6 (p6): Specifies ammonium persulfate (0.00005–1.00 mol) plus sodium bromate (0.00005–2.00 mol) as the preferred oxidizer combination
+Chart · Figure (process flow) page 54 (p54): Flowchart depicting the sequential hydraulic fracturing method applying the oxidizer composition to treat kerogen"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + chart<span class="pn">3</span></span></td><td><span class="val">Oil and gas extraction from shale formations</span><span class="prov" title="The abstract, detailed description, and process flow diagram all describe the same core method of placing a persulfate+bromate composition into a formation to degrade kerogen.
+
+Text · Abstract, page 2 (p2): States the method places a composition comprising a first oxidizer (persulfate) and a second oxidizer (bromate) into the formation
+Text · Description, pages 5-6 (p6): Specifies ammonium persulfate (0.00005–1.00 mol) plus sodium bromate (0.00005–2.00 mol) as the preferred oxidizer combination
+Chart · Figure (process flow) page 54 (p54): Flowchart depicting the sequential hydraulic fracturing method applying the oxidizer composition to treat kerogen"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + chart<span class="pn">3</span></span></td></tr>
+              <tr><td class="pid"><span class="pidv">CN115595499A</span><span class="pidbadges"><span class="flang">ZH</span><span class="bvis" title="3 of 7 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-C-Mn-Ti-B steel</span><span class="prov" title="The same composition ranges are stated in the abstract, claimed in Claim 1, justified element-by-element in the specification, and reflected in the example composition tables.
+
+Text · Abstract, page 1 (p1): States the composition ranges in the abstract
+Text · Claim 1, page 2 (p2): Claims the exact composition ranges
+Text · Spec [0008], [0010]-[0015], pages 3 (p3): Explains role and range of each alloying element
+Table · Table 1, page 6 (p6): Lists chemical compositions of the worked examples
+Table · Table 2, page 6 (p6): Continues example composition data"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">5</span></span></td><td><span class="val">C 0.08-0.20%, Mn 0.80-1.80%, S 0.010-0.035%, Ti 0.04-0.09%, B 0.0005-0.0040%</span><span class="prov" title="The same composition ranges are stated in the abstract, claimed in Claim 1, justified element-by-element in the specification, and reflected in the example composition tables.
+
+Text · Abstract, page 1 (p1): States the composition ranges in the abstract
+Text · Claim 1, page 2 (p2): Claims the exact composition ranges
+Text · Spec [0008], [0010]-[0015], pages 3 (p3): Explains role and range of each alloying element
+Table · Table 1, page 6 (p6): Lists chemical compositions of the worked examples
+Table · Table 2, page 6 (p6): Continues example composition data"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">5</span></span></td><td><span class="val">Tensile strength 650-800 MPa, hydrogen permeation time ≥25 min</span><span class="src" title="Verbatim from the source filing, as read by Axion">抗拉强度 650~800MPa、延伸率≥23.0%，氢渗透时间达 25min以上</span><span class="prov" title="The performance targets appear in the abstract, are claimed in Claim 2, restated in the specification, and demonstrated by measured values in the example property tables.
+
+Text · Abstract, page 1 (p1): Summarizes the achieved mechanical and scale-burst properties
+Text · Claim 2, page 2 (p2): Claims the property ranges
+Text · Spec [0009], page 3 (p3): Restates the target property values
+Table · Table 3, page 7 (p7): Reports measured yield, tensile, elongation values for examples
+Table · Table 4, page 7 (p7): Reports measured hydrogen permeation times for the examples"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">5</span></span></td><td><span class="val">Controlled rolling, controlled cooling, acid pickling</span><span class="prov" title="The rolling/cooling window is specified in the abstract, claimed in Claim 3, and applied to the example heats whose process parameters are tabulated.
+
+Text · Abstract, page 1 (p1): Describes precise control of deformation temperature/amount to create hydrogen trapping sites
+Text · Claim 3, page 2 (p2): Specifies rough/finish rolling and coiling parameter ranges
+Table · Table 2, page 6 (p6): Lists rolling process parameters used in the examples"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">Enamel-coated tank bodies for water treatment</span></td></tr>
+              <tr><td class="pid"><span class="pidv">JP5523373B2</span><span class="pidbadges"><span class="flang">JA</span><span class="bvis" title="4 of 12 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">High-chromium low-nickel steel alloy</span><span class="prov" title="The claimed composition and 300 HV minimum are demonstrated experimentally through hardness measurements on friction-welded test specimens tabulated in the examples.
+
+Text · Claims 1 and 2 (p1): Specify the alloy composition ranges and require minimum hardness ≥300 HV after friction pressure welding
+Figure · Figure 3 (hardness measurement schematic) (p11): Shows the friction-welded test joint with locations where hardness measurements were taken
+Table · Table 1 (p8): Lists chemical compositions of the test steels within the claimed ranges
+Table · Table 2 (p9): Reports measured minimum hardness values for friction-welded specimens, demonstrating ≥300 HV for inventive compositions"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table + figure<span class="pn">4</span></span></td><td><span class="val">C 0.20-0.80%, Cr 2.00-5.00%, Mo 0.20-0.80%, Ni &lt;0.50%</span><span class="src" title="Verbatim from the source filing, as read by Axion">C: 0.20~0.80% Si: 0.10～0.50% Mn: 0.10~1.00% P：=0.015% S：=0.050% Cu： = </span><span class="prov" title="The claimed composition and 300 HV minimum are demonstrated experimentally through hardness measurements on friction-welded test specimens tabulated in the examples.
+
+Text · Claims 1 and 2 (p1): Specify the alloy composition ranges and require minimum hardness ≥300 HV after friction pressure welding
+Figure · Figure 3 (hardness measurement schematic) (p11): Shows the friction-welded test joint with locations where hardness measurements were taken
+Table · Table 1 (p8): Lists chemical compositions of the test steels within the claimed ranges
+Table · Table 2 (p9): Reports measured minimum hardness values for friction-welded specimens, demonstrating ≥300 HV for inventive compositions"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table + figure<span class="pn">4</span></span></td><td><span class="val">Minimum hardness 300 HV, impact value ≥15 J/cm²</span><span class="src" title="Verbatim from the source filing, as read by Axion">硬さの最小値が300HV以上であること</span><span class="prov" title="The claimed composition and 300 HV minimum are demonstrated experimentally through hardness measurements on friction-welded test specimens tabulated in the examples.
+
+Text · Claims 1 and 2 (p1): Specify the alloy composition ranges and require minimum hardness ≥300 HV after friction pressure welding
+Figure · Figure 3 (hardness measurement schematic) (p11): Shows the friction-welded test joint with locations where hardness measurements were taken
+Table · Table 1 (p8): Lists chemical compositions of the test steels within the claimed ranges
+Table · Table 2 (p9): Reports measured minimum hardness values for friction-welded specimens, demonstrating ≥300 HV for inventive compositions"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table + figure<span class="pn">4</span></span></td><td><span class="val">Induction harden threaded portion, friction pressure weld</span><span class="prov" title="The claims, specification and figure all describe the same two-piece (stem A + threaded portion B) friction-welded construction with prior induction hardening of the threads.
+
+Text · Claims 1 and 2 (p1): State that stem and threaded portions are separate bodies joined by friction pressure welding after induction hardening of the threaded portion
+Text · Spec [0008] (p1): Describes stem portion A and threaded portion B manufactured separately and joined by friction pressure welding
+Figure · Figure 2(A) (p11): Cross-sectional drawing showing shaft assembly composed of stem section A and threaded section B joined together"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + figure<span class="pn">3</span></span></td><td><span class="val">Drilling rod for mining and tunnel excavation</span></td></tr>
+              <tr><td class="pid"><span class="pidv">JP6794630B2</span><span class="pidbadges"><span class="flang">JA</span><span class="bvis" title="7 of 18 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Si-Al-Mn/Ni α-Fe transformation</span><span class="prov" title="The claims define the composition and texture requirement, the specification explains why {100}&lt;011&gt; accumulation delivers high magnetic flux density, and example data tables report the measured intensity ratios verifying the 30–200 range.
+
+Text · Claim 1 (p1): Specifies composition and requires {100}&lt;011&gt; intensity ratio 30–200 at plate surface
+Text · Summary / Means for Solving (p1): Explains that strong {100}&lt;011&gt; accumulation yields two &lt;100&gt; easy-axis directions and high flux density
+Table · Table 3 (p14): Lists measured {100}&lt;011&gt; X-ray random intensity ratios for example steels"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">Si 2.0-4.5%, Al &lt;0.1%, Mn/Ni 2.0-6.0% total</span><span class="src" title="Verbatim from the source filing, as read by Axion">S i：2.0質量%以上4.5 質量％以下、A1：0．1質量%未満、Mn及びNiより選択される元素のうち1種以上 ：合計で2．0質量%以上6</span><span class="prov" title="The claims define the composition and texture requirement, the specification explains why {100}&lt;011&gt; accumulation delivers high magnetic flux density, and example data tables report the measured intensity ratios verifying the 30–200 range.
+
+Text · Claim 1 (p1): Specifies composition and requires {100}&lt;011&gt; intensity ratio 30–200 at plate surface
+Text · Summary / Means for Solving (p1): Explains that strong {100}&lt;011&gt; accumulation yields two &lt;100&gt; easy-axis directions and high flux density
+Table · Table 3 (p14): Lists measured {100}&lt;011&gt; X-ray random intensity ratios for example steels"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">{100}&lt;011&gt; texture ratio 30-200, dislocation 2×10¹⁵/m²</span><span class="prov" title="The claims define the composition and texture requirement, the specification explains why {100}&lt;011&gt; accumulation delivers high magnetic flux density, and example data tables report the measured intensity ratios verifying the 30–200 range.
+
+Text · Claim 1 (p1): Specifies composition and requires {100}&lt;011&gt; intensity ratio 30–200 at plate surface
+Text · Summary / Means for Solving (p1): Explains that strong {100}&lt;011&gt; accumulation yields two &lt;100&gt; easy-axis directions and high flux density
+Table · Table 3 (p14): Lists measured {100}&lt;011&gt; X-ray random intensity ratios for example steels"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">Hot roll, rapid cool, cold roll 88%+, anneal</span><span class="prov" title="Claims 2–9 specify the processing conditions and hot-band properties, and the example tables list the corresponding hardness, dislocation density, grain size and recrystallization values for each sample.
+
+Text · Claims 2, 3, 6, 7, 8, 9 (p1): Define the no-intermediate-annealing route, rapid cooling, and hot-rolled sheet property targets
+Table · Table 1 (p12): Lists hot-rolling conditions (finishing temperature, cooling rate) for each example
+Table · Table 2 (p13): Reports hot-rolled sheet Vickers hardness, dislocation density, grain size, and recrystallization rate"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">Motor cores, transformers, generators</span><span class="prov" title="The specification frames the objective, and the results tables tabulate magnetic flux density, iron loss, and mechanical strength for invention vs. comparative examples.
+
+Text · Summary of the Invention (p1): States goal of simultaneously excellent magnetic properties and strength
+Table · Table 5 (p16): Reports magnetic flux density, high-frequency iron loss, and strength for each example, showing invention examples outperform comparatives"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">2</span></span></td></tr>
+              <tr><td class="pid"><span class="pidv">JPWO2020262063A1</span><span class="pidbadges"><span class="flang">JA</span><span class="bvis" title="18 of 30 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Si-Al-Mn steel with controlled Zn and S</span></td><td><span class="val">Si 2.8-6.5%, Al 0.3-4%, Mn 0.05-2.0%, C ≤0.005%</span></td><td><span class="val">Yield stress ≥480 MPa; iron loss W₁₀/₄₀₀ ≤8+20t W/kg</span><span class="src" title="Verbatim from the source filing, as read by Axion">上記仕上焼鈍後の鋼板の降伏応力を480MPa以上とすることを特徴とする</span></td><td><span class="val">Hot rolling, annealing, cold rolling, finish annealing</span></td><td><span class="val">Motor cores for electric vehicles and motors</span></td></tr>
+              <tr><td class="pid"><span class="pidv">EP2038445B1</span><span class="pidbadges"><span class="flang">FR</span><span class="bvis" title="5 of 25 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Fe-Cr-Ni duplex stainless steel</span><span class="prov" title="The claimed composition and microstructure are set out in the specification and instantiated in the experimental heat compositions.
+
+Text · Spec [0010]-[0011] (p2): Defines composition ranges and 35-65% ferrite microstructure of the invention
+Table · Table 1 (p8): Chemical compositions of experimental steel heats within the claimed ranges
+Table · Table 2 (p9): Additional composition data with computed IF and IRCL indices"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">Cr 21-25%, Ni 1-2.95%, N 0.16-0.28%</span><span class="src" title="Verbatim from the source filing, as read by Axion">21%≤ Cr≤ 25% 1 % ≤ Ni ≤ 2,95% 0,16 % ≤ N ≤ 0,28 %</span><span class="prov" title="The claimed composition and microstructure are set out in the specification and instantiated in the experimental heat compositions.
+
+Text · Spec [0010]-[0011] (p2): Defines composition ranges and 35-65% ferrite microstructure of the invention
+Table · Table 1 (p8): Chemical compositions of experimental steel heats within the claimed ranges
+Table · Table 2 (p9): Additional composition data with computed IF and IRCL indices"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">3</span></span></td><td><span class="val">Yield strength 400-450 MPa annealed state</span><span class="prov" title="Tensile and corrosion test data from the examples confirm the mechanical and corrosion targets stated as the aim of the invention.
+
+Text · Spec [0009] (p2): States the target of yield strength &gt;400-450 MPa and corrosion ≥ 304L
+Table · Table 6/7 (p13): Tensile mechanical properties of the experimental heats
+Table · Table 8 (p14): Corrosion test results comparing to reference grades
+Table · Table 9/10 (p15): Additional performance data on welded/heat-treated conditions"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table<span class="pn">4</span></span></td><td><span class="val">Hot rolling at 1150-1280°C, heat treatment 900-1100°C</span><span class="prov" title="The hot-rolling temperature window prescribed in the process claims is supported by torsion/deformation testing on multiple heats.
+
+Text · Spec [0012]-[0014] (p3): Specifies hot rolling between 1150 and 1280°C
+Chart · Chart page 22 (ΔØ vs Temperature) (p22): Shows deformation behavior versus temperature for heats 14382, 14383, 14441
+Table · Table 4/5 (p12): Hot-working test data for the experimental heats"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table + chart<span class="pn">3</span></span></td><td><span class="val">Structural elements for chemical and energy installations</span></td></tr>
+              <tr><td class="pid"><span class="pidv">US11203795</span><span class="pidbadges"><span class="flang">EN</span><span class="bvis" title="17 of 17 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Manganese-based steel with retained austenite</span><span class="prov" title="The claimed composition is described in the abstract/specification and its Mn-temperature phase stability boundaries are shown graphically.
+
+Text · Abstract / Spec p.1-2 (p1): States the chemical composition ranges and the C+(Mn/25) ≤ 0.46 constraint
+Chart · Figure 2 (Mn wt% vs temperature) (p3): Shows FCC/BCC+FCC, BCC+FCC and BCC+cementite phase boundaries as a function of Mn content, defining the composition window
+Table · Table 1 (p13): Lists inventive and comparative steel compositions used to test the C+Mn/25 rule"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table + chart<span class="pn">3</span></span></td><td><span class="val">C 0.04-0.17%, Mn 4-10%, Si ≤2%</span><span class="prov" title="The claimed composition is described in the abstract/specification and its Mn-temperature phase stability boundaries are shown graphically.
+
+Text · Abstract / Spec p.1-2 (p1): States the chemical composition ranges and the C+(Mn/25) ≤ 0.46 constraint
+Chart · Figure 2 (Mn wt% vs temperature) (p3): Shows FCC/BCC+FCC, BCC+FCC and BCC+cementite phase boundaries as a function of Mn content, defining the composition window
+Table · Table 1 (p13): Lists inventive and comparative steel compositions used to test the C+Mn/25 rule"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table + chart<span class="pn">3</span></span></td><td><span class="val">Tensile strength ≥1200 MPa, TS×EL ≥25000 MPa%</span><span class="prov" title="Textual comparison with prior art (yield strength ~720 MPa) is quantitatively supported by the mechanical-property tables and TS×El chart data.
+
+Text · Background/Technical Problem p.1-2 (p2): States the target TS×El ≥25,000 MPa% and the need for higher YS and HER than prior 720 MPa-grade Mn steels
+Table · Table 3 (p14): Provides measured YS, TS, El, and HER values demonstrating the improvement
+Chart · Figure 4A/4B (p4): Plots TS×El and HER simultaneously, showing both formability metrics are met"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + table + chart<span class="pn">3</span></span></td><td><span class="val">Hot roll, coil, heat treat, cold roll, anneal</span></td><td><span class="val">Lightweight automotive body components</span></td></tr>
+              <tr><td class="pid"><span class="pidv">EP2356713B1</span><span class="pidbadges"><span class="flang">FR</span><span class="bvis" title="7 of 29 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Iron, chromium, nickel, stainless steels, aluminum-containing alloys</span></td><td><span class="null">not stated</span></td><td><span class="val">Porosity gradient 25-65% high-porosity, 10-40% low-porosity layer</span><span class="src" title="Verbatim from the source filing, as read by Axion">une porosité entre 20 et 75%</span><span class="prov" title="The specification highlights microstructure/porosity gradient optimization absent from prior art, and SEM micrographs reveal the resulting particle morphology and sintered ceramic microstructure.
+
+Text · Spec [0011], [0017], [0020] (p3): States that prior art does not optimize microstructure or porosity gradient, implying the invention does
+Figure · SEM of spherical particles (p24): SEM micrograph of the metal powder particles used to build the porous support
+Figure · SEM of sintered porous cross-section (p25): SEM cross-section showing porous sintered ceramic/metal microstructure with graded porosity"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + figure<span class="pn">3</span></span></td><td><span class="val">Press-sintering with partial oxidation of metal powder layers</span><span class="prov" title="The specification highlights microstructure/porosity gradient optimization absent from prior art, and SEM micrographs reveal the resulting particle morphology and sintered ceramic microstructure.
+
+Text · Spec [0011], [0017], [0020] (p3): States that prior art does not optimize microstructure or porosity gradient, implying the invention does
+Figure · SEM of spherical particles (p24): SEM micrograph of the metal powder particles used to build the porous support
+Figure · SEM of sintered porous cross-section (p25): SEM cross-section showing porous sintered ceramic/metal microstructure with graded porosity"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + figure<span class="pn">3</span></span></td><td><span class="val">Metal-supported SOFC and HTE cells</span><span class="prov" title="The layered MSC structure is both described in the specification and depicted in the multi-layer cross-sectional schematics.
+
+Text · Spec [0007]-[0008] (p3): Describes the four-layer MSC configuration with thickness specifications for support, electrodes and electrolyte
+Figure · Figure 3A (p22): Cross-sectional schematic of four-layer MSC with H2/H2O electrode in contact with porous metallic support
+Figure · Figure 3B (p22): Cross-sectional schematic of four-layer MSC with O2 electrode in contact with porous metallic support"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + figure<span class="pn">3</span></span></td></tr>
+              <tr><td class="pid"><span class="pidv">SA522432530B1</span><span class="pidbadges"><span class="flang">AR</span><span class="bscan" title="No text layer anywhere. All 44 pages were read from the image."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Scanned pages only</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="val">Reinforced polymer, ultra-high molecular weight polyethylene</span><span class="prov" title="The abstract, detailed description, and multiple perspective/side/top view figures all depict the same barbed cable structure central to the invention.
+
+Text · Page 2 Abstract [57] (p2): Describes reinforced polymer cable body with barbed projections extending longitudinally and radially
+Text · Pages 4-5 General Description (p4): Details the cable device with barbed ends spaced along length and circumference
+Figure · Figure 2a/2b (perspective and side views) (p27): Shows the cable insertion device embodiment
+Figure · Figure 3a-3d (p28): Perspective, side, top, and front views of the barbed cable insertion device"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + figure<span class="pn">4</span></span></td><td><span class="null">not stated</span></td><td><span class="val">Tensile strength approximately 333,000 newtons per cable</span><span class="src" dir="rtl" title="Verbatim from the source filing, as read by Axion">قوة قصوى تبلغ 333000 نيوتن</span></td><td><span class="val">Subsurface cable insertion and mechanical interlocking without trenching</span><span class="prov" title="The abstract, described embodiments, and network schematics all depict the same interlocking-cable protection concept.
+
+Text · Page 2 Abstract [57] (p2): States multiple cables can be placed underground and interlocked to form a protection network
+Figure · Figures 5a-5c interlocking cable configurations (p31): Schematics of interlocking cables connected to ground
+Figure · Figure 11a (before/after cable displacement) (p2): Illustrates cable displacement behavior demonstrating the protection function
+Chart · Figures 8a-8b cable position graphs (p36): Graphs of meaningful cable position within distributed network using system variables
+Figure · Figures 9a-9c distributed cable net (p38): Schematics of meaningful cable position within a distributed cable network"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h6a4 4 0 014 4v5"/></svg>text + chart + figure<span class="pn">5</span></span></td><td><span class="val">Subsurface protection for oil and gas pipelines</span></td></tr>
+              <tr><td class="pid"><span class="pidv">CN120155710A</span><span class="pidbadges"><span class="flang">ZH</span><span class="bvis" title="13 of 20 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="null">not stated</span></td><td><span class="val">Improved welding precision on curved U-rib inner surfaces</span><span class="src" title="Verbatim from the source filing, as read by Axion">提高U肋 内部两侧的焊接精准度</span></td><td><span class="val">Articulated support arm with self-guiding spherical structures</span></td><td><span class="val">Bridge steel box girder U-rib welding</span></td></tr>
+              <tr><td class="pid"><span class="pidv">CN120292898A</span><span class="pidbadges"><span class="flang">ZH</span><span class="bvis" title="18 of 27 pages mix text with figures, tables or diagrams that only a vision model can read."><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Text + images</span></span><span class="opendoc">Open document <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span></td><td><span class="null">not stated</span></td><td><span class="null">not stated</span></td><td><span class="val">Energy consumption reduction 15-25%</span></td><td><span class="val">Heat exchange tube with rotating valve plates creating turbulent flow</span></td><td><span class="val">Waste heat recovery in galvanized steel production</span></td></tr>
                   </tbody>
                 </table>
               </div>
               <div class="foot"><b>Hover any row</b> to open the filing it came from.
-              Source text shown for <b>16</b> values across
-              <b>12</b> documents.</div>
+              Source text shown for <b>16</b> values.
+              The <b>text + table</b> tags mark values assembled from more than one kind of
+              source; hover one to see every passage, table and figure that fed it, with pages.</div>
             </div>
 
             <p class="note"><b>Where a source line is missing</b>, the value was assembled from
