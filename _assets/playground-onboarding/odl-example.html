@@ -116,19 +116,8 @@ body{background:#e8e8ef;font-family:var(--font-poppins);color:var(--fg-1);paddin
 .claim em{font-style:normal;color:var(--fg-ai)}
 .claimsub{font-size:13px;color:var(--fg-2);margin-top:9px;line-height:1.6;max-width:92ch}
 
-/* the legend that teaches the dual line, placed before the table */
-.legend{display:flex;align-items:center;gap:14px;margin:16px 0 12px;padding:11px 14px;
-  background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-md)}
-.legend .demo{flex:none;padding:7px 11px;border:1px dashed var(--color-ai-border);
-  border-radius:var(--radius-sm);background:var(--color-ai-tint)}
-.legend .demo .val{display:block;font-size:12px;color:#333a5e}
-.legend .demo .src{display:block;font-family:var(--font-mono);font-size:10.5px;color:#8a5a12;
-  margin-top:3px}
-.legend .txt{font-size:12.5px;color:var(--fg-2);line-height:1.55}
-.legend .txt b{color:var(--fg-1)}
-
 .tblcard{background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);
-  overflow:hidden;box-shadow:var(--shadow-2)}
+  overflow:hidden;box-shadow:var(--shadow-2);margin-top:16px}
 .tblscroll{overflow:auto;max-height:600px}
 table.odl{width:100%;border-collapse:collapse;font-size:12px;min-width:1280px}
 table.odl th{background:var(--color-ai-tint);text-align:left;padding:9px 13px;vertical-align:top;
@@ -386,17 +375,9 @@ table.odl tbody tr:hover .opendoc{opacity:1}
             <p class="claimsub">Nobody had to open these documents. Each was read in its own
             language, three of them from scans with no text layer, and the same facts were pulled
             into the same columns in English, with units and thresholds made consistent.
-            What used to mean an engineer reading every filing by hand is now one table.</p>
-
-            <div class="legend">
-              <div class="demo">
-                <span class="val">Tensile strength ≥ 780 MPa</span>
-                <span class="src">引張強度Rmが少なくとも780MPa</span>
-              </div>
-              <div class="txt"><b>Every value shows its origin.</b> The top line is the normalised
-              English fact. Below it, in the filing's own script, is the text Axion actually read,
-              copied exactly, OCR quirks and all. Nothing here was typed by a person.</div>
-            </div>
+            What used to mean an engineer reading every filing by hand is now one table.
+            Under each value, in the filing's own script, is the text it was read from,
+            copied exactly.</p>
 
             <div class="tblcard">
               <div class="tblscroll">
