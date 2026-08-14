@@ -96,6 +96,58 @@ table.out td.mono{font-family:var(--font-mono);font-size:9px;color:var(--fg-2)}
 .sechead{font-family:var(--font-saira);font-size:17px;font-weight:600;margin-top:26px;
   letter-spacing:-.005em}
 @media(max-width:900px){.split3{grid-template-columns:1fr}.arrow{display:none}}
+/* ---------- variant ③: the messy pile ----------
+   Vankata's steer was that the input side should "reek of complexity", so this
+   pane is deliberately unruly: overlapping, rotated, mixed kinds, some of it
+   unreadable. It is the mess a real portfolio arrives as, not a tidy stack. */
+.pane.before.messy{background:#0d1030;filter:none;position:relative;overflow:hidden}
+.pane.before.messy .paneh{color:rgba(231,237,253,.5)}
+.pane.before.messy .paneh .sn{background:rgba(62,76,213,.3);color:#aab3f0}
+.pile{position:relative;height:250px;margin-top:2px}
+.sc-item{position:absolute;background:#151a3d;border:1px solid #2b3268;border-radius:4px;
+  padding:5px 6px;width:78px;box-shadow:0 3px 10px rgba(0,0,0,.45)}
+.sc-tag{font-family:var(--font-mono);font-size:6px;letter-spacing:.06em;color:#7c86c8;
+  margin-bottom:3px}
+.sc-tag.warn{color:#e0a24a}
+.sc-body{font-size:6px;color:#5f68a4;line-height:1.4}
+.sc-body.cjk,.sc-item .cjk{color:#98a1de;font-size:7px}
+.pile .ln{height:2.5px;background:#262d5e;border-radius:2px;margin:2.5px 0}
+.pile .ln.s{width:55%}.pile .ln.m{width:78%}
+.sc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.sc-grid.sm{grid-template-columns:repeat(4,1fr)}
+.sc-grid i{height:5px;background:#2b3268;border-radius:1px}
+.sc-item svg{width:100%;height:26px;stroke:#5b67c4;fill:none;stroke-width:1.4}
+.sc-item.chart svg polyline{stroke:#7b86e0}
+.sc-item.chart svg polyline.b{stroke:#3f4784}
+.sc-item.fig svg{stroke:#6a74c0}
+.sc-item.scan{border-color:#6b4a1c;background:#1d1730}
+.sc-x{font-family:var(--font-mono);font-size:5.5px;color:#e0a24a;margin-top:3px}
+/* scattered, rotated, overlapping: no grid, on purpose */
+.i1{left:2%;top:2%;transform:rotate(-6deg)}
+.i2{left:31%;top:0;transform:rotate(3deg);z-index:3}
+.i3{left:62%;top:5%;transform:rotate(-3deg)}
+.i4{left:6%;top:29%;transform:rotate(4deg);z-index:4}
+.i5{left:38%;top:26%;transform:rotate(-5deg);z-index:2}
+.i6{left:68%;top:34%;transform:rotate(6deg)}
+.i7{left:1%;top:57%;transform:rotate(-2deg);z-index:3}
+.i8{left:30%;top:60%;transform:rotate(5deg)}
+.i9{left:60%;top:64%;transform:rotate(-4deg);z-index:2}
+.i10{left:22%;top:44%;transform:rotate(8deg);width:62px;opacity:.85}
+.speck{position:absolute;background:#1e2450;border:1px solid #2b3268;border-radius:2px;
+  width:9px;height:11px}
+.s1{left:24%;top:16%;transform:rotate(12deg)}
+.s2{left:54%;top:22%;transform:rotate(-14deg)}
+.s3{left:88%;top:19%;transform:rotate(7deg)}
+.s4{left:50%;top:48%;transform:rotate(-9deg)}
+.s5{left:90%;top:52%;transform:rotate(15deg)}
+.s6{left:16%;top:80%;transform:rotate(-6deg)}
+.s7{left:47%;top:82%;transform:rotate(10deg)}
+.s8{left:80%;top:84%;transform:rotate(-12deg)}
+.s9{left:92%;top:70%;transform:rotate(5deg)}
+.pilecap{font-size:10px;line-height:1.5;color:rgba(231,237,253,.62);margin-top:10px}
+.pilecap b{color:#fff;font-weight:600}
+.pane.before.messy .pcap{color:rgba(231,237,253,.38)}
+.pane.before.messy .pcap .hi{color:#8f9ae8}
 /* ---------- A+C hybrid: three-panel hero with a routing middle ---------- */
 .split3{display:grid;grid-template-columns:1fr auto 1.25fr auto 1fr;gap:0;align-items:stretch;
   border:1px solid var(--border-1);border-radius:var(--radius-lg);overflow:hidden;background:var(--bg-card)}
@@ -463,7 +515,7 @@ table.out td.mono{font-family:var(--font-mono);font-size:9px;color:var(--fg-2)}
   </div>
 </div>
 
-<div class="optlabel">Hybrid A·C ③ — objects only</div>
+<div class="optlabel">Hybrid A·C ③ — connected middle, messy upload</div>
 <div class="shell">
   <nav class="side">
     <div class="brand"><div class="mark"><svg viewBox="0 0 24 24"><path d="M12 3l7 4v10l-7 4-7-4V7z"/></svg></div><span>IRIS.AI</span></div>
@@ -482,29 +534,38 @@ table.out td.mono{font-family:var(--font-mono);font-size:9px;color:var(--fg-2)}
       <div class="body">The portfolio was never written in one language. Patents in Chinese, Japanese, Arabic, Korean, French and English, from seven patent offices. Coating chemistry in tables that break across page boundaries. Figures carrying detail the body text never states. Two in five pages are scanned images with no text layer at all.</div>
 
       <div class="split3" style="margin-top:18px">
-        <div class="pane before">
+        <div class="pane before messy">
           <div class="paneh"><span class="sn">01</span>What you upload</div>
-          <div class="doc doc3">
-            <div class="dlang">JA · JPO</div>
-            <div class="cjk">非配向性電磁鋼板の製造方法</div>
-            <div class="ln m"></div><div class="ln s"></div>
-            <div class="brk">表 2 — 化学成分 <span style="color:#b03">(splits p.14–15)</span></div>
-            <div class="ln"></div>
+          <div class="pile">
+            <!-- a real pile: overlapping, rotated, different kinds, some unreadable -->
+            <div class="sc-item i1"><div class="sc-tag">PDF · JA</div>
+              <div class="sc-body cjk">非配向性電磁鋼板<div class="ln m"></div><div class="ln s"></div></div></div>
+            <div class="sc-item i2 tbl"><div class="sc-tag">TABLE</div>
+              <div class="sc-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="sc-item i3 chart"><div class="sc-tag">CHART</div>
+              <svg viewBox="0 0 60 34"><polyline points="2,30 12,22 22,25 32,12 42,15 52,5"/><polyline class="b" points="2,32 12,29 22,27 32,24 42,18 52,14"/></svg></div>
+            <div class="sc-item i4 scan"><div class="sc-tag warn">SCAN · AR</div>
+              <div class="sc-body" dir="rtl"><div class="ln"></div><div class="ln m"></div><div class="ln s"></div><div class="ln"></div></div>
+              <div class="sc-x">no text layer</div></div>
+            <div class="sc-item i5 fig"><div class="sc-tag">FIGURE</div>
+              <svg viewBox="0 0 60 34"><rect x="10" y="8" width="40" height="4"/><rect x="10" y="13" width="40" height="3"/><rect x="10" y="17" width="40" height="6"/><path d="M10 10 H4"/><path d="M50 15 H56"/></svg></div>
+            <div class="sc-item i6"><div class="sc-tag">PDF · ZH</div>
+              <div class="sc-body cjk">热浸镀锌铝镁<div class="ln"></div><div class="ln m"></div></div></div>
+            <div class="sc-item i7 tbl"><div class="sc-tag">TABLE</div>
+              <div class="sc-grid sm"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="sc-x">splits p.14&ndash;15</div></div>
+            <div class="sc-item i8 scan"><div class="sc-tag warn">SCAN · ZH</div>
+              <div class="sc-body"><div class="ln m"></div><div class="ln"></div><div class="ln s"></div></div></div>
+            <div class="sc-item i9"><div class="sc-tag">PDF · KO</div>
+              <div class="sc-body cjk">알루미늄<div class="ln s"></div></div></div>
+            <div class="sc-item i10 fig"><div class="sc-tag">FIGURE</div>
+              <svg viewBox="0 0 60 34"><circle cx="30" cy="17" r="10"/><path d="M30 7 V27 M20 17 H40"/></svg></div>
+            <!-- specks: the long tail you never look at -->
+            <span class="speck s1"></span><span class="speck s2"></span><span class="speck s3"></span>
+            <span class="speck s4"></span><span class="speck s5"></span><span class="speck s6"></span>
+            <span class="speck s7"></span><span class="speck s8"></span><span class="speck s9"></span>
           </div>
-          <div class="doc doc3">
-            <div class="dlang">ZH · CNIPA</div>
-            <div class="cjk">一种热浸镀锌铝镁镀层钢板</div>
-            <div class="ln"></div><div class="ln m"></div>
-            <div style="font-size:8px;margin-top:4px">图 3 — 粒度分布</div>
-            <div class="ln s"></div>
-          </div>
-          <div class="doc doc3">
-            <div class="dlang">AR · SAIP <span class="sc">scan</span></div>
-            <div class="cjk" dir="rtl">براءة اختراع — المملكة العربية السعودية</div>
-            <div class="ln m"></div><div class="ln"></div>
-            <div class="brk">no text layer — image only</div>
-          </div>
-          <span class="scanflag">two in five pages are scanned images — no text to copy</span>
+          <div class="pilecap"><b>376 pages</b> of tables, figures, charts and scans, in six languages, from seven patent offices. No two laid out the same way.</div>
           <div class="pcap">Dense technical papers · <span class="hi">hundreds of pages</span> · Multiple languages: Chinese, Japanese, Arabic, Korean, French, English · scanned or digital</div>
         </div>
         <div class="arrow"><div><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div></div>
@@ -512,23 +573,53 @@ table.out td.mono{font-family:var(--font-mono);font-size:9px;color:var(--fg-2)}
         <div class="pane mid">
           <div class="paneh"><span class="sn">02</span>What Axion finds</div>
 
-          <div class="web web3">
+          <div class="web">
             <svg class="weblines" viewBox="0 0 300 250" preserveAspectRatio="none">
-              <!-- table -> chart -->
-              <path class="wl on" d="M166 55 C 186 76, 196 88, 200 95"/>
-              <!-- chart -> claims -->
-              <path class="wl on" d="M196 150 C 190 180, 180 198, 175 211"/>
-              <!-- table -> figures -->
-              <path class="wl on" d="M128 51 C 92 84, 62 128, 50 157"/>
-              <!-- figures -> claims (weaker) -->
-              <path class="wl" d="M62 202 C 96 226, 124 234, 139 238"/>
-              <!-- chart -> figures (weaker) -->
-              <path class="wl" d="M176 133 C 130 152, 96 168, 68 176"/>
+              <!-- traced finding: table -> chart, table -> figure, chart -> text -->
+              <path class="wl on" d="M190 46 C 205 62, 215 74, 219 90"/>
+              <path class="wl on" d="M110 46 C 96 62, 82 74, 75 90"/>
+              <path class="wl on" d="M219 132 C 219 160, 218 180, 217 200"/>
+              <!-- secondary, weaker links -->
+              <path class="wl" d="M75 140 C 82 176, 120 198, 152 206"/>
+              <path class="wl" d="M144 112 C 168 112, 180 112, 196 112"/>
             </svg>
-            <div class="cnode c1"><div class="cic"><svg viewBox="0 0 21 17" fill="currentColor"><path d="M18.3071 0.125C19.3112 0.125 20.1252 0.967758 20.1252 2.00735V14.2426C20.1252 15.2174 19.4096 16.0186 18.4926 16.1149L18.3071 16.125H1.94343L1.75788 16.1149C0.901923 16.025 0.221789 15.3209 0.13501 14.4347L0.125244 14.2426V2.00735C0.125244 0.967758 0.939272 0.125 1.94343 0.125H18.3071ZM1.94343 14.2426H4.6707V11.4191H1.94343V14.2426ZM6.48888 14.2426H9.21615V11.4191H6.48888V14.2426ZM15.5798 14.2426H18.3071V11.4191H15.5798V14.2426ZM11.0343 14.2426H13.7616V11.4191H11.0343V14.2426ZM1.94343 9.53677H4.6707V6.71324H1.94343V9.53677ZM6.48888 9.53677H9.21615V6.71324H6.48888V9.53677ZM15.5798 9.53677H18.3071V6.71324H15.5798V9.53677ZM11.0343 9.53677H13.7616V6.71324H11.0343V9.53677ZM1.94343 4.83088H4.6707V2.00735H1.94343V4.83088ZM6.48888 4.83088H9.21615V2.00735H6.48888V4.83088ZM15.5798 4.83088H18.3071V2.00735H15.5798V4.83088ZM11.0343 4.83088H13.7616V2.00735H11.0343V4.83088Z"/></svg></div><span class="cl">Tables</span></div>
-            <div class="cnode c2"><div class="cic"><svg viewBox="0 0 19 17" fill="currentColor"><path d="M3.12363 17H0V10.6108H3.12363V17Z"/><path d="M8.4122 17H5.28857V7.06657H8.4122V17Z"/><path d="M13.698 9.03315V17H10.5744V9.03315H13.698Z"/><path d="M18.9884 17H15.8648V5.27835H18.9884V17Z"/><path d="M17.6349 0C18.3889 9.04559e-05 18.9998 0.617153 19 1.3784C19 2.13984 18.3891 2.75767 17.6349 2.75776C17.2866 2.75776 16.9699 2.62443 16.7286 2.4077L13.5224 4.85525C13.565 4.98861 13.5882 5.13069 13.5882 5.27835C13.5882 6.03974 12.9772 6.65755 12.2231 6.6577C11.4689 6.6577 10.8571 6.03984 10.8571 5.27835C10.8571 5.22965 10.8598 5.18155 10.8647 5.13415L7.94465 3.84208C7.71246 4.26849 7.26343 4.55727 6.74744 4.55737C6.33993 4.55737 5.97503 4.37641 5.72481 4.09062L2.59966 6.51256C2.69026 6.69689 2.7427 6.90377 2.74275 7.12349C2.74275 7.88487 2.13173 8.50266 1.37765 8.50285C0.623408 8.50285 0.0115896 7.88498 0.0115896 7.12349C0.0117788 6.36216 0.623525 5.74509 1.37765 5.74509C1.72266 5.74517 2.03688 5.87538 2.27723 6.0885L5.4577 3.62863C5.40943 3.48753 5.3814 3.33662 5.38138 3.17896C5.38138 2.41747 5.9932 1.79961 6.74744 1.79961C7.50156 1.79975 8.11255 2.41756 8.11255 3.17896C8.11255 3.22122 8.10956 3.2629 8.10587 3.30419L11.0335 4.601C11.268 4.1824 11.7128 3.89994 12.2231 3.89994C12.6345 3.90003 13.0021 4.08461 13.2524 4.37522L16.4062 1.97796C16.3193 1.7966 16.2688 1.5934 16.2688 1.3784C16.2691 0.617097 16.8808 0 17.6349 0Z"/></svg></div><span class="cl">Charts</span></div>
-            <div class="cnode c3"><div class="cic"><svg viewBox="0 0 25 25" fill="currentColor"><path d="M21.3904 24.2H3.00948C1.46096 24.2 0.199951 22.9388 0.199951 21.3941V3.01001C0.199951 1.46123 1.46096 0.200012 3.00948 0.200012H19.2094C19.4106 0.200012 19.6037 0.282177 19.7474 0.425963L23.9905 4.81761C24.126 4.95729 24.2 5.14216 24.2 5.33524V21.39C24.2 22.9388 22.939 24.1959 21.3904 24.1959V24.2ZM3.00948 1.69128C2.28245 1.69128 1.69508 2.28286 1.69508 3.0059V21.39C1.69508 22.1172 2.28656 22.7046 3.00948 22.7046H21.3904C22.1175 22.7046 22.7048 22.1131 22.7048 21.39V5.63514L18.8931 1.68718H3.00948V1.69128Z"/><path d="M19.5422 7.6441H15.562C15.1513 7.6441 14.8145 7.31134 14.8145 6.89641C14.8145 6.48148 15.1472 6.14872 15.562 6.14872H19.5422C19.9529 6.14872 20.2897 6.48148 20.2897 6.89641C20.2897 7.31134 19.957 7.6441 19.5422 7.6441Z"/><path d="M19.5422 11.7358H15.562C15.1513 11.7358 14.8145 11.403 14.8145 10.9881C14.8145 10.5732 15.1472 10.2404 15.562 10.2404H19.5422C19.9529 10.2404 20.2897 10.5732 20.2897 10.9881C20.2897 11.403 19.957 11.7358 19.5422 11.7358Z"/><path d="M18.5274 19.9645H5.90923C4.93576 19.9645 4.13891 19.1717 4.13891 18.1939V16.2877C4.13891 15.3141 4.93165 14.5171 5.90923 14.5171H18.5274C19.5009 14.5171 20.2977 15.31 20.2977 16.2877V18.1939C20.2977 19.1675 19.505 19.9645 18.5274 19.9645ZM5.90923 16.0001C5.74904 16.0001 5.61759 16.1316 5.61759 16.2918V18.198C5.61759 18.3582 5.74904 18.4897 5.90923 18.4897H18.5274C18.6876 18.4897 18.819 18.3582 18.819 18.198V16.2918C18.819 16.1316 18.6876 16.0001 18.5274 16.0001H5.90923Z"/><path d="M8.63722 5.82412C9.89411 5.95969 10.9045 6.9703 11.0401 8.22741C11.0442 8.2726 11.0853 8.30546 11.1305 8.30546H12.2723C12.297 8.30546 12.3216 8.29314 12.3381 8.2767C12.3545 8.26027 12.3627 8.23562 12.3627 8.21097C12.2888 7.25376 11.878 6.34997 11.1962 5.67212C10.5184 4.99427 9.61481 4.57934 8.65776 4.5054C8.63312 4.5054 8.60847 4.51361 8.59204 4.53004C8.57561 4.54648 8.56329 4.57113 8.56329 4.59578V5.73785C8.56329 5.78304 8.59615 5.82001 8.64133 5.82823L8.63722 5.82412Z"/><path d="M4.42711 8.30558H5.56078C5.60596 8.30558 5.64293 8.27271 5.65114 8.22752C5.78669 6.97042 6.79713 5.9598 8.05402 5.82423C8.0992 5.82013 8.13205 5.77904 8.13205 5.73385V4.59589C8.13205 4.57124 8.11974 4.54659 8.10331 4.53016C8.08688 4.51373 8.06223 4.50551 8.03759 4.50551C7.08465 4.57946 6.18511 4.99438 5.50738 5.67223C4.82965 6.35008 4.41479 7.25388 4.34086 8.21109C4.34086 8.23574 4.34907 8.26039 4.3655 8.27682C4.38193 8.29325 4.40658 8.30558 4.43122 8.30558H4.42711Z"/><path d="M10.1616 10.6389C10.1287 10.606 10.0794 10.606 10.0424 10.6307C9.55776 11.021 8.97039 11.2305 8.34194 11.2305C6.95362 11.2305 5.79531 10.1911 5.64744 8.81077C5.64333 8.76558 5.60226 8.73272 5.55707 8.73272H4.42752C4.40287 8.73272 4.37823 8.74505 4.3618 8.76148C4.34537 8.77791 4.33715 8.80256 4.33715 8.8272C4.41109 9.7803 4.82594 10.68 5.50367 11.3578C6.27999 12.1343 7.31508 12.5287 8.35017 12.5287C9.27846 12.5287 10.2108 12.2123 10.9584 11.5715C10.9789 11.555 10.9872 11.5304 10.9913 11.5057C10.9954 11.4811 10.9831 11.4564 10.9666 11.44L10.1616 10.6348V10.6389Z"/><path d="M12.2693 8.73277H11.1274C11.0822 8.73277 11.0453 8.76564 11.0371 8.81083C10.9837 9.32435 10.7824 9.81322 10.4538 10.2158C10.425 10.2528 10.4291 10.3021 10.462 10.335L11.2671 11.1402C11.2671 11.1402 11.3082 11.1648 11.3287 11.1648C11.3533 11.1648 11.378 11.1525 11.3944 11.1319C11.9571 10.4787 12.2898 9.68176 12.3556 8.82315C12.3556 8.7985 12.3473 8.77385 12.3309 8.75742C12.3145 8.74099 12.2898 8.72866 12.2652 8.72866L12.2693 8.73277Z"/><path d="M19.2097 0.100403C19.4096 0.100489 19.6014 0.171522 19.7546 0.297668L19.8181 0.355286L19.8191 0.356262L24.0623 4.74786L24.1169 4.80939C24.236 4.95864 24.2995 5.14344 24.2996 5.33478V21.3904C24.2993 22.987 23.006 24.2827 21.4128 24.2947C21.4055 24.2965 21.3983 24.2996 21.3904 24.2996H3.00952C1.40593 24.2996 0.100461 22.9942 0.100342 21.3943V3.00958C0.100576 1.40578 1.4059 0.100403 3.00952 0.100403H19.2097ZM3.00952 1.79083C2.33802 1.79083 1.7948 2.33775 1.79468 3.00568V21.3904C1.79491 22.062 2.34179 22.6043 3.00952 22.6043H21.3904C22.0618 22.6043 22.605 22.0583 22.6052 21.3904V5.6756L18.8503 1.78693H3.02905C3.02259 1.78824 3.01637 1.79083 3.00952 1.79083ZM18.5271 14.4168C19.5557 14.4168 20.3982 15.2548 20.3982 16.2879V18.1942C20.3981 19.2227 19.56 20.0643 18.5271 20.0643H5.90894C4.88059 20.0641 4.03895 19.2271 4.03882 18.1942V16.2879C4.03882 15.2593 4.8761 14.417 5.90894 14.4168H18.5271ZM5.90894 16.1004C5.80412 16.1006 5.71753 16.1869 5.71753 16.2918V18.1981C5.71755 18.3029 5.80413 18.3893 5.90894 18.3895H18.5271C18.632 18.3895 18.7195 18.303 18.7195 18.1981V16.2918C18.7195 16.1868 18.632 16.1004 18.5271 16.1004H5.90894ZM5.55737 8.63263C5.64664 8.63277 5.73687 8.69779 5.74683 8.8006L5.78491 9.04572C6.0298 10.2508 7.08812 11.1305 8.34155 11.1307C8.94696 11.1307 9.51225 10.9285 9.97925 10.5526L9.98706 10.5467C10.0444 10.5087 10.1241 10.5012 10.1912 10.5399C10.2063 10.5446 10.2205 10.5526 10.2322 10.5643L11.0369 11.369C11.0672 11.3993 11.1008 11.4551 11.0896 11.5223C11.0843 11.5541 11.0699 11.6067 11.0222 11.6463L11.0232 11.6473C10.2566 12.3044 9.3011 12.6287 8.35034 12.6287C7.29019 12.6287 6.22935 12.2246 5.43335 11.4285C4.73882 10.7339 4.31285 9.81174 4.23706 8.83478V8.82697L4.24976 8.75665C4.25826 8.73337 4.27141 8.71071 4.29077 8.69122L4.35034 8.65021C4.37351 8.63965 4.39957 8.63263 4.42749 8.63263H5.55737ZM19.5417 10.1404C20.0074 10.1404 20.3894 10.5176 20.3894 10.9881C20.3894 11.4582 20.0118 11.8358 19.5417 11.8358H15.5623C15.0966 11.8358 14.7146 11.4586 14.7146 10.9881C14.7146 10.518 15.0922 10.1404 15.5623 10.1404H19.5417ZM12.4558 8.83087H12.4548C12.3875 9.71075 12.0469 10.5279 11.4705 11.1971L11.4695 11.1961C11.4355 11.2371 11.385 11.2644 11.3289 11.2645C11.3071 11.2645 11.288 11.2591 11.2781 11.2557C11.2663 11.2517 11.2552 11.247 11.2468 11.243C11.2382 11.2388 11.2307 11.2342 11.2253 11.2313C11.2227 11.2298 11.2201 11.2283 11.2185 11.2274L11.2166 11.2264H11.2156C11.2086 11.2222 11.2018 11.2165 11.196 11.2108L10.3914 10.4061C10.3242 10.3389 10.3139 10.2324 10.3748 10.1541L10.3767 10.1522C10.6926 9.76494 10.8859 9.29467 10.9373 8.8006L10.9382 8.79279C10.9545 8.70374 11.0306 8.63263 11.1277 8.63263H12.2361C12.2453 8.62982 12.2554 8.62872 12.2654 8.62872C12.2933 8.62875 12.3194 8.63571 12.3425 8.6463L12.4021 8.68634L12.4265 8.71857C12.4472 8.752 12.4558 8.7897 12.4558 8.82306V8.83087ZM8.03784 4.40509C8.07115 4.40513 8.10893 4.41372 8.14233 4.43439L8.17358 4.45978L8.2146 4.51837C8.22519 4.54152 8.23212 4.56763 8.23218 4.59552V5.73419C8.23201 5.82337 8.16698 5.91265 8.06421 5.92267L8.06519 5.92365C6.8551 6.05417 5.88131 7.0278 5.75073 8.2381L5.74976 8.24591C5.73339 8.33478 5.65728 8.40607 5.5603 8.40607H4.42749C4.42596 8.40607 4.42412 8.40418 4.42261 8.40411C4.37035 8.40155 4.3246 8.37741 4.29468 8.34747C4.25531 8.30805 4.24097 8.25521 4.24097 8.21075V8.20294L4.25952 8.02032C4.37116 7.10778 4.78506 6.25276 5.43628 5.60138C6.13081 4.90673 7.05323 4.48187 8.03003 4.40607L8.03784 4.40509ZM19.5417 6.04865C20.0073 6.04865 20.3893 6.42586 20.3894 6.8963C20.3894 7.36644 20.0119 7.74396 19.5417 7.74396H15.5623C15.0966 7.74396 14.7146 7.3668 14.7146 6.8963C14.7147 6.42621 15.0922 6.04865 15.5623 6.04865H19.5417ZM12.4626 8.21075C12.4626 8.25522 12.4483 8.30804 12.4089 8.34747C12.3774 8.37905 12.3281 8.40509 12.2722 8.40509H11.1306C11.0414 8.40509 10.9504 8.34076 10.9402 8.2381C10.8105 7.03599 9.84978 6.06757 8.65112 5.92657C8.64211 5.92747 8.63301 5.92822 8.62378 5.92657C8.53476 5.91039 8.46374 5.8351 8.46362 5.7381V4.59552C8.4637 4.53992 8.48983 4.49132 8.52124 4.45978L8.55347 4.43439C8.58689 4.41379 8.62468 4.40509 8.65796 4.40509H8.66577V4.40607C9.6464 4.48192 10.5727 4.90668 11.2673 5.60138H11.2664C11.9654 6.29636 12.3868 7.2224 12.4626 8.20294V8.21075Z"/></svg></div><span class="cl">Figures</span></div>
-            <div class="cnode c4"><div class="cic"><svg viewBox="0 0 25 25" fill="currentColor"><path d="M21.3904 24.2H3.00948C1.46096 24.2 0.199951 22.9388 0.199951 21.3941V3.01002C0.199951 1.46123 1.46096 0.200012 3.00948 0.200012H19.2094C19.4106 0.200012 19.6037 0.282171 19.7475 0.425957L23.9905 4.8176C24.126 4.95728 24.2 5.14215 24.2 5.33524V21.39C24.2 22.9388 22.939 24.1959 21.3904 24.1959V24.2ZM3.00948 1.69128C2.28245 1.69128 1.69508 2.28287 1.69508 3.00591V21.39C1.69508 22.1172 2.28656 22.7046 3.00948 22.7046H21.3904C22.1175 22.7046 22.7048 22.113 22.7048 21.39V5.63515L18.8931 1.68717H3.00948V1.69128Z"/><path d="M19.5064 16.2096H4.89201C4.48126 16.2096 4.14447 15.8768 4.14447 15.4619C4.14447 15.047 4.47715 14.7142 4.89201 14.7142H19.5064C19.9172 14.7142 20.254 15.047 20.254 15.4619C20.254 15.8768 19.9213 16.2096 19.5064 16.2096Z"/><path d="M19.5064 19.9521H4.89201C4.48126 19.9521 4.14447 19.6193 4.14447 19.2044C4.14447 18.7895 4.47715 18.4567 4.89201 18.4567H19.5064C19.9172 18.4567 20.254 18.7895 20.254 19.2044C20.254 19.6193 19.9213 19.9521 19.5064 19.9521Z"/><path d="M19.5434 12.4629H4.89201C4.48126 12.4629 4.14447 12.1301 4.14447 11.7152C4.14447 11.3003 4.47715 10.9675 4.89201 10.9675H19.5434C19.9542 10.9675 20.291 11.3003 20.291 11.7152C20.291 12.1301 19.9583 12.4629 19.5434 12.4629Z"/><path d="M18.3686 4.50945H4.89201C4.48126 4.50945 4.14447 4.84221 4.14447 5.25714V8.07125C4.14447 8.48207 4.47715 8.81895 4.89201 8.81895H19.5393C19.95 8.81895 20.2869 8.48618 20.2869 8.07125V6.42798L18.3686 4.50945ZM18.7917 7.31945H5.63546V5.99663H17.4198L18.7917 7.31945Z"/><path d="M19.2097 0.100403C19.4096 0.100484 19.6014 0.171521 19.7546 0.297668L19.8181 0.355286L19.8191 0.356262L24.0623 4.74786L24.1169 4.80939C24.236 4.95864 24.2995 5.14344 24.2996 5.33478V21.3904C24.2993 22.987 23.006 24.2827 21.4128 24.2947C21.4055 24.2965 21.3983 24.2996 21.3904 24.2996H3.00952C1.40593 24.2996 0.100466 22.9942 0.100342 21.3943V3.00958C0.100578 1.40579 1.4059 0.100403 3.00952 0.100403H19.2097ZM3.00952 1.79083C2.33802 1.79083 1.7948 2.33775 1.79468 3.00568V21.3904C1.79491 22.062 2.34179 22.6043 3.00952 22.6043H21.3904C22.0618 22.6043 22.605 22.0583 22.6052 21.3904V5.6756L18.8503 1.78693H3.02905C3.02259 1.78824 3.01637 1.79083 3.00952 1.79083ZM19.5066 18.3563C19.972 18.3564 20.354 18.7337 20.3542 19.2039C20.3542 19.674 19.9766 20.0525 19.5066 20.0526H4.89233C4.42669 20.0526 4.04468 19.6744 4.04468 19.2039C4.04493 18.734 4.42239 18.3563 4.89233 18.3563H19.5066ZM19.5066 14.6141C19.9721 14.6142 20.3542 14.9914 20.3542 15.4617C20.3542 15.9318 19.9766 16.3093 19.5066 16.3094H4.89233C4.4267 16.3094 4.04468 15.9322 4.04468 15.4617C4.04476 14.9917 4.42228 14.6141 4.89233 14.6141H19.5066ZM19.5437 10.868C20.0092 10.8681 20.3914 11.2452 20.3914 11.7156C20.3911 12.1855 20.0135 12.5631 19.5437 12.5633H4.89233C4.42684 12.5633 4.04491 12.1859 4.04468 11.7156C4.04468 11.2455 4.42223 10.868 4.89233 10.868H19.5437ZM5.73511 7.21954H18.5447L17.3796 6.0965H5.73511V7.21954ZM20.3865 8.07111C20.3865 8.5416 20.0045 8.91876 19.5388 8.91876H4.89233C4.42187 8.91876 4.04468 8.53677 4.04468 8.07111V5.25665C4.04494 4.78639 4.42685 4.409 4.89233 4.409H18.3689L18.407 4.41681C18.4189 4.42174 18.4299 4.42905 18.4392 4.43829L20.3572 6.35724C20.3758 6.37589 20.3864 6.40119 20.3865 6.42755V8.07111Z"/></svg></div><span class="cl">Claims</span></div>
+
+            <div class="wn n1">
+              <span class="wtag">table</span>
+              <table class="mt"><tr><th>Int. Cl.</th><th>F1</th></tr>
+              <tr><td>C22C 38/00</td><td>301</td></tr></table>
+            </div>
+
+            <div class="wn n2">
+              <span class="wtag">chart</span>
+              <div class="mc"><i style="height:40%"></i><i style="height:66%"></i><i style="height:88%"></i><i style="height:72%"></i><i style="height:95%"></i></div>
+            </div>
+
+            <div class="wn n3">
+              <span class="wtag">figure</span>
+              <div class="figbox">
+                <svg class="figsvg" viewBox="0 0 120 38" aria-label="technical drawing, coated steel cross-section">
+                  <defs><pattern id="fh" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="#a8adc6" stroke-width="1.1"/></pattern></defs>
+                  
+                  <!-- layered cross-section: coating stack on a substrate -->
+                  <rect class="hatch" fill="url(#fh)" x="20" y="6" width="74" height="7"/>
+                  <rect class="lyr"   x="20" y="14" width="74" height="5"/>
+                  <rect class="lyr2"  x="20" y="20" width="74" height="4"/>
+                  <rect class="sub"   x="20" y="25" width="74" height="9"/>
+                  <!-- leader lines + numbered callouts -->
+                  <path class="ld" d="M20 9 H10"/><text class="cal" x="4" y="11">1</text>
+                  <path class="ld" d="M94 16 H105"/><text class="cal" x="107" y="18">2</text>
+                  <path class="ld" d="M94 22 H105"/><text class="cal" x="107" y="24">3</text>
+                  <path class="ld" d="M20 29 H10"/><text class="cal" x="4" y="31">4</text>
+                </svg>
+                <span class="figcap">Fig. 3 — cross-section</span>
+              </div>
+            </div>
+
+            <div class="wn n4">
+              <span class="wtag">text</span>
+              <div class="wtxt">"…化学成分 <span class="tin">→ chemical composition</span>, stated in the claims."</div>
+            </div>
           </div>
           <div class="conv">
             <div class="ch">↳ One finding, four sources</div>
