@@ -38,25 +38,49 @@ for those layouts — **these need copy from Liana**:
 - Option A pane labels: "What you upload" / "What you get"
 - Option B source row: "Read from"
 
+## Client evidence
+
+[CLIENT-EVIDENCE.md](CLIENT-EVIDENCE.md) ranks what clients actually ask for when they look at
+extracted data, by how many distinct accounts raised each theme. Read from every client transcript
+on file: 26 accounts, 41 meeting sets, ~1.15M words.
+
+Headline: the top four themes are all served by showing the finished table rather than a count of
+artifacts. Seeing where each value came from ranks fifth on frequency but first on function, since
+checking, trust and accuracy all depend on it.
+
+The four-client block at the top of `odl-example.html` is the earlier, narrower version of the same
+argument.
+
 ## Numbers — source of truth
 
-Taken from the **Neuralith Extracted Artifacts panel**, not from the pipeline output directories:
+Verified per document against `manifest.json`, the source the platform ingests:
 
 | Artifact | Count |
 |---|---|
-| Tables | 103 |
-| Charts | 70 |
-| Images | 31 |
-| Brands | 8 |
-| Cross-references | 27 |
-| **Total** | **239** |
+| Tables | 126 |
+| Figures | 95 |
+| Charts | 54 |
+| Connected findings | 52 |
+| Page marks / branding | 10 |
+| **Total** | **337** |
 
-Corpus: 8 patents · 178 pages (range 9–47) · 2 languages (EN + ZH).
+Corpus (**v2 set**): 14 patents · 376 pages (range 7–59) · 6 languages, 5 scripts ·
+7 patent authorities · 2012–2025 · **157 pages (42%) scanned images with no text layer**.
 
-**Do not re-derive these from `engagements/_demo-builder/demos/process-manufacturing/out/`.**
-Those directories contain pipeline intermediates (JSON sidecars, `_semantic.png` overlays) and
-counting them overstates images ~3x and understates tables ~2x. The platform applies its own
-filtering. Read the product panel.
+Read from `manifest.json`, the same source the platform ingests.
+
+**The old 8-document set is retired.** It was 8 docs of which 3 were academic journal papers,
+not patents, and its counts (Tables 103 / Charts 70 / Images 31 / total 239) are wrong even for
+itself. Anything quoting 8 patents, 178 pages or 2 languages is stale.
+
+**Do not re-derive these from pipeline `out/` directories.** Those hold intermediates (JSON
+sidecars, `_semantic.png` overlays); counting them overstates figures and understates tables.
+Read `manifest.json`, or the product's Extracted Artifacts panel.
+
+**No accuracy figure is cleared for this corpus.** No ground truth was built and no benchmark
+run. The 97% figure comes from other engagements and must not appear on this page. Same for any
+time-saving or person-hours multiplier. Source:
+`engagements/_internal/platform-product/artefacts/onboarding-flow/liana-answers-manufacturing.md`.
 
 ## Design system
 
