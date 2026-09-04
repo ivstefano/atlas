@@ -3,7 +3,7 @@
 _Working memory for this task. Auto-written on session end/compact. Read on session start.
 This is NOT the client-facing STATUS.md._
 
-last_session: 2026-09-04T18:00
+last_session: 2026-09-04T19:30
 last_tab: A: Operations
 
 ## Now
@@ -15,12 +15,19 @@ Read `engagements/finca/HANDOFF.md` first - it is current as of 2026-09-04 and c
 this file would otherwise repeat. Don't duplicate CONTEXT/STATUS/COMMERCIAL content here.
 
 ## Next action
-Ivo sends `_briefs/2026-09-02_response-to-campbell.md` to Alastair Campbell, cc Jordan.
-Target Friday 2026-09-05, Monday 2026-09-07 at the latest, so there is room for the
-back-and-forth Campbell offered before the working session on 2026-09-09 (10:00-11:00
-London, Teams, with André the CTO of 361).
+**Sent.** Ivo emailed the response document to Alastair Campbell on 2026-09-04.
+
+Waiting on Campbell. He said he would forward it to André (CTO of 361) once comfortable,
+and offered a round trip first ("if we need to do a quick back and forth, we can").
+
+Next real action is preparing for the working session: **2026-09-09, 10:00-11:00 London,
+on Teams**, with André and possibly one or two others Campbell brings. Two things to watch
+for before then: any reply from Campbell that changes the agenda, and whether André's
+details arrive so he can be added to the invite.
 
 ## Open threads
+- No reply from Campbell yet as of 2026-09-04 evening. If nothing lands by Monday
+  2026-09-07, the 9th goes ahead on the agenda as written in section 4 of the sent document.
 - Cold start is the unresolved technical objection. Campbell raised it three times on
   2026-09-01 and rejected every standard answer. Our position: his own Observed
   Affordability Signals framework IS the cold-start answer. Expect André to test it.
