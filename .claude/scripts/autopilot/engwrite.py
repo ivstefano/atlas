@@ -119,8 +119,10 @@ def commit_paths(repo, changes, message, lock_path, branch=BRANCH):
                     _git(repo, "update-index", "--force-remove", "--", path, env=env)
                 else:
                     b = _git(repo, "hash-object", "-w", "--stdin", input=new_head).strip()
-                    blobs[path] = b
-                    _git(repo, "update-index", "--add", "--cacheinfo", f"100644,{b},{path}", env=env)
+                    wp = os.path.join(repo, path)
+                    mode = "100755" if os.path.exists(wp) and os.access(wp, os.X_OK) else "100644"
+                    blobs[path] = (b, mode)
+                    _git(repo, "update-index", "--add", "--cacheinfo", f"{mode},{b},{path}", env=env)
             tree = _git(repo, "write-tree", env=env).strip()
         finally:
             os.unlink(tmp_index)
@@ -130,7 +132,8 @@ def commit_paths(repo, changes, message, lock_path, branch=BRANCH):
             if new_head is None:
                 _git(repo, "update-index", "--force-remove", "--", path)
             else:
-                _git(repo, "update-index", "--add", "--cacheinfo", f"100644,{blobs[path]},{path}")
+                b, mode = blobs[path]
+                _git(repo, "update-index", "--add", "--cacheinfo", f"{mode},{b},{path}")
             wp = os.path.join(repo, path)
             if new_work is None:
                 if os.path.exists(wp):
