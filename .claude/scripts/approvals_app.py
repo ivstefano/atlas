@@ -3,12 +3,21 @@
 
 Reads/writes the queue in approval_queue.py. Executors (approval_executors.py) run ONLY when Ivo
 clicks "Approve & send" (or "Approve selected"). Bound to 127.0.0.1; every POST must carry the
-X-Approvals header, so a cross-site form on another page cannot trigger a send.
+X-Approvals header (a cross-site form cannot set it, and no CORS is served, so a fetch from another page
+is blocked at preflight), its Host must be this inbox (stops DNS rebinding) and its Origin, when sent, must
+be this inbox. Undo additionally requires the Origin header, so it only works from the inbox page itself.
+
+Undo (status_entry items the autopilot auto-wrote): runs target.undo_cmd, which must be exactly
+"<autopilot python> meeting_autopilot.py undo <target.undo_id>" (checked, never passed to a shell),
+then marks the item rejected.
 
     approvals_app.py            (launchd: ai.iris.atlas.approvals, KeepAlive)
 """
 import html
 import json
+import os
+import re
+import shlex
 import subprocess
 import sys
 import urllib.parse
@@ -23,12 +32,40 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse  # noqa: 
 
 FONTS = Path.home() / "Documents" / "Cognion" / "proto" / "static" / "fonts"
 ENG = Path.home() / "Documents" / "engagements"
+PORT = int(os.environ.get("APPROVALS_PORT", "8096"))
+HOSTS = {f"127.0.0.1:{PORT}", f"localhost:{PORT}"}
+ORIGINS = {f"http://{h}" for h in HOSTS}
+AUTOPILOT = Path(__file__).resolve().parent / "meeting_autopilot.py"
+AUTOPILOT_PY = "/Users/iris/Documents/Cognion/atlas/.venv/bin/python"   # = meeting_autopilot.PY
 app = FastAPI(title="Approvals")
 
 
-def _guard(req: Request):
+def _guard(req: Request, need_origin=False):
     if req.headers.get("x-approvals") != "1":
         raise HTTPException(403, "missing X-Approvals header")
+    if req.headers.get("host") not in HOSTS:
+        raise HTTPException(403, "wrong Host")
+    origin = req.headers.get("origin")
+    if (origin is None and need_origin) or (origin is not None and origin not in ORIGINS):
+        raise HTTPException(403, "request not from the inbox origin")
+    if req.headers.get("sec-fetch-site") not in (None, "same-origin"):
+        raise HTTPException(403, "cross-site request")
+
+
+def undo_argv(it):
+    """The undo command for an auto-written status_entry, or None. Only the exact known form is accepted."""
+    t = it.get("target") or {}
+    key = t.get("undo_id") or ""
+    if it.get("kind") != "status_entry" or not re.fullmatch(r"[\w.:-]+", key):
+        return None
+    try:
+        argv = shlex.split(t.get("undo_cmd") or "")
+    except ValueError:
+        return None
+    want = [AUTOPILOT_PY, str(AUTOPILOT), "undo", key]
+    if len(argv) != 4 or argv[0] != AUTOPILOT_PY or Path(argv[1]).resolve() != AUTOPILOT or argv[2:] != want[2:]:
+        return None
+    return want
 
 
 def open_url(it):
@@ -101,6 +138,31 @@ async def batch(req: Request):
     return [dict(id=i, **_approve(i)) for i in data.get("ids", [])]
 
 
+@app.post("/api/items/{item_id}/undo")
+async def undo(item_id: str, req: Request):
+    _guard(req, need_origin=True)
+    it = Q.get(item_id)
+    if not it:
+        raise HTTPException(404)
+    argv = undo_argv(it)
+    if not argv:
+        return JSONResponse(dict(ok=False, error="no valid undo command on this item"))
+    if it["status"] != "done":
+        return JSONResponse(dict(ok=False, error=f"item is {it['status']}"))
+    try:
+        r = subprocess.run(argv, capture_output=True, text=True, timeout=180, cwd=str(Path.home()))
+    except subprocess.TimeoutExpired:
+        Q.update(item_id, "undo_failed", note="timed out")
+        return JSONResponse(dict(ok=False, error="undo timed out"))
+    if r.returncode != 0:
+        err = (r.stderr.strip() or r.stdout.strip())[-300:]
+        Q.update(item_id, "undo_failed", note=err)
+        return JSONResponse(dict(ok=False, error=err))
+    out = r.stdout.strip()[-300:]
+    Q.update(item_id, "undone from inbox", status="rejected", note=out)
+    return JSONResponse(dict(ok=True, result=out))
+
+
 @app.post("/api/items/{item_id}/{action}")
 async def act(item_id: str, action: str, req: Request):
     _guard(req)
@@ -136,6 +198,7 @@ def _card(it):
         for s in it.get("sources") or [])
     url = open_url(it)
     can = it["kind"] in X.EXECUTABLE and it["status"] == "pending"
+    can_undo = it["status"] == "done" and undo_argv(it) is not None
     hist = " · ".join(f"{h['ts'][5:16].replace('T', ' ')} {h['action']}" + (f" ({e(h['note'])})" if h.get("note") else "")
                       for h in it.get("history", [])[-4:])
     sent = f'<a href="{e(it["sent_link"])}" target="_blank">sent link</a>' if it.get("sent_link") else ""
@@ -156,6 +219,7 @@ def _card(it):
     <button onclick="copyBody(this)">Copy</button>
     {f'<a class="btn" href="{e(url)}" target="_blank">Open target</a>' if url else ''}
     {'<button onclick="act(this,&quot;open-path&quot;)">Open file</button>' if t.get('path') else ''}
+    {'<button class="no" onclick="undo(this)">Undo write</button>' if can_undo else ''}
     {'<button onclick="save(this)">Save edit</button><button onclick="act(this,&quot;done&quot;)">Mark done</button><button class="no" onclick="act(this,&quot;reject&quot;)">Reject</button>' if it['status'] == 'pending' else '<button onclick="act(this,&quot;reopen&quot;)">Reopen</button>'}
     <span class="status">{e(it['status'])} {sent}</span>
   </div>
@@ -216,6 +280,8 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.sty
 async function post(u,d){const r=await fetch(u,{method:'POST',headers:H,body:JSON.stringify(d||{})});return r.json()}
 async function save(b){await post(`/api/items/${id(b)}/save`,{body:txt(b)});toast('Saved')}
 async function act(b,a){await post(`/api/items/${id(b)}/${a}`);location.reload()}
+async function undo(b){if(!confirm('Revert this STATUS entry? Adds a revert commit in engagements.'))return;
+  const r=await post(`/api/items/${id(b)}/undo`);toast(r.ok?r.result:('Failed: '+(r.error||r.detail)));if(r.ok)setTimeout(()=>location.reload(),900)}
 function copyBody(b){navigator.clipboard.writeText(txt(b));toast('Copied')}
 async function approve(b){if(!confirm('Send this now? It goes out as you.'))return;
   const r=await post(`/api/items/${id(b)}/approve`,{body:txt(b)});toast(r.ok?r.result:('Failed: '+r.error));if(r.ok)setTimeout(()=>location.reload(),900)}
@@ -230,4 +296,4 @@ if __name__ == "__main__":
     import uvicorn
     from autopilot_common import tcc_guard
     tcc_guard("approvals")
-    uvicorn.run(app, host="127.0.0.1", port=8096, log_level="warning")
+    uvicorn.run(app, host="127.0.0.1", port=PORT, log_level="warning")
