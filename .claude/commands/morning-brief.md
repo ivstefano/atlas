@@ -142,6 +142,10 @@ If `gap_days >= 2`, the brief gets a new section near the top, between TL;DR and
 
 After this gap-recovery section, proceed with normal per-engagement state synthesis (existing step 6).
 
+### 5c. Approvals queue count
+
+Run `python3 .claude/scripts/approval_queue.py list pending` (read-only). Put the count, the split by source and the oldest pending date on the "N drafts waiting" line at the top of the brief. If 0, write "No drafts waiting". Never approve or send from the brief loop.
+
 ### 6. Synthesise the brief
 
 Write to `briefs/YYYY/WNN/YYYY-MM-DD_auto.md` with this structure:
@@ -150,6 +154,8 @@ Write to `briefs/YYYY/WNN/YYYY-MM-DD_auto.md` with this structure:
 # Morning brief — YYYY-MM-DD (Day of week)
 
 Auto-generated <timestamp>. Trigger: evening-before from <prev brief date>.
+
+**N drafts waiting** in Approvals (http://127.0.0.1:8096): <per source, e.g. 5 missing-post, 4 monday-thread, 1 weekly-rollup>. Oldest: <date>.
 
 ## TL;DR — the 3 things that matter today
 
