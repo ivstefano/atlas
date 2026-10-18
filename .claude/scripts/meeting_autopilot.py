@@ -61,6 +61,11 @@ AGENTS = {
     "ai.iris.atlas.autopilot-web": "local viewer on 127.0.0.1:8095",
     "ai.iris.atlas.morning-brief": "weekdays 07:30",
 }
+OTHER_AGENTS = {   # installed by the approvals work (plists in launchd/), same launcher; shown by status only
+    "ai.iris.atlas.approvals": "approvals inbox on 127.0.0.1:8096",
+    "ai.iris.atlas.weekly-rollup": "Fri 15:00",
+    "ai.iris.atlas.monday-threads": "Mon 08:30",
+}
 MODELS = {   # USD per 1M tokens (Bedrock list, same table Cognion uses). No temperature on these models.
     "haiku": dict(id="eu.anthropic.claude-haiku-5-5", inp=0.11, out=0.55, thinking={"type": "adaptive"}),
     "sonnet": dict(id="eu.anthropic.claude-sonnet-5-5", inp=2.20, out=11.00, thinking={"type": "between_tools"}),
@@ -1972,7 +1977,7 @@ def cmd_uninstall():
 
 def cmd_status():
     print("Agents:")
-    for label, what in AGENTS.items():
+    for label, what in {**AGENTS, **OTHER_AGENTS}.items():
         r = subprocess.run(["launchctl", "print", f"gui/{UID}/{label}"], capture_output=True, text=True)
         st = "not loaded"
         if r.returncode == 0:

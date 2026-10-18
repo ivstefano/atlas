@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""launchd entry point for the atlas autopilot jobs. Lives OUTSIDE ~/Documents on purpose:
-launchd processes cannot read ~/Documents unless this interpreter has Full Disk Access (macOS TCC).
-If access is missing, show a notification saying exactly what to grant, instead of failing silently.
+"""LEGACY launchd entry point. The ai.iris.atlas.* plists no longer use it: every job now runs
+through ~/Applications/AtlasAutopilot.app (autopilot/launcher.c), which holds the single Documents grant.
+Kept for manual use only. If access is missing it names that same grant.
 
     launch.py <script.py in atlas/.claude/scripts> [args...]
 """
@@ -26,8 +26,8 @@ path = os.path.join(SCRIPTS, script)
 try:
     open(path).close()
 except PermissionError:
-    py = os.path.realpath(sys.executable)
-    msg = f"{script}: macOS blocks ~/Documents. Grant Full Disk Access to {py}"
+    msg = (f"{script}: macOS blocks ~/Documents. Run it via the AtlasAutopilot launcher and turn on: "
+           "System Settings > Privacy & Security > Files and Folders > AtlasAutopilot > Documents Folder")
     note(msg)
     stamp = os.path.expanduser("~/.cache/atlas/tcc_notified")
     if os.path.exists(stamp) and (dt.datetime.now().timestamp() - os.path.getmtime(stamp)) < 6 * 3600:

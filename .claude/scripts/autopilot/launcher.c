@@ -6,6 +6,10 @@
  * (bundle id ai.iris.atlas.autopilot). Ivo clicks "Allow" once on the first prompt.
  *
  * Usage (from launchd): AtlasAutopilot.app/Contents/MacOS/atlas-autopilot <python> <script> [args...]
+ * Every ai.iris.atlas.* job goes through this one binary (watcher, viewer, morning brief, weekly rollup,
+ * Monday threads, approvals inbox), so ONE grant covers all of them:
+ *   System Settings > Privacy & Security > Files and Folders > AtlasAutopilot > Documents Folder: on.
+ * The grant is pinned to this binary's cdhash (ad-hoc signature): rebuilding voids it.
  * Built by `meeting_autopilot.py install` (clang + ad-hoc codesign). No logic lives here.
  */
 #include <dirent.h>
@@ -13,8 +17,10 @@
 #include <time.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <string.h>
 #include <spawn.h>
 #include <stdio.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -40,20 +46,26 @@ int main(int argc, char **argv) {
             closedir(d);
         } else if (errno == EPERM || errno == EACCES) {
             /* No grant yet: tell Ivo once a day how to fix it, then stop (python would fail anyway). */
-            char stamp[1100], day[16];
+            char stamp[1100], logdir[1050], day[16], script[600];
+            const char *job = getenv("XPC_SERVICE_NAME");   /* launchd sets this to the job label */
+            if (!job || !*job || strchr(job, '"') || strchr(job, '\\')) job = "atlas job";
             time_t now = time(NULL);
             strftime(day, sizeof day, "%Y%m%d", localtime(&now));
-            snprintf(stamp, sizeof stamp, "%s/Library/Logs/atlas-autopilot/tcc_notified_%s", home, day);
-            if (access(stamp, F_OK) != 0) {
+            snprintf(logdir, sizeof logdir, "%s/Library/Logs/atlas-autopilot", home);
+            mkdir(logdir, 0755);
+            snprintf(stamp, sizeof stamp, "%s/tcc_notified_%s", logdir, day);
+            if (access(stamp, F_OK) != 0) {   /* one notification per day across all jobs */
                 FILE *f = fopen(stamp, "w");
                 if (f) fclose(f);
-                char *nargv[] = {"/usr/bin/osascript", "-e",
-                    "display notification \"System Settings > Privacy & Security > Files and Folders > AtlasAutopilot: turn on Documents\" with title \"Meeting autopilot blocked\"",
-                    NULL};
+                snprintf(script, sizeof script,
+                    "display notification \"%s blocked. Turn on: System Settings > Privacy & Security > "
+                    "Files and Folders > AtlasAutopilot > Documents Folder\" with title \"Atlas autopilot blocked\"", job);
+                char *nargv[] = {"/usr/bin/osascript", "-e", script, NULL};
                 pid_t p;
                 if (posix_spawn(&p, nargv[0], NULL, NULL, nargv, environ) == 0) waitpid(p, NULL, 0);
             }
-            fprintf(stderr, "atlas-autopilot: no access to ~/Documents (grant AtlasAutopilot in Files and Folders)\n");
+            fprintf(stderr, "atlas-autopilot: no access to ~/Documents. Turn on System Settings > Privacy & Security > "
+                    "Files and Folders > AtlasAutopilot > Documents Folder\n");
             return 77;
         }
     }

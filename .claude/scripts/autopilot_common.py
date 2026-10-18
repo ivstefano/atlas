@@ -50,15 +50,17 @@ CLOSED = {"closed-lost", "closed-paused", "closed-won", "closed"}
 
 # ----------------------------------------------------------------------------- utils
 def tcc_guard(job):
-    """launchd jobs cannot read ~/Documents unless the interpreter has Full Disk Access (macOS TCC).
-    Fail loudly with a notification instead of silently."""
+    """launchd jobs cannot read ~/Documents (macOS TCC). Every ai.iris.atlas.* job runs through the
+    AtlasAutopilot launcher (autopilot/launcher.c), which holds the one Documents grant; this guard only
+    fires if a job is started some other way. Fail loudly with a notification instead of silently."""
     try:
         os.listdir(ENG)
         LOG_DIR.mkdir(parents=True, exist_ok=True)
         (LOG_DIR / ".tcc_ok").write_text(dt.datetime.now().isoformat())
     except PermissionError:
         py = os.path.realpath(sys.executable)
-        msg = f"{job}: no access to ~/Documents. Grant Full Disk Access to {py} in System Settings."
+        msg = (f"{job}: no access to ~/Documents ({py}). Run it via the AtlasAutopilot launcher and turn on: "
+               "System Settings > Privacy & Security > Files and Folders > AtlasAutopilot > Documents Folder")
         Path.home().joinpath(".cache", "atlas").mkdir(parents=True, exist_ok=True)
         with open(Path.home() / ".cache" / "atlas" / "autopilot_tcc.log", "a") as f:
             f.write(f"{dt.datetime.now().isoformat()}  {msg}\n")
