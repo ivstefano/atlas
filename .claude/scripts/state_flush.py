@@ -293,11 +293,40 @@ def refresh_index() -> None:
     (STATE_DIR / "INDEX.md").write_text("\n".join(out) + "\n")
 
 
+AUTOPILOT_PY = "/Users/iris/Documents/Cognion/atlas/.venv/bin/python"
+
+
+def spawn_session_log(data: dict) -> None:
+    """Meeting autopilot step: log client-facing work from this session into the engagement STATUS.md.
+
+    Detached (never blocks the hook), runs under the venv that has boto3. All logic and the
+    idempotency per session id live in meeting_autopilot.py session-log.
+    """
+    import os
+    import tempfile
+    try:
+        if not data.get("session_id") or not os.path.exists(AUTOPILOT_PY):
+            return
+        run = ATLAS / "_autopilot" / "run"
+        run.mkdir(parents=True, exist_ok=True)
+        fd, path = tempfile.mkstemp(prefix="hook_", suffix=".json", dir=str(run))
+        with os.fdopen(fd, "w") as f:
+            json.dump({k: data.get(k) for k in ("session_id", "transcript_path", "cwd")}, f)
+        logf = open(ATLAS / "_autopilot" / "logs" / "session_log.log", "a") \
+            if (ATLAS / "_autopilot" / "logs").exists() else subprocess.DEVNULL
+        subprocess.Popen([AUTOPILOT_PY, str(Path(__file__).resolve().parent / "meeting_autopilot.py"),
+                          "session-log", "--hook-file", path],
+                         stdout=logf, stderr=logf, start_new_session=True, cwd=str(ATLAS))
+    except Exception as e:
+        log(f"session-log spawn failed: {e}")
+
+
 def main() -> None:
     import os
     if os.environ.get("ATLAS_STATE_FLUSH") == "1":
         return  # nested headless flush call; do not re-flush
     data = read_hook_input()
+    spawn_session_log(data)
     cwd = cwd_from_hook(data)
     task = resolve_task(cwd)
     tpath = data.get("transcript_path", "")
