@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>ai.iris.atlas.approvals</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/iris/.pyenv/versions/3.10.19/bin/python3</string>
+    <string>/Users/iris/.local/share/atlas-autopilot/launch.py</string>
+    <string>approvals_app.py</string>
+  </array>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ThrottleInterval</key><integer>60</integer>
+  <key>WorkingDirectory</key>
+  <string>/tmp</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>AWS_PROFILE</key><string>Iris_Devs</string>
+    <key>AWS_REGION</key><string>eu-west-1</string>
+    <key>PATH</key><string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/Users/iris/.cache/atlas/ai.iris.atlas.approvals.out</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/iris/.cache/atlas/ai.iris.atlas.approvals.err</string>
+</dict>
+</plist>
