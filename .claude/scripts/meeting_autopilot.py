@@ -1600,6 +1600,8 @@ def tick():
         todo.append((key, parse_time(ev["start"]), parse_time(ev["end"])))
     for key, s, e in todo:                                   # pass 1: before / during
         try:
+            if not meeting(key).get("engagement"):           # internal / unknown: no brief, no live page, digest only
+                continue
             ph = meeting(key).get("phases", {})
             lv = ph.get("live") or {}
             if s - dt.timedelta(minutes=2) <= t < e + dt.timedelta(minutes=5) and not DRY_RUN:
@@ -1973,7 +1975,7 @@ def build_launcher():
     (APP / "Contents" / "Info.plist").write_bytes(plistlib.dumps({
         "CFBundleIdentifier": "ai.iris.atlas.autopilot", "CFBundleName": "AtlasAutopilot",
         "CFBundleExecutable": "atlas-autopilot", "CFBundlePackageType": "APPL", "CFBundleVersion": "1",
-        "LSUIElement": True,
+        "CFBundleIconFile": "AppIcon", "LSUIElement": True,
         "NSDocumentsFolderUsageDescription": "Atlas meeting autopilot reads and writes the atlas and engagements repos."}))
     sdks = [[]] + [["-isysroot", str(s)] for s in sorted(Path("/Library/Developer/CommandLineTools/SDKs").glob("MacOSX*.*.sdk"), reverse=True)]
     for sdk in sdks:   # newest CLT SDK can be unreadable by the installed linker; fall back to older ones
@@ -1985,6 +1987,7 @@ def build_launcher():
         raise SystemExit(f"launcher build failed: {r.stderr[:400]}")
     stamp.parent.mkdir(parents=True, exist_ok=True)
     stamp.write_text(sha)
+    (stamp.parent / "AppIcon.icns").write_bytes((HERE / "autopilot" / "icon" / "AppIcon.icns").read_bytes())
     subprocess.run(["/usr/bin/codesign", "--force", "-s", "-", "--identifier", "ai.iris.atlas.autopilot", str(APP)],
                    capture_output=True, text=True)
     return str(LAUNCHER)
