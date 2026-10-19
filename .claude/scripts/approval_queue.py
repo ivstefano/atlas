@@ -2,13 +2,14 @@
 """Shared approval queue: one JSON file per draft in atlas/_autopilot/queue/<id>.json (gitignored).
 
 Every autopilot producer (weekly-rollup, monday-thread, missing-post, post-call, session-hook,
-cognion-daily) drops drafts here. Nothing is sent from here: the Approvals inbox
+cognion-daily, slash-command) drops drafts here. Nothing is sent from here: the Approvals inbox
 (approvals_app.py, http://127.0.0.1:8096) shows them, and an executor runs only on Ivo's click.
 
 Item schema:
   id        str   "<yyyymmdd-hhmmss>-<source>-<engagement>-<4 hex>"
   created   str   ISO timestamp
-  source    weekly-rollup | monday-thread | missing-post | post-call | session-hook | cognion-daily
+  source    weekly-rollup | monday-thread | missing-post | post-call | session-hook | cognion-daily |
+            slash-command (/reply, /email run by Ivo in a Claude tab)
   engagement str  engagements/ folder name, or "operations"
   kind      slack_post | slack_thread_reply | email_draft | gmail_draft | form | status_entry |
             calendar_event | note
@@ -29,6 +30,8 @@ API (import from any script):
   pending_count() -> int
 
 CLI:  approval_queue.py list [status] | show <id> | count
+      approval_queue.py add --kind slack_thread_reply --title T --channel C --thread-ts TS
+                            [--permalink URL] [--engagement E] [--source S] [--key K]  < body.txt
 """
 import datetime as dt
 import fcntl
@@ -42,7 +45,8 @@ from pathlib import Path
 
 QUEUE = Path.home() / "Documents" / "atlas" / "_autopilot" / "queue"
 
-SOURCES = {"weekly-rollup", "monday-thread", "missing-post", "post-call", "session-hook", "cognion-daily"}
+SOURCES = {"weekly-rollup", "monday-thread", "missing-post", "post-call", "session-hook", "cognion-daily",
+           "slash-command"}
 KINDS = {"slack_post", "slack_thread_reply", "email_draft", "gmail_draft", "form", "status_entry",
          "calendar_event", "note"}
 STATUSES = {"pending", "approved", "sent", "rejected", "done"}
@@ -147,9 +151,38 @@ def pending_count():
     return len(list_items("pending"))
 
 
+def _cli_add(argv):
+    """Queue a draft from the shell (body on stdin). Prints the item id. Nothing is sent."""
+    import argparse
+    ap = argparse.ArgumentParser(prog="approval_queue.py add")
+    ap.add_argument("--kind", required=True, choices=sorted(KINDS))
+    ap.add_argument("--title", required=True)
+    ap.add_argument("--engagement", default="operations")
+    ap.add_argument("--source", default="slash-command", choices=sorted(SOURCES))
+    ap.add_argument("--key")
+    ap.add_argument("--channel")
+    ap.add_argument("--thread-ts")
+    ap.add_argument("--permalink")
+    ap.add_argument("--to")
+    ap.add_argument("--cc")
+    ap.add_argument("--subject")
+    x = ap.parse_args(argv)
+    body = sys.stdin.read().strip()
+    if not body:
+        sys.exit("empty body on stdin")
+    if x.kind == "slack_thread_reply" and not (x.channel and x.thread_ts):
+        sys.exit("slack_thread_reply needs --channel and --thread-ts")
+    target = {k: v for k, v in dict(channel=x.channel, thread_ts=x.thread_ts, permalink=x.permalink,
+                                    to=x.to, cc=x.cc, subject=x.subject).items() if v}
+    it = add(x.source, x.engagement, x.kind, x.title, body, target=target, key=x.key, by="ivo")
+    print(it["id"])
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "list"
-    if cmd == "count":
+    if cmd == "add":
+        _cli_add(sys.argv[2:])
+    elif cmd == "count":
         print(pending_count())
     elif cmd == "show":
         print(json.dumps(get(sys.argv[2]), indent=1, ensure_ascii=False))
