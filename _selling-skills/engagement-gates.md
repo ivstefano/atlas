@@ -48,7 +48,7 @@ Added 2026-10-19 after FINCA (war room: Vankata "this is not what we do… cance
 How to flag, within 24 h of the deep dive, in the engagement's Slack thread, @Vankata @Steven:
 > Before I start work on <client>: <stopper in one line, with the client's own words>. Use case as I understand it: <one line>. Not covered by us: <list>. Go or stop?
 
-Their written answer is the paper trail. If Sales overrides a flag, send one written FYI to Steven ("I flagged X, <owner> wants to continue, your call") and stop arguing it. Log the flag and the answer in STATUS.
+Flag in the channel thread, never only in a DM or group DM: on FINCA, Vankata's "this is just not aligned" (9 Sep) sat in the Jordan/Vankata/Ivo group DM, so Steven never saw it. If a flag comes up in a DM, repost the gist in the thread the same day. Their written answer is the paper trail. If Sales overrides a flag, send one written FYI to Steven ("I flagged X, <owner> wants to continue, your call") and stop arguing it. Log the flag and the answer in STATUS.
 
 Don't confirm capabilities live on the call either: "Let me check that with our CPO and come back to you in writing" (pocket-lines Group D).
 
