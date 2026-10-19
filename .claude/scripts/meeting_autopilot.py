@@ -38,6 +38,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE / "autopilot"))
 import engwrite as W  # noqa: E402
+import autopilot_common as AC  # noqa: E402  (people_away rules shared with weekly_rollup / monday_threads)
 
 HOME = Path.home()
 ATLAS = HOME / "Documents" / "atlas"
@@ -707,7 +708,7 @@ From the Cognion table only. APPROVED values can be quoted. Everything else: "do
 If the table is empty write "Cognion not running: no approved figures, do not quote numbers".
 ## Jordan owns
 Commercial items (pricing, SoW, NDA send, reschedules) that Jordan owns: flag only, never draft for Jordan.
-
+{away}
 === CALENDAR EVENT ===
 Title: {title}
 Start: {start_h}, end {end_h}
@@ -757,7 +758,8 @@ def run_brief(key):
         gmail_query=q, title=ev["title"], start_h=s.strftime("%a %d %b %H:%M"), end_h=e.strftime("%H:%M"),
         link=ev.get("link") or "none", attendees=attendees_block(ev), description=ev.get("description") or "none",
         people=read(ATLAS / "_iris_people.md", 2700), eng=eng or "none", context=context,
-        pocket=pocket_lines(), figures=cognion_figures(eng) or "(empty)")
+        pocket=pocket_lines(), figures=cognion_figures(eng) or "(empty)",
+        away=away_brief_rule())
     text = run_claude("brief", key, prompt, cwd, mcp="readonly", allowed="Read,Grep,Glob," + GMAIL_RO, budget=0.40,
                       add_dirs=[ATLAS / "_selling-skills"])
     if not text or not text.lstrip().startswith("#"):
@@ -1088,7 +1090,7 @@ Transcript file name (for the STATUS reference): {tr_ref}
 
 === EMAIL / COMMS RULES ===
 {rules}
-
+{away}
 === HOW IVO POSTS IN #active-engagements (one thread per client; reply inside the client's thread) ===
 {slack_style}
 
@@ -1122,6 +1124,40 @@ Rules:
   "customer_address","account_executive","notes"}} from the call/invite, "unknown" when not said. calendar -> details
   {{"title","proposed_time","duration_min","attendees","agenda"}}. demo/sow/data_request -> details {{"scope","due"}}.
 - No em dashes anywhere."""
+
+
+def away_brief_rule(day=None):
+    """People-away block for Ivo-facing prompts (brief, morning brief)."""
+    r = AC.away_rule(day or now().date())
+    return ("\n" + r.strip() + "\nIn the brief: say who is away and who covers; list his open items as "
+            "\"for <name> when back\" or under the cover owner, never as his next steps.\n") if r else ""
+
+
+def apply_away(d, day):
+    """Digest JSON: enforce people_away on every draft (Slack text, email cc + body, STATUS entry, artefacts, actions)."""
+    away = AC.people_away(day)
+    if not away:
+        return d
+    sl = d.get("slack") or {}
+    if sl.get("text"):
+        sl["text"] = AC.scrub_away(sl["text"], away=away, slack=True)
+    em = d.get("email") or {}
+    if em.get("cc"):
+        em["cc"] = AC.drop_away_emails(em["cc"], away=away)
+    if em.get("body"):
+        em["body"] = AC.scrub_away(em["body"], away=away, slack=False)
+    if d.get("status_entry"):
+        d["status_entry"] = AC.scrub_away(d["status_entry"], away=away, slack=False)
+    for a in d.get("artefacts") or []:
+        if a.get("line"):
+            a["line"] = AC.scrub_away(a["line"], away=away, slack=False)
+    for a in d.get("actions") or []:
+        own = str(a.get("owner") or "")
+        for p in away:
+            if re.search(rf"\b{re.escape(p['first'])}\b", own, re.I):
+                a["owner"] = AC.cover_for(p, f"{a.get('what', '')} {a.get('type', '')}")
+                a.setdefault("details", {})["away_note"] = f"{p['name']} away until {p['until']}; was his"
+    return d
 
 
 def voice_pack():
@@ -1230,7 +1266,7 @@ def run_digest(key, final=False, tactiq_id=None):
         attendees=attendees_block(ev), tr_ref=tr_ref, context=(st.get("context_excerpt") or "none")[:5000],
         status=(st.get("status_recent") or "none")[:6000], commercial=read(ENG / eng / "COMMERCIAL.md", 3000) if eng else "none",
         live=json.dumps(L.get("commitments", []), ensure_ascii=False)[:3000] or "none", voice=voice_pack(), rules=rules_pack(),
-        slack_style=slack_style()[:5000], nda=re.sub(r"^---.*?---\n", "", read(MEM / "nda-request-process.md"), flags=re.S),
+        away=AC.away_rule(now().date()), slack_style=slack_style()[:5000], nda=re.sub(r"^---.*?---\n", "", read(MEM / "nda-request-process.md"), flags=re.S),
         transcript=body)
     d = None
     for attempt in range(2):
@@ -1248,7 +1284,7 @@ def run_digest(key, final=False, tactiq_id=None):
     if d is None:
         set_phase(key, phase, status="bad json")
         return None
-    d = clean(d)
+    d = apply_away(clean(d), now().date())
     d["meta"] = {"key": key, "title": ev["title"], "engagement": eng, "date": f"{s:%Y-%m-%d}", "tactiq_id": tid,
                  "transcript_name": tr_name, "transcript_ref": tr_ref, "lines": n_lines, "generated": now().isoformat(),
                  "final": final}
@@ -1500,7 +1536,7 @@ def queue_digest(key, d):
         if not (a.get("jordan_owned") or a.get("type") in ("nda", "calendar") or mine):
             continue                       # client-owned: stays in actions.md, not in Ivo's inbox
         if a.get("jordan_owned"):
-            jordan.append(f"- {what} (when: {a.get('when')})")
+            jordan.append(f"- {what} (when: {a.get('when')})" + (f" (cover: {a['owner']})" if (a.get("details") or {}).get("away_note") else ""))
             continue
         elif a.get("type") == "nda":
             body = "\n".join(f"{k}: {v}" for k, v in det.items())
@@ -1517,9 +1553,16 @@ def queue_digest(key, d):
                       {"owner": a.get("owner")}, eng, srcs)
         n += 1
     if jordan:
-        queue_add(f"{key}__jordan", "note", f"Jordan owns ({len(jordan)}): {title}",
-                  "Flag only, no drafts (Jordan owns the commercial thread). Remind him if it is near and has not moved.\n\n"
-                  + "\n".join(jordan), {"owner": "Jordan"}, eng, srcs)
+        ja = next((p for p in AC.people_away(now().date()) if p["first"].lower() == "jordan"), None)
+        if ja:
+            queue_add(f"{key}__jordan", "note", f"For Jordan when back ({len(jordan)}): {title}",
+                      f"Jordan is away until {ja['until']:%a %-d %b}. Owner while away: cover per item (default {ja['cover']}). "
+                      "Flag only, no drafts; do not @mention him.\n\n" + "\n".join(jordan),
+                      {"owner": ja["cover"]}, eng, srcs)
+        else:
+            queue_add(f"{key}__jordan", "note", f"Jordan owns ({len(jordan)}): {title}",
+                      "Flag only, no drafts (Jordan owns the commercial thread). Remind him if it is near and has not moved.\n\n"
+                      + "\n".join(jordan), {"owner": "Jordan"}, eng, srcs)
         n += 1
     return n
 
@@ -1612,7 +1655,7 @@ Overrides for this headless run:
   every matched engagement; this is the main source.
 - Calls Jordan booked are still Ivo's calls to prepare. Only Jordan's commercial actions (pricing, SoW, NDA send,
   reschedules) are flag-only: never draft those for him.
-- House style: terse, no em dashes."""
+- House style: terse, no em dashes.""" + away_brief_rule(d)
     txt = run_claude("morning", f"morning-{d}", prompt, ATLAS, mcp="readonly",
                      allowed="Read,Grep,Glob,mcp__gcal__get_events," + GMAIL_RO, budget=0.60, timeout=1200,
                      add_dirs=[ENG])

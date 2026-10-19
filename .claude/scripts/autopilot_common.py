@@ -506,6 +506,167 @@ def find_threads(slack, rx, days=365):
 DATE_RX = re.compile(r"by:?\s*(\d{4}-\d\d-\d\d)")
 
 
+# ----------------------------------------------------------------------------- people away
+AP_CONFIG = ATLAS / "_autopilot" / "config.json"
+COVER_DEFAULT = "[cover]"
+
+
+def load_config():
+    try:
+        return json.loads(AP_CONFIG.read_text())
+    except (OSError, ValueError):
+        return {}
+
+
+def save_config(c):
+    AP_CONFIG.parent.mkdir(parents=True, exist_ok=True)
+    tmp = AP_CONFIG.with_suffix(".tmp")
+    tmp.write_text(json.dumps(c, indent=1, ensure_ascii=False) + "\n")
+    tmp.replace(AP_CONFIG)
+
+
+def _rule_rx(match):
+    """'AWS (credits, funding, co-sell, marketplace)' -> regex hitting any of those words."""
+    words = [w for w in re.split(r"[^\w-]+", match or "") if len(w) >= 3]
+    return re.compile(r"\b(" + "|".join(re.escape(w) for w in words) + r")\b", re.I) if words else None
+
+
+def people_away(today=None):
+    """config.json people_away entries whose from..until (inclusive) covers `today`.
+    Each: key, name, first, start, until, rule, cover (name or "[cover]"), cover_rules [(match, cover, rx)],
+    email, slack_id."""
+    today = today or dt.date.today()
+    out = []
+    for key, p in (load_config().get("people_away") or {}).items():
+        try:
+            f, u = d(p["from"]), d(p["until"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if f <= today <= u:
+            name = (p.get("name") or key).strip()
+            rules = [(r["match"], r["cover"].strip(), _rule_rx(r["match"])) for r in (p.get("cover_rules") or [])
+                     if isinstance(r, dict) and r.get("match") and (r.get("cover") or "").strip()]
+            out.append(dict(key=key, name=name, first=name.split()[0], start=f, until=u, rule=p.get("rule") or "",
+                            cover=(p.get("cover") or "").strip() or COVER_DEFAULT, cover_rules=rules,
+                            email=(p.get("email") or "").lower(), slack_id=p.get("slack_id") or ""))
+    return out
+
+
+def _first(name):
+    return name if name == COVER_DEFAULT else name.split()[0]
+
+
+def _who(name, slack):
+    """How a cover is written: "@Steven" in Slack drafts, "Steven" elsewhere, "[cover]" as is."""
+    return name if name == COVER_DEFAULT else ("@" if slack else "") + _first(name)
+
+
+def cover_for(p, text):
+    """Cover for one item: the first cover_rule whose words appear in `text`, else the default cover."""
+    for _, cov, rx in p["cover_rules"]:
+        if rx and rx.search(text or ""):
+            return cov
+    return p["cover"]
+
+
+def away_rule(today=None, away=None):
+    """Prompt block for the model. Empty string when nobody is away."""
+    away = people_away(today) if away is None else away
+    if not away:
+        return ""
+    out = ["", "PEOPLE AWAY (hard rule, overrides every other instruction, example and source text):"]
+    for p in away:
+        f, c = p["first"], p["cover"]
+        routes = "; ".join(f"{m} items -> {cov} (@{_first(cov)})" for m, cov, _ in p["cover_rules"])
+        dflt = c if c == COVER_DEFAULT else f"{c} (@{_first(c)})"
+        out += [
+            f"- {p['name']} ({f}) is away {p['start']:%a %-d %b} to {p['until']:%a %-d %b %Y}."
+            + (f" Ivo's rule: {p['rule']}." if p["rule"] else ""),
+            f"  - Never @mention {f}. No \"cc: @{f}\" line, never cc {f} on an email, do not address him in an opener.",
+            f"  - Never make {f} the owner of a next step, gate or action, even where the data or older posts name him.",
+            "  - Cover owners for what would have been his: " + (routes + "; everything else -> " if routes else "")
+            + dflt + ". In Slack drafts @mention the cover where he would have been (cc line, \"Over to @<cover>\", "
+            "owner); in emails and STATUS text write the cover's first name, no @.",
+            f"  - Things only {f} can decide or do go on a \"For {f} when back\" list where the task asks for one; "
+            "otherwise state them with the cover as owner.",
+        ]
+    return "\n".join(out) + "\n"
+
+
+def _name_rx(p):
+    parts = [re.escape(p["name"])] + ([re.escape(p["first"])] if p["first"] != p["name"] else [])
+    return "(?:" + "|".join(parts) + ")"
+
+
+_OWNER_VERBS = (r"(?:sends?|to send|will|owns|books?|to book|chases?|to chase|follows? up|to follow up|confirms?|"
+                r"to confirm|drafts?|to draft|shares?|to share|schedules?|to schedule|picks? up|takes? over|handles?|"
+                r"to handle|replies|to reply|signs?|to sign)")
+
+
+def scrub_away(text, today=None, away=None, slack=True):
+    """Deterministic backstop for generated drafts while someone is away. Removes @mentions of him and
+    swaps him out as owner of next steps for the cover (cover_rules matched on that line, else the default
+    cover). cc lines lose him; in Slack drafts they get the covers used in this draft instead (default
+    cover if none). slack=True writes covers as @First; False (email, STATUS) as First."""
+    away = people_away(today) if away is None else away
+    if not away or not text:
+        return text
+    cc_rx = re.compile(r"^(\s*(?:[-*•]\s*)?cc:?\s*)(.*)$", re.I)
+    for p in away:
+        N = _name_rx(p)
+        lines, used = text.split("\n"), []
+        for i, ln in enumerate(lines):
+            if cc_rx.match(ln):
+                continue
+            cov = cover_for(p, ln)
+            w, before = _who(cov, slack), ln
+            if p["slack_id"]:
+                ln = ln.replace(f"<@{p['slack_id']}>", "@" + p["first"])
+            ln = re.sub(rf"\b(Hey|Hi|Hello)\s+@?{N},\s*", r"\1 ", ln)
+            ln = re.sub(rf"\b(Over to)\s+@?{N}\b", rf"\1 {w}", ln, flags=re.I)
+            ln = re.sub(rf"\b(owner:?\s*)@?{N}\b", rf"\g<1>{w}", ln, flags=re.I)
+            ln = re.sub(rf"(\s-\s+)@?{N}(\s+-\s)", rf"\g<1>{w}\g<2>", ln)        # "<step> - Jordan - <date>"
+            ln = re.sub(rf"(\s-\s+)@?{N}\s*$", rf"\g<1>{w}", ln)                  # "<step> - Jordan"
+            ln = re.sub(rf"(^|[:•]\s*|^\s*[-*]\s+)@?{N}\s+(?={_OWNER_VERBS}\b)", rf"\g<1>{w} ", ln)
+            if ln != before and w in ln and cov not in used:
+                used.append(cov)
+            lines[i] = re.sub(rf"@({N})\b", r"\1", ln, flags=re.I)              # any mention left: plain name
+        out = []
+        for ln in lines:
+            m = cc_rx.match(ln)
+            if m and re.search(N, m.group(2), re.I):
+                rest = re.sub(rf"(?:\s*(?:,|&|\band\b)\s*)?@?{N}\b", "", m.group(2), flags=re.I)
+                rest = re.sub(r"^\s*(?:,|&|\band\b)\s*", "", rest, flags=re.I).strip()
+                if slack:
+                    add = [_who(c, True) for c in (used or [p["cover"]]) if c != COVER_DEFAULT
+                           and not re.search(rf"@{re.escape(_first(c))}\b", rest)]
+                    rest = ", ".join(add + ([rest] if rest else []))
+                if not re.search(r"\w", rest):
+                    continue                          # the cc line was only him
+                ln = m.group(1) + rest
+            out.append(ln)
+        text = "\n".join(out)
+    return text
+
+
+def drop_away_emails(addrs, today=None, away=None):
+    """Remove away people from an email address list (explicit `email`, else name parts in the local part)."""
+    away = people_away(today) if away is None else away
+    if not away or not addrs:
+        return addrs
+
+    def hit(a):
+        a = a.lower()
+        local = a.split("<")[-1].split("@")[0]
+        for p in away:
+            if p["email"] and p["email"] in a:
+                return True
+            if not p["email"] and a.rstrip(">").endswith("@iris.ai") and p["first"].lower() in re.split(r"[._\-+]", local):
+                return True
+        return False
+    return [a for a in addrs if not hit(a)]
+
+
 # ----------------------------------------------------------------------------- llm
 def bedrock(system, user, max_tokens=MAX_OUT):
     import boto3
@@ -571,6 +732,11 @@ No tidy wrap-up summary at the end. Slight looseness is fine.
 """
 
 
+def system_prompt(today=None):
+    """SYSTEM with Ivo's voice, plus the people-away hard rule when someone is away."""
+    return SYSTEM.format(voice=voice_block()) + away_rule(today)
+
+
 # ----------------------------------------------------------------------------- notify
 def notify(path, title, msg):
     p = str(path).replace('"', '\\"')
@@ -582,3 +748,67 @@ def notify(path, title, msg):
     subprocess.Popen(["/usr/bin/osascript", "-e", script], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
+# ----------------------------------------------------------------------------- cli
+def _cli():
+    ap = argparse.ArgumentParser(prog="autopilot_common.py", description="Autopilot config helpers")
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    aw = sub.add_parser("away", help="people_away map in _autopilot/config.json").add_subparsers(dest="op", required=True)
+    a = aw.add_parser("add", help="add or replace a person away")
+    a.add_argument("key")
+    a.add_argument("name")
+    a.add_argument("start", metavar="from", help="YYYY-MM-DD")
+    a.add_argument("until", help="YYYY-MM-DD (inclusive)")
+    a.add_argument("--cover", help="owner to use instead of [cover]")
+    a.add_argument("--cover-rule", action="append", default=None, metavar="MATCH=NAME",
+                   help='route matching items to NAME, e.g. "AWS (credits, funding, co-sell, marketplace)=Eric Frances"; '
+                        "repeatable; any word of MATCH on a line hits")
+    a.add_argument("--rule", help="free-text rule shown to the model")
+    a.add_argument("--email", help="address to drop from email cc (default: name match on @iris.ai)")
+    aw.add_parser("list", help="show everyone in the map, marking who is away today")
+    r = aw.add_parser("rm", help="remove a person")
+    r.add_argument("key")
+    x = ap.parse_args()
+    c = load_config()
+    pa = c.setdefault("people_away", {})
+    if x.op == "add":
+        f, u = d(x.start), d(x.until)
+        if u < f:
+            sys.exit("until is before from")
+        e = dict(name=x.name, **{"from": f.isoformat()}, until=u.isoformat(),
+                 rule=x.rule or (pa.get(x.key) or {}).get("rule")
+                 or "no @mentions; route his items to the cover owner or a 'for <name> when back' list")
+        for k in ("cover", "email"):
+            v = getattr(x, k) or (pa.get(x.key) or {}).get(k)
+            if v:
+                e[k] = v
+        if x.cover_rule is not None:
+            rules = []
+            for cr in x.cover_rule:
+                m, sep, n = cr.rpartition("=")
+                if not sep or not m.strip() or not n.strip():
+                    sys.exit(f"bad --cover-rule {cr!r}, want MATCH=NAME")
+                rules.append(dict(match=m.strip(), cover=n.strip()))
+            e["cover_rules"] = rules
+        elif (pa.get(x.key) or {}).get("cover_rules"):
+            e["cover_rules"] = pa[x.key]["cover_rules"]
+        pa[x.key] = e
+        save_config(c)
+        print(f"added {x.key}: {x.name} {f} to {u}" + (f", cover {e['cover']}" if e.get("cover") else ""))
+    elif x.op == "rm":
+        if pa.pop(x.key, None) is None:
+            sys.exit(f"no such key: {x.key}")
+        save_config(c)
+        print(f"removed {x.key}")
+    else:
+        now_away = {p["key"] for p in people_away()}
+        if not pa:
+            print("nobody in people_away")
+        for k, p in pa.items():
+            print(f"{'AWAY ' if k in now_away else '     '}{k}: {p.get('name')} {p.get('from')} to {p.get('until')}"
+                  f", cover {p.get('cover') or COVER_DEFAULT}" + (f", email {p['email']}" if p.get("email") else ""))
+            for r in p.get("cover_rules") or []:
+                print(f"       {r.get('match')} -> {r.get('cover')}")
+
+
+if __name__ == "__main__":
+    _cli()

@@ -28,7 +28,8 @@ from autopilot_common import (  # noqa: E402
     tcc_guard,
     ATLAS, ENG, CHANNEL, IVO_SLACK, MODEL, PRICE_IN, PRICE_OUT, MAX_COST_USD, CLOSED, SYSTEM,
     Slack, set_log, log, clean, d, aliases, matcher, match, git, find_threads, calendar, cognion_meetings,
-    tactiq_week, gmail_sent, bitbucket_commits, bedrock, voice_block, notify)
+    tactiq_week, gmail_sent, bitbucket_commits, bedrock, voice_block, notify,
+    people_away, system_prompt, scrub_away)
 import approval_queue as Q  # noqa: E402
 
 set_log("monday_threads")
@@ -56,8 +57,7 @@ What we need:
 
 2-4 bullets under What changed, 1-3 under What we need. Max 90 words. Do not repeat anything the \
 thread already says. Facts only from the data; no invented commitments, owners or dates; a missing \
-fact is "(?: ...)". Jordan-owned items stay plain facts ("Jordan sends the invite"), never drafted \
-for him. Optional "cc: @Name" first line only if a named person must act.
+fact is "(?: ...)". {owner_rule} Optional "cc: @Name" first line only if a named person must act{cc_extra}.
 
 Output, per engagement, exactly:
 ### [<engagement>]
@@ -222,8 +222,19 @@ def main():
             notify(APPROVALS_URL, "Monday thread updates", f"Nothing new. {Q.pending_count()} drafts waiting in Approvals.")
         return
 
-    system = SYSTEM.format(voice=voice_block())
-    user = TASK.format(today=today.isoformat(), weekday=today.strftime("%a"),
+    away = people_away(today)
+    log("people away: " + (", ".join(f"{p['name']} until {p['until']} (cover {p['cover']})" for p in away) or "none"))
+    if away:
+        names = ", ".join(p["first"] for p in away)
+        c0 = away[0]["cover"] if away[0]["cover"].startswith("[") else away[0]["cover"].split()[0]
+        owner_rule = (f"Items that would have been {names}'s get the cover owner from PEOPLE AWAY, as plain facts "
+                      f"(\"{c0} sends the invite\"), never drafted for anyone.")
+        cc_extra = f" (never @{' or @'.join(p['first'] for p in away)}; the cover owner instead)"
+    else:
+        owner_rule = 'Jordan-owned items stay plain facts ("Jordan sends the invite"), never drafted for him.'
+        cc_extra = ""
+    system = system_prompt(today)
+    user = TASK.format(today=today.isoformat(), weekday=today.strftime("%a"), owner_rule=owner_rule, cc_extra=cc_extra,
                        today_label=today.strftime("%a %-d %b"), blocks="\n\n".join(blocks))
     max_out = 450 * len(blocks) + 1500   # includes thinking tokens
     est = ((len(system) + len(user)) / 3.2) * PRICE_IN + max_out * PRICE_OUT
@@ -249,7 +260,7 @@ def main():
         f = re.search(r"```text\n(.*?)```", blk, re.S)
         if not h or not f or h.group(1) not in metas:
             continue
-        txt = f.group(1).strip()
+        txt = scrub_away(f.group(1).strip(), today, away)
         if txt.upper().startswith("SKIP"):
             log(f"{h.group(1)}: model skipped")
             continue

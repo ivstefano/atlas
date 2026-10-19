@@ -39,7 +39,8 @@ from autopilot_common import *  # noqa: E402,F401,F403
 from autopilot_common import (  # noqa: E402
     tcc_guard,
     ATLAS, ENG, LOG_DIR, CHANNEL, IVO_SLACK, MODEL, PRICE_IN, PRICE_OUT, MAX_COST_USD, TARGET_COST_USD,
-    HISTORY_DAYS, STALE_DAYS, ACTIVE_DAYS, CLOSED, DATE_RX, SYSTEM)
+    HISTORY_DAYS, STALE_DAYS, ACTIVE_DAYS, CLOSED, DATE_RX, SYSTEM,
+    people_away, system_prompt, scrub_away, COVER_DEFAULT)
 
 import approval_queue as Q  # noqa: E402
 
@@ -52,17 +53,17 @@ DATE_KEY = "Date key (use these weekdays, never guess): {days}"
 TASK_ROLLUP = """Today is {today} ({weekday}). Week {week}: {t0} to {t1}. Next week: {n0} to {n1}.
 {date_key}
 
-Write ONE ready-to-paste Slack message from Ivo to Jordan and Steven, inside a ```text fence. Nothing \
+Write ONE ready-to-paste Slack message from Ivo to {to}, inside a ```text fence. Nothing \
 outside the fence.
 
 Shape:
-Line 1: a casual opener in his words, e.g. "Hey Jordan, Steven, weekly rollup on the engagements".
+Line 1: a casual opener in his words, e.g. "Hey {to_comma}, weekly rollup on the engagements".
 Then one block per engagement in ENGAGEMENTS THAT MOVED, most commercially urgent first (money, \
 signature, year-end AWS credit deadlines first). Block shape, exactly four labelled lines:
 
 *<Client name>*
 Status: <what moved THIS week only: 1-2 short sentences, the one or two facts a sales lead cares about>
-Commercial gate: <the single decision or blocker and who holds it; Jordan-owned asks as "Over to Jordan: ...">
+Commercial gate: <the single decision or blocker and who holds it; {gate_rule}>
 Timeline: <next step - owner - date (weekday from the date key); add next week's call on it if any>
 Links: <only demo/showcase URLs from DEMO LINKS for this client, with access code if given; drop the line if none>
 
@@ -72,7 +73,7 @@ lead would repeat to the client, then one number max. Do not copy STATUS sentenc
 After the blocks:
 - one line "Quiet this week: <names only>, details in the stale list" (names of engagements in STALE FLAGS)
 - one line with the single most important ask to a named person (from the data), if any.
-Total under 550 words. Ivo's register: plain, slightly loose, capitals at line starts, no bold except the \
+{away_list}Total under 550 words. Ivo's register: plain, slightly loose, capitals at line starts, no bold except the \
 *Client* lines, no wrap-up.
 
 === ENGAGEMENTS THAT MOVED (STATUS entries dated this week, ARTEFACTS added this week) ===
@@ -100,10 +101,10 @@ TASK_POSTS = """Today is {today} ({weekday}). Week {week}: {t0} to {t1}.
 These client calls happened this week and nobody posted about them in #active-engagements. For EACH one, \
 draft the post Ivo would put in the channel, copying the shape of his real posts below:
 - a top-level message that is just the client name (that is how he opens a thread)
-- a thread reply: "*<Client>* - <deal or topic>", then "cc: @Jordan" (+ others only if they attended), \
+- a thread reply: "*<Client>* - <deal or topic>", then {cc_rule}, \
 then "Contact: <name, role>" and "Call: <weekday date>, with <who>", then 3-5 plain bullets of what we \
 learned that matter commercially, then "Status: ..." (one line), then "Next: <step> - <owner> - <date>" \
-(1-3 lines; Jordan-owned items stay as plain facts, e.g. "Jordan sends the invite", never drafted for him), \
+(1-3 lines; {owner_rule}), \
 then an honest caveat line if something is unproven or unknown.
 Max 130 words per thread reply. Facts only from the data below; if a fact is missing write "(?: ...)".
 If two calls are on the same client, write one post covering both.
@@ -129,6 +130,51 @@ Output markdown only, per client:
 {examples}
 """
 
+
+
+# ----------------------------------------------------------------------------- people away
+AUDIENCE = ["Jordan", "Steven"]
+
+
+def away_vars(away):
+    """Prompt fragments for TASK_ROLLUP / TASK_POSTS, normal or with people away (config people_away)."""
+    gone = {p["first"] for p in away}
+    to = [n for n in AUDIENCE if n not in gone]
+    for p in away:
+        c = p["cover"].split()[0]
+        if p["cover"] != COVER_DEFAULT and c not in to:
+            to.append(c)
+    to = to or ["Steven"]
+    v = dict(to=" and ".join(to), to_comma=", ".join(to),
+             gate_rule='Jordan-owned asks as "Over to Jordan: ..."',
+             cc_rule='"cc: @Jordan" (+ others only if they attended)',
+             owner_rule='Jordan-owned items stay as plain facts, e.g. "Jordan sends the invite", never drafted for him',
+             away_list="")
+    if away:
+        names = ", ".join(p["first"] for p in away)
+        v["gate_rule"] = f'asks that would have gone to {names} go to the cover owner from PEOPLE AWAY, as "Over to @<cover>: ..."'
+        v["cc_rule"] = (f'"cc: @<cover>" for the cover owner(s) from PEOPLE AWAY instead of {names} '
+                        f'(+ others only if they attended; never @{" or @".join(p["first"] for p in away)})')
+        v["owner_rule"] = (f'items that would have been {names}\'s get the cover owner from PEOPLE AWAY, '
+                           'stated as plain facts, never drafted for anyone')
+        v["away_list"] = "".join(
+            f'- then, as the last lines of the message, "For {p["first"]} when back:" and 1-5 plain bullets: '
+            f'decisions or commercial items only {p["first"]} can take, from the data; one bullet "Nothing waiting" if none. '
+            f'No @mention there either.\n' for p in away)
+    return v
+
+
+def ensure_away_list(part1, away):
+    """The 'For <name> when back' list must sit at the end of the rollup message; add a placeholder if the model dropped it."""
+    for p in away:
+        head = f"For {p['first']} when back"
+        if head.lower() in part1.lower():
+            continue
+        log(f"WARNING: model left out '{head}', adding a placeholder")
+        line = f"\n\n{head}:\n- (?: model gave no list, check the blocks above)\n"
+        m = list(re.finditer(r"```\s*$", part1, re.M))
+        part1 = part1[:m[-1].start()].rstrip() + line + part1[m[-1].start():] if m else part1 + line
+    return part1
 
 
 # ----------------------------------------------------------------------------- main
@@ -355,14 +401,18 @@ def main():
     base = dict(today=today.isoformat(), weekday=today.strftime("%a"), week=week, t0=t0,
                 t1=t1 - dt.timedelta(days=1), n0=n0, n1=n1 - dt.timedelta(days=1),
                 date_key=DATE_KEY.format(days=days))
+    away = people_away(today)
+    aw = away_vars(away)
+    log("people away: " + (", ".join(f"{p['name']} until {p['until']} (cover {p['cover']})" for p in away) or "none"))
     miss_meet = [m for m in meetings if match(rx, m["title"] + " " + m["participants"]) & set(miss_names)]
     examples = "\n\n---\n".join(f"[{m['date']}]\n{m['text'][:1500]}" for m in ex) or "(none found)"
-    system = SYSTEM.format(voice=voice_block())
+    system = system_prompt(today)
     out_posts = 900 * len(miss_names) + 1500 if miss_names else 0
     out_roll = 5000
     cap = 2400
     while True:
-        u1 = TASK_ROLLUP.format(engagements=eng_block(moved_sorted, cap),
+        u1 = TASK_ROLLUP.format(to=aw["to"], to_comma=aw["to_comma"], gate_rule=aw["gate_rule"],
+                                away_list=aw["away_list"], engagements=eng_block(moved_sorted, cap),
                                 calls="\n".join(call_line(e) for e in week_calls) or "(none)",
                                 next_calls="\n".join(call_line(e) for e in next_calls) or "(none)",
                                 slack_week=slack_week[:15000] or "(none)", links="\n".join(links) or "(none)",
@@ -372,7 +422,8 @@ def main():
                                engagements=eng_block(miss_names, cap),
                                meetings="\n".join(f"- {day(m['date'])} {m['title']} ({m['participants'][:150]})\n  {m['summary'][:1500]}"
                                                    for m in miss_meet) or "(none)",
-                               examples=examples, **base) if miss_names else ""
+                               examples=examples, cc_rule=aw["cc_rule"], owner_rule=aw["owner_rule"],
+                               **base) if miss_names else ""
         n_in = len(system) * (2 if u2 else 1) + len(u1) + len(u2)
         est = (n_in / 3.2) * PRICE_IN + (out_roll + out_posts) * PRICE_OUT
         if est <= TARGET_COST_USD or cap <= 600:
@@ -413,8 +464,9 @@ def main():
         if not a.no_notify:
             notify(out, "Weekly rollup failed", "Bedrock call failed." + hint)
         sys.exit(1)
-    part1 = "## 1. Rollup for Jordan and Steven\n\n" + clean(part1.strip())
-    part3 = "## 3. Missing #active-engagements posts\n\n" + clean(part3.strip())
+    part1 = ensure_away_list(scrub_away(clean(part1.strip()), today, away), away)
+    part1 = f"## 1. Rollup for {aw['to']}\n\n" + part1
+    part3 = "## 3. Missing #active-engagements posts\n\n" + scrub_away(clean(part3.strip()), today, away)
     usage = dict(inputTokens=tin, outputTokens=tout)
     srcs = "\n".join(f"- {k}: {v}" for k, v in src.items())
     doc = f"""# Weekly engagements rollup, {week} ({t0} to {t1 - dt.timedelta(days=1)})
@@ -440,7 +492,7 @@ or an overdue next action in the newest STATUS entry.
 """
     out.write_text(clean(doc))
     log(f"wrote {out} cost ${cost:.4f} usage {usage}")
-    n = enqueue(out, week, part1, part3, sl, rx, info)
+    n = enqueue(out, week, part1, part3, sl, rx, info, aw["to"])
     log(f"queued {n} items; {Q.pending_count()} pending in the approvals inbox")
     if not a.no_notify:
         notify(APPROVALS_URL, "Weekly rollup draft ready",
@@ -448,13 +500,13 @@ or an overdue next action in the newest STATUS entry.
                f"{Q.pending_count()} drafts waiting in Approvals.")
 
 
-def enqueue(out, week, part1, part3, sl, rx, info):
+def enqueue(out, week, part1, part3, sl, rx, info, to="Jordan and Steven"):
     """Rollup -> one note item; each missing-post draft -> a slack item (thread reply when the engagement
     already has a top-level thread in #active-engagements, else a new top-level post + thread reply)."""
     rel = str(out.relative_to(ATLAS))
     srcs = [dict(label=f"draft {rel}", path_or_url=str(out))]
     m = re.search(r"```text\n(.*?)```", part1, re.S)
-    Q.add("weekly-rollup", "operations", "note", f"Weekly rollup {week} for Jordan + Steven",
+    Q.add("weekly-rollup", "operations", "note", f"Weekly rollup {week} for {to.replace(' and ', ' + ')}",
           (m.group(1) if m else part1).strip(), target=dict(path=str(out)), sources=srcs,
           key=f"weekly-rollup:{week}")
     n = 1
