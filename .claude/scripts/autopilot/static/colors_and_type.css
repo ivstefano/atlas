@@ -1,0 +1,301 @@
+/* ============================================================
+   Neuralith Design System — Colors & Type
+   Sourced from neuralith-frontend (Tailwind 4) +
+   "Iris.ai — Platform 3.0 (SHARED)" Figma file.
+   Authoritative tokens live in:
+     libs/iris/src/lib/ui-kit/styles/config/tailwind-config.scss
+   ============================================================ */
+
+/* ---------- Fonts ---------- */
+/* Saira and Poppins are loaded via Google Fonts (see preview HTML);
+   Aber Mono is self-hosted from fonts/ — original .woff2 files
+   copied verbatim from the Neuralith repo. */
+@font-face {
+  font-family: "Aber Mono";
+  src: url("fonts/Aber-Mono-Light.woff2") format("woff2");
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Aber Mono";
+  src: url("fonts/Aber-Mono-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Aber Mono";
+  src: url("fonts/Aber-Mono-Bold.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+:root {
+  /* =========================================================
+     CORE PALETTE — verbatim from tailwind-config.scss
+     ========================================================= */
+
+  /* "Blue Ocean" — the brand spine. Deep ink-navy → bright iris. */
+  --color-blue-ocean-50:  #181d3f;  /* near-black navy */
+  --color-blue-ocean-100: #1c2550;  /* PRIMARY navy — most-used hue */
+  --color-blue-ocean-200: #2a346f;
+  --color-blue-ocean-300: #3335ae;  /* accent main */
+  --color-blue-ocean-400: #3a49e0;  /* bright iris */
+  --color-blue-ocean-500: #5d72b3;
+  --color-blue-ocean-600: #778ed2;
+
+  /* "Default Blue" — text + UI chrome */
+  --color-blue-50:  #030615;  /* near-black, body text */
+  --color-blue-100: #040a2c;
+  --color-blue-200: #04043a;
+  --color-blue-300: #07074f;  /* divider base (used at 15% / 26%) */
+  --color-blue-400: #2f3068;
+  --color-blue-500: #494b7c;  /* primary text-secondary */
+  --color-blue-600: #636190;
+  --color-blue-700: #8d8cb4;  /* hint / disabled text */
+  --color-blue-800: #a6a6cc;
+  --color-blue-900: #ceceea;  /* contrast-darker fill */
+
+  /* Surface — light, near-paper */
+  --color-surface:                     #f4f4f9;
+  --color-surface-variant:             #e3e1ec;
+  --color-surface-container-lowest:    #ffffff;
+  --color-surface-container-low:       #f6f2f7;
+  --color-surface-container:           #f0edf1;
+  --color-surface-container-high:      #ebe7eb;
+  --color-surface-container-highest:   #e5e1e6;
+  --color-main:                        #f2f2f8;
+
+  /* Status / accent */
+  --color-orange-50:  #f04e37;
+  --color-orange-100: #f36648;
+  --color-orange-200: #f57a5b;
+  --color-orange-300: #f6896c;
+  --color-orange-400: #f59678;
+  --color-orange-500: #fbbaa8;
+
+  --color-green-10:  #0c4a2e;
+  --color-green-50:  #12b25a;   /* "additional green" — success */
+  --color-green-100: #4eba6e;   /* the soft success used most in Figma (55,172,99) */
+  --color-green-200: #70c282;
+  --color-green-300: #86cb95;
+  --color-green-400: #9fd2a7;
+  --color-green-500: #bae2c0;
+  --color-green-600: #d0e9d7;
+  --color-green-700: #e3f0eb;
+
+  --color-yellow-50:  #f59e0b;
+  --color-yellow-100: #f7b048;
+  --color-yellow-200: #f9c77a;
+
+  --color-error:      #ca2626;
+  --color-error-40:   #ba191d;
+  --color-error-50:   #de3632;
+  --color-error-90:   #ffdad6;
+
+  /* Tertiary / "AI" accent — the bright iris-violet that signals
+     anything model-driven (artifact cards, AI highlights). */
+  --color-tertiary:        #3335ae;
+  --color-tertiary-40:     #4c4fc6;
+  --color-tertiary-50:     #6569e1;
+  --color-tertiary-60:     #7f84fd;
+  --color-tertiary-70:     #9fa3ff;
+  --color-tertiary-90:     #e1e0ff;
+
+  /* AI / Demo-card palette (exposed in Figma as "AI variables") */
+  --color-ai-text:     #030614;
+  --color-ai-text-10:  #1b2562;
+  --color-ai-accent:   #3e4cd5;
+  --color-ai-border:   #3438a5;
+  --color-ai-card:     #f1f2f9;
+  --color-ai-tint:     #e7edfd;  /* the airy blue wash seen behind AI rows */
+
+  --color-divider:     #07074f26;  /* blue-300 @ 15% */
+  --color-white:       #ffffff;
+  --color-black:       #000000;
+
+  /* =========================================================
+     SEMANTIC TOKENS
+     ========================================================= */
+  --fg-1:        var(--color-blue-50);          /* primary text */
+  --fg-2:        var(--color-blue-500);         /* secondary text */
+  --fg-3:        var(--color-blue-700);         /* tertiary / hint */
+  --fg-on-dark:  var(--color-white);
+  --fg-accent:   var(--color-blue-ocean-300);
+  --fg-ai:       var(--color-ai-accent);
+  --fg-link:     var(--color-blue-ocean-400);
+  --fg-success:  var(--color-green-50);
+  --fg-warning:  var(--color-orange-100);
+  --fg-danger:   var(--color-error);
+
+  --bg-page:     var(--color-surface);          /* #f4f4f9 — app canvas */
+  --bg-card:     var(--color-white);
+  --bg-sunken:   var(--color-surface-container);
+  --bg-inverse:  var(--color-blue-ocean-100);   /* the deep navy used on header / dark tooltips */
+  --bg-ai-row:   var(--color-ai-tint);
+  --bg-overlay:  rgba(28, 37, 80, 0.55);
+
+  --border-1:    var(--color-divider);          /* #07074f @ 15% — the workhorse hairline */
+  --border-2:    var(--color-blue-900);
+  --border-strong: var(--color-blue-ocean-100);
+
+  /* =========================================================
+     TYPE
+     ========================================================= */
+  --font-saira:    "Saira", "Inter", system-ui, sans-serif;     /* UI label / display */
+  --font-poppins:  "Poppins", system-ui, sans-serif;            /* body / form */
+  --font-mono:     "Aber Mono", "JetBrains Mono", ui-monospace, monospace;
+
+  --font-sans:     var(--font-poppins);
+  --font-display:  var(--font-saira);
+
+  /* Scale — matches Figma + Tailwind, optimised for dense UI */
+  --text-2xs:    0.625rem;   /* 10px */
+  --text-xs:    0.6875rem;   /* 11px — Saira Medium uppercase labels */
+  --text-sm:    0.8125rem;   /* 13px — table rows, mono code */
+  --text-base:    0.9375rem; /* 15px — body */
+  --text-md:        1rem;    /* 16px — Poppins Medium */
+  --text-lg:    1.0625rem;   /* 17px — Saira SemiBold subheads */
+  --text-xl:     1.25rem;    /* 20px — Saira Regular section titles */
+  --text-2xl:   1.6875rem;   /* 27px */
+  --text-3xl:   2.375rem;    /* 38px — Poppins display */
+
+  /* =========================================================
+     SPACING / RADII / SHADOWS
+     ========================================================= */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  --radius-xs:  4px;
+  --radius-sm:  6px;
+  --radius-md:  8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-pill: 999px;
+
+  /* Drop-shadows — Figma uses one base elevation (rgba(0,0,0,.13))
+     plus a colored "accent glow" for active items. */
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.03), 0 1px 1px rgba(0,0,0,0.04);
+  --shadow-2: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-3: 0 8px 24px rgba(0,0,0,0.13);                       /* the "popover / artifact card" lift */
+  --shadow-ai:    0 4px 16px rgba(62,76,213,0.40);               /* iris glow under active AI control */
+  --shadow-green: 0 4px 12px rgba(85,172,99,0.25);
+  --shadow-inset: inset 0 0 0 1px var(--border-1);
+
+  --motion-fast:  120ms;
+  --motion-base:  200ms;
+  --motion-slow:  320ms;
+  --ease-out:     cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in-out:  cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =========================================================
+   SEMANTIC TYPE STYLES (the things you @apply / className)
+   ========================================================= */
+.h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-3xl);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--fg-1);
+}
+.h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-2xl);
+  line-height: 1.15;
+  letter-spacing: -0.005em;
+  color: var(--fg-1);
+}
+.h3 {
+  font-family: var(--font-display);
+  font-weight: 600;          /* Saira SemiBold 17px is the Figma section header */
+  font-size: var(--text-lg);
+  line-height: 1.25;
+  color: var(--fg-1);
+}
+.h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-md);
+  line-height: 1.3;
+  color: var(--fg-1);
+}
+.eyebrow,
+.overline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-xs);            /* 11px — Saira Medium */
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+.p,
+.body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--text-base);          /* 15px Poppins */
+  line-height: 1.5;
+  color: var(--fg-1);
+}
+.body-sm {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  color: var(--fg-2);
+}
+.label {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-1);
+}
+.metric {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-2xl);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  color: var(--fg-1);
+}
+.code,
+code,
+kbd {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.8125rem;                 /* 13px — the only Aber Mono size used */
+  letter-spacing: 0;
+  color: var(--fg-1);
+}
+.caption {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--text-2xs);
+  line-height: 1.3;
+  color: var(--fg-3);
+}
+
+/* Tooltips throughout Platform 3.0 are dark-navy + uppercase Saira 11px.
+   Copy this exact recipe whenever you draw a tooltip. */
+.tooltip-dark {
+  background: var(--color-blue-ocean-100);
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 8px;
+  line-height: 1;
+}

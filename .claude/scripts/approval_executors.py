@@ -72,14 +72,19 @@ def _slack_post(channel, text, thread_ts=None):
     return ts, f"https://irisai.slack.com/archives/{channel}/p{ts.replace('.', '')}"
 
 
+def addr(v):
+    """Recipients may be stored as a list (meeting autopilot digests) or a comma string."""
+    return ", ".join(x for x in v if x) if isinstance(v, (list, tuple)) else (v or "")
+
+
 def _gmail_draft(target, body):
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from autopilot_common import google_token
     msg = MIMEText(body, "plain", "utf-8")
-    msg["To"] = target.get("to", "")
+    msg["To"] = addr(target.get("to"))
     if target.get("cc"):
-        msg["Cc"] = target["cc"]
+        msg["Cc"] = addr(target["cc"])
     msg["Subject"] = target.get("subject", "")
     raw = base64.urlsafe_b64encode(msg.as_bytes()).decode()
     req = urllib.request.Request("https://gmail.googleapis.com/gmail/v1/users/me/drafts",

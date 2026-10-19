@@ -1,0 +1,5 @@
+/* Saira + Poppins, self-hosted latin subsets (copied from Cognion proto/static/fonts, Google Fonts, OFL). Aber Mono comes from colors_and_type.css. */
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 400; font-display: swap; src: url("fonts/Poppins-latin-350a5a.woff2") format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 500; font-display: swap; src: url("fonts/Poppins-latin-789778.woff2") format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 600; font-display: swap; src: url("fonts/Poppins-latin-52afda.woff2") format('woff2'); }
+@font-face { font-family: 'Saira'; font-style: normal; font-weight: 100 900; font-display: swap; src: url("fonts/Saira-latin-8eed14.woff2") format('woff2'); }

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atlas</title>
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/colors_and_type.css">
+<link rel="stylesheet" href="/static/cc.css">
+</head>
+<body>
+<nav class="side" aria-label="Main">
+  <a class="brand" href="/" aria-label="Atlas command center">
+    <svg viewBox="0 0 42 42" aria-hidden="true"><rect width="42" height="42" rx="8" fill="#E7EDFD" fill-opacity=".95"/><path d="M29.8963 16.2881C29.332 12.4022 26.2396 9.27607 22.5335 8.81555C22.1823 8.77185 21.8448 8.75 21.5 8.75H15.8379C14.2721 8.75 13 10.0895 13 11.7409V17.7007C13 19.3814 13.4405 20.9504 14.2058 22.2916C15.2026 24.0413 15.2026 26.2792 14.2058 28.0288C13.4405 29.3709 13 30.9398 13 32.6189V33.75H15.8331V32.6189C15.8331 29.3372 18.3836 26.6506 21.5 26.6506C24.6164 26.6506 27.1677 29.3372 27.1677 32.6189V33.75H30V32.6189C30 30.1129 29.0184 27.849 27.4415 26.2262C26.8653 25.6346 26.8565 24.6934 27.4319 24.1018C29.3065 22.1773 30.344 19.3546 29.8963 16.2881ZM21.5 23.6681C18.3836 23.6681 15.8331 20.9823 15.8331 17.7007V11.735H21.5C24.6164 11.735 27.1677 14.4191 27.1677 17.7007C27.1677 20.9823 24.6172 23.6681 21.5 23.6681Z" fill="#141734"/></svg>
+    <span><b>Atlas</b><small>IRIS.AI</small></span>
+  </a>
+  <div class="side-sep"></div>
+  <div class="nav">
+    <a href="#today" aria-current="page"><span class="ibox"><svg class="ic"><use href="/static/icons.svg#ai-icon-dashboard"/></svg></span><span class="t">Today</span></a>
+    <a href="#week"><span class="ibox"><svg class="ic"><use href="/static/icons.svg#ai-icon-time"/></svg></span><span class="t">Week</span></a>
+    <a href="#drafts" id="nav-drafts"><span class="ibox"><svg class="ic"><use href="/static/icons.svg#ai-icon-description"/></svg></span><span class="t">Drafts</span><span class="n" id="nav-n" hidden></span></a>
+    <a href="/admin"><span class="ibox"><svg class="ic"><use href="/static/icons.svg#ai-icon-settings"/></svg></span><span class="t">Admin</span></a>
+  </div>
+  <div class="side-fill"></div>
+  <div class="side-sep"></div>
+  <div class="fresh" id="fresh"></div>
+</nav>
+
+<div class="work">
+  <header class="top" id="top">
+    <span class="bracket" id="today-label"></span>
+    <h1>Command center</h1>
+    <span class="grow"></span>
+    <span class="asof" id="asof"></span>
+    <button class="btn" id="refresh" type="button" title="Re-read the calendar and refresh HubSpot + Asana (about $0.04, 3 min)"><svg class="ic"><use href="/static/icons.svg#ai-icon-sync"/></svg>Refresh</button>
+    <a class="icon-btn" href="/admin" title="Admin: meetings, logs, commands"><svg class="ic"><use href="/static/icons.svg#ai-icon-settings"/></svg></a>
+  </header>
+
+  <main class="page" id="page">
+    <section class="sec" id="today">
+      <div id="banner"></div>
+      <div class="strip" id="strip"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    </section>
+
+    <section class="sec" id="week">
+      <div class="sec-head">
+        <h2 id="week-title">This week</h2><span class="count" id="week-count"></span>
+        <div class="right">
+          <div class="seg" role="group" aria-label="Show">
+            <button type="button" data-show="client" aria-pressed="true">Client</button>
+            <button type="button" data-show="all" aria-pressed="false">All</button>
+          </div>
+          <button class="icon-btn" id="wk-prev" type="button" title="Previous week"><svg class="ic"><use href="/static/icons.svg#nlf-icon-chevron-left"/></svg></button>
+          <button class="btn sm" id="wk-now" type="button">This week</button>
+          <button class="icon-btn" id="wk-next" type="button" title="Next week"><svg class="ic" style="transform:rotate(180deg)"><use href="/static/icons.svg#nlf-icon-chevron-left"/></svg></button>
+        </div>
+      </div>
+      <div class="week" id="weekgrid"></div>
+    </section>
+
+    <section class="sec" id="timecost" hidden></section>
+  </main>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" aria-hidden="true" tabindex="-1">
+  <div class="dhead" id="dhead"></div>
+  <div class="dbody" id="dbody"></div>
+</aside>
+<div id="toast" hidden></div>
+<script src="/static/cc.js"></script>
+</body>
+</html>
