@@ -6,6 +6,17 @@ Underlying framework: [talk-like-jordan.md](talk-like-jordan.md) (patterns), [po
 
 ---
 
+## Stop bad-fit deals early, in writing (2026-10-19, FINCA in the war room)
+
+Vankata killed FINCA live ("not what we do", non-profit, photo grading, "cancel the AWS request"); Steven asked why it wasn't stopped three months ago and looked for a July paper trail. My flags existed but only in a thread with Jordan, who overrode them, and I'd said "we do support computer vision" on the 1 Sep call.
+
+- **The rep:** after every first deep dive, run the stoppers in [engagement-gates.md](engagement-gates.md) (S1-S5). Any hit: post the flag template to @Vankata @Steven within 24 h, before any work.
+- **If Sales overrides:** one written FYI to Steven, then it's his call. No back-and-forth with Jordan.
+- **Live on calls:** never confirm a capability I'm not sure of. Group D line.
+- **When blame comes up in a meeting:** one line of dated facts, offer the trail after the call. Don't argue it live.
+
+---
+
 ## The two skills Jordan named (2026-07-10, Postbank no-show sideways)
 
 Jordan's frame: I started technical, moved commercial. That's the hard direction to travel, so it's a structural advantage — someone who starts commercial needs years to get the tech. Press the advantage by adding exactly two skills. Capturing both = "good to great, plus-player SA territory."
