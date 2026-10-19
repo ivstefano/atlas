@@ -79,6 +79,8 @@ def open_url(it):
         if t.get("cc"):
             q["cc"] = t["cc"]
         return "https://mail.google.com/mail/?" + urllib.parse.urlencode(q)
+    if it["kind"] == "asana":
+        return t.get("task_url") or X.ASANA_PROJECT_URL
     if it["kind"] == "slack_post":
         return f"https://irisai.slack.com/archives/{t.get('channel') or X.DEFAULT_CHANNEL}"
     return ""
@@ -203,7 +205,8 @@ def _card(it):
                       for h in it.get("history", [])[-4:])
     sent = f'<a href="{e(it["sent_link"])}" target="_blank">sent link</a>' if it.get("sent_link") else ""
     label = {"slack_post": "Approve &amp; post", "slack_thread_reply": "Approve &amp; reply in thread",
-             "gmail_draft": "Approve &amp; create Gmail draft", "status_entry": "Approve &amp; write STATUS"}.get(it["kind"], "")
+             "gmail_draft": "Approve &amp; create Gmail draft", "status_entry": "Approve &amp; write STATUS",
+             "asana": "Approve &amp; apply in Asana"}.get(it["kind"], "")
     return f"""
 <div class="card {e(it['status'])}" data-id="{e(it['id'])}">
   <div class="meta">
@@ -230,16 +233,19 @@ def _card(it):
 
 @app.get("/", response_class=HTMLResponse)
 def index():
-    pend = Q.list_items("pending")
+    pend = Q.list_items("pending", visible_only=True)
+    held = Q.held_count()
     groups = {}
     for it in pend:
         groups.setdefault(it["engagement"], []).append(it)
     order = sorted(groups, key=lambda g: max(i["created"] for i in groups[g]), reverse=True)
     body = "".join(f'<h2>{html.escape(g)} <small>{len(groups[g])}</small></h2>' + "".join(_card(i) for i in groups[g])
                    for g in order) or "<p class='empty'>Nothing waiting.</p>"
-    done = Q.list_items(["sent", "done", "rejected"])[:25]
+    done = Q.list_items(["sent", "done", "rejected"], visible_only=True)[:25]
     recent = "".join(_card(i) for i in done) or "<p class='empty'>Nothing yet.</p>"
-    return PAGE.replace("{{PENDING}}", body).replace("{{RECENT}}", recent).replace("{{N}}", str(len(pend)))
+    held_txt = f'<span style="color:var(--mute);font-size:12px">{held} more surface at 08:00 (quiet hours)</span>' if held else ""
+    return (PAGE.replace("{{PENDING}}", body).replace("{{RECENT}}", recent).replace("{{N}}", str(len(pend)))
+            .replace("{{HELD}}", held_txt))
 
 
 PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>Approvals ({{N}})</title>
@@ -269,7 +275,7 @@ button.go{background:var(--acc);color:#fff;border-color:var(--acc)}button.no{col
 .empty{color:var(--mute)}
 #toast{position:fixed;bottom:18px;right:18px;background:var(--ink);color:#fff;padding:8px 12px;border-radius:4px;display:none}
 </style></head><body>
-<header><h1>Approvals</h1><span>{{N}} pending</span>
+<header><h1>Approvals</h1><span>{{N}} pending</span>{{HELD}}
 <button class="go" onclick="batch()">Approve selected</button>
 <span style="color:var(--mute);font-size:12px">Nothing is sent until you click. Slack posts go out as you.</span></header>
 <main>{{PENDING}}<h2>Recent</h2>{{RECENT}}</main><div id="toast"></div>
@@ -283,7 +289,7 @@ async function act(b,a){await post(`/api/items/${id(b)}/${a}`);location.reload()
 async function undo(b){if(!confirm('Revert this STATUS entry? Adds a revert commit in engagements.'))return;
   const r=await post(`/api/items/${id(b)}/undo`);toast(r.ok?r.result:('Failed: '+(r.error||r.detail)));if(r.ok)setTimeout(()=>location.reload(),900)}
 function copyBody(b){navigator.clipboard.writeText(txt(b));toast('Copied')}
-async function approve(b){if(!confirm('Send this now? It goes out as you.'))return;
+async function approve(b){if(!confirm(card(b).querySelector('.pill.k').textContent==='asana'?'Apply this change in Asana now?':'Send this now? It goes out as you.'))return;
   const r=await post(`/api/items/${id(b)}/approve`,{body:txt(b)});toast(r.ok?r.result:('Failed: '+r.error));if(r.ok)setTimeout(()=>location.reload(),900)}
 async function batch(){const ids=[...document.querySelectorAll('.sel:checked')].map(c=>card(c).dataset.id);
   if(!ids.length)return toast('Nothing selected');if(!confirm(`Send ${ids.length} item(s) now, as you?`))return;
