@@ -1,37 +1,107 @@
 #!/usr/bin/env python3
-"""Local viewer for the meeting autopilot: briefs, live sidekick, digest drafts.
+"""Atlas command center: 127.0.0.1:8095. Today strip, week calendar, client meeting cards, approvals inline.
 
-127.0.0.1:8095 only. Read-only over atlas/_autopilot, atlas/briefs and the autopilot state; it never
-sends anything. Started by launchd (ai.iris.atlas.autopilot-web) with the Cognion venv python.
+Replaces the old autopilot log viewer (now at /admin) and the front page of the approvals inbox (:8096 redirects
+here; its API stays there too). Kept routes, used by notifications and the autopilot: /brief/<key>,
+/brief-file?path=, /live/<key>, /api/live/<key>, /digest/<key>, /health.
+
+Read-only over atlas/_autopilot, briefs, autopilot state and engagements/*; the only writes go through the
+approval queue API (approvals_app.make_router, same X-Approvals/Host/Origin guard, bound to this port) and the
+CRM refresh (crm_refresh.py, spend-capped). Nothing sends without a click.
+
+    CC_PORT=8097 CC_AUTO_REFRESH=0 <venv python> web.py      (test copy; launchd runs it on 8095)
 """
+import datetime as dt
 import html
 import json
+import os
+import subprocess
 import sys
+import threading
+import time
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE.parent))
+sys.path.insert(0, str(HERE))
 import meeting_autopilot as A  # noqa: E402
+import approvals_app as APR  # noqa: E402
+import approval_queue as Q  # noqa: E402
+import crm_refresh as CRM  # noqa: E402
+import cc_data  # noqa: E402
 
-app = FastAPI()
+PORT = int(os.environ.get("CC_PORT", str(A.PORT)))
+AUTO_REFRESH = os.environ.get("CC_AUTO_REFRESH", "1" if PORT == A.PORT else "0") == "1"
+STATIC = HERE / "static"
 SCRIPT = f"{A.PY} {Path(A.__file__).resolve()}"
 
-CSS = """
-body{font:15px/1.5 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;margin:0;color:#1d2228;background:#f6f6f3}
-main{max-width:980px;margin:0 auto;padding:24px 28px 60px}
-a{color:#22568a} h1{font-size:22px;margin:0 0 4px} h2{font-size:16px;margin:26px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px}
-h3{font-size:15px;margin:18px 0 6px} code,pre{font:13px/1.45 ui-monospace,Menlo,monospace;background:#ecebe6;border-radius:3px}
-code{padding:1px 4px} pre{padding:10px 12px;white-space:pre-wrap;overflow-x:auto}
-table{border-collapse:collapse;margin:8px 0} td,th{border:1px solid #d8d8d2;padding:4px 8px;vertical-align:top;text-align:left}
-.muted{color:#6b7177;font-size:13px} .card{background:#fff;border:1px solid #e1e0da;border-radius:6px;padding:12px 16px;margin:10px 0}
-.flag{color:#9a3412} .ok{color:#166534} button{font:13px sans-serif;padding:3px 10px;cursor:pointer}
-.tail div{font:13px/1.45 ui-monospace,Menlo,monospace;padding:1px 0} .unstable{color:#8a8f94;font-style:italic}
-nav{font-size:13px;margin-bottom:14px} nav a{margin-right:12px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px} @media(max-width:860px){.grid{grid-template-columns:1fr}}
-"""
+app = FastAPI(title="Atlas", docs_url=None, redoc_url=None)
+app.mount("/static", StaticFiles(directory=str(STATIC)), name="static")
+app.include_router(APR.make_router(PORT))
+guard = APR.make_guard(PORT)
 
+
+@app.middleware("http")
+async def _no_cache(request, call_next):
+    resp = await call_next(request)
+    p = request.url.path
+    if p == "/" or p.startswith("/api/") or p.endswith((".js", ".css", ".html")):
+        resp.headers["Cache-Control"] = "no-cache"
+    return resp
+
+
+# ---------------------------------------------------------------- command center
+@app.get("/health")
+def health():
+    return {"ok": True}
+
+
+@app.get("/")
+def index():
+    return FileResponse(STATIC / "index.html")
+
+
+@app.get("/api/cc")
+def api_cc(week: int = 0):
+    return JSONResponse(cc_data.snapshot(max(-4, min(4, week))))
+
+
+def _spawn_refresh(reason):
+    if CRM.running():
+        return dict(ok=False, error="already running")
+    subprocess.Popen([A.PY, str(Path(CRM.__file__).resolve()), "auto" if reason == "auto" else "run"],
+                     cwd=str(A.HOME), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+    return dict(ok=True, started=True)
+
+
+@app.post("/api/refresh")
+async def api_refresh(req: Request):
+    guard(req)
+    if A.day_spend() >= A.cfg()["hard_cap_usd"]:
+        return dict(ok=False, error="daily spend cap reached")
+    cc_data._cal.clear()                     # the next /api/cc re-reads the calendar too
+    return _spawn_refresh("manual")
+
+
+def _auto_loop():
+    while True:
+        time.sleep(120)
+        try:
+            if not CRM.due_auto():
+                _spawn_refresh("auto")
+        except Exception as e:
+            A.log(f"command center auto refresh: {type(e).__name__}: {e}")
+
+
+if AUTO_REFRESH:
+    threading.Thread(target=_auto_loop, daemon=True).start()
+
+
+# ---------------------------------------------------------------- doc pages (brief, live, admin)
 MD_JS = r"""
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function inl(s){s=esc(s);return s.replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>')
@@ -50,18 +120,20 @@ function md(src){const L=src.replace(/<!--[\s\S]*?-->/g,'').split('\n');let o=[]
   if(/^>/.test(l)){close();o.push('<p class="muted">'+inl(l.replace(/^>\s?/,''))+'</p>');i++;continue}
   close();o.push('<p>'+inl(l)+'</p>');i++}
  close();return o.join('\n')}
-function copy(id){navigator.clipboard.writeText(document.getElementById(id).innerText);}
 """
 
 
 def page(title, body, script=""):
-    return HTMLResponse(f"""<!doctype html><html><head><meta charset="utf-8"><title>{html.escape(title)}</title>
-<style>{CSS}</style></head><body><main><nav><a href="/">Autopilot</a></nav>{body}</main>
+    return HTMLResponse(f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>{html.escape(title)}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/fonts.css"><link rel="stylesheet" href="/static/colors_and_type.css">
+<link rel="stylesheet" href="/static/cc.css"></head><body class="doc">
+<nav class="docnav"><a href="/">Command center</a><a href="/admin">Admin</a></nav><main class="docmain">{body}</main>
 <script>{MD_JS}{script}</script></body></html>""")
 
 
 def md_page(title, text, extra=""):
-    return page(title, f'<div id="md"></div>{extra}<pre id="raw" style="display:none">{html.escape(text)}</pre>',
+    return page(title, f'{extra}<article id="md"></article><pre id="raw" hidden>{html.escape(text)}</pre>',
                 "document.getElementById('md').innerHTML=md(document.getElementById('raw').textContent);")
 
 
@@ -74,36 +146,6 @@ def all_meetings():
     except (OSError, ValueError, KeyError):
         pass
     return out
-
-
-@app.get("/health")
-def health():
-    return {"ok": True}
-
-
-@app.get("/", response_class=HTMLResponse)
-def index():
-    st = A.load_state()
-    rows = []
-    for k, m in sorted(all_meetings().items(), reverse=True):
-        ph = m.get("phases", {})
-        ev = m.get("event") or {}
-        bits = [f'<a href="/brief/{k}">brief</a>' if "path" in (ph.get("brief") or {}) else "brief: -",
-                f'<a href="/live/{k}">live</a>', f'<a href="{A.QUEUE_UI}">drafts (inbox)</a>' if ph.get("digest") else "digest: -"]
-        phs = ", ".join(f"{p}: {v.get('status')}" for p, v in ph.items())
-        rows.append(f"<tr><td>{html.escape(k[:16].replace('_', ' '))}{' (dry-run)' if m.get('dry') else ''}</td><td>{html.escape(ev.get('title', k))}</td>"
-                    f"<td>{html.escape(m.get('engagement') or 'unmatched')}</td><td>{' | '.join(bits)}</td>"
-                    f"<td class='muted'>{html.escape(phs)}</td></tr>")
-    mb = "".join(f'<li><a href="/brief-file?path={html.escape(p)}">{d}</a></li>' for d, p in sorted(st.get("morning", {}).items(), reverse=True)[:7])
-    spend = A.day_spend()
-    return page("Autopilot", f"""<h1>Meeting autopilot</h1><p class="muted">Spend today ${spend:.3f}. Nothing here sends anything.</p>
-<table><tr><th>When</th><th>Meeting</th><th>Engagement</th><th>Open</th><th>Phases</th></tr>{''.join(rows) or '<tr><td colspan=5>No meetings yet</td></tr>'}</table>
-<h2>Morning briefs</h2><ul>{mb or '<li>none yet</li>'}</ul>
-<h2>Commands</h2><pre>{SCRIPT} status
-{SCRIPT} apply &lt;key&gt;        # fallback STATUS write
-{SCRIPT} undo &lt;key|engagement&gt;
-{SCRIPT} gmail-draft &lt;key&gt;  # creates a Gmail DRAFT, never sends
-{SCRIPT} uninstall</pre>""")
 
 
 def _meeting(key):
@@ -120,7 +162,7 @@ def brief(key: str):
     if not p or not Path(p).exists():
         return page("Brief", "<p>No brief yet.</p>")
     return md_page(m["event"]["title"], Path(p).read_text(),
-                   f'<p class="muted"><a href="/live/{key}">Live sidekick</a> | file: {html.escape(p)}</p>')
+                   f'<p class="muted"><a href="/live/{key}">Live sidekick</a> <span class="mono">{html.escape(p)}</span></p>')
 
 
 @app.get("/brief-file", response_class=HTMLResponse)
@@ -166,18 +208,66 @@ def live(key: str):
     m = _meeting(key)
     return page("Live: " + m["event"]["title"], f"""<h1>{html.escape(m['event']['title'])}</h1>
 <p class="muted" id="st"></p><p class="muted"><a href="/brief/{key}">Brief</a></p>
-<div class="grid"><div><h2>Client questions, suggested answers</h2><div id="q"></div></div>
+<div class="grid2"><div><h2>Client questions, suggested answers</h2><div id="q"></div></div>
 <div><h2>Next questions to ask</h2><ul id="n"></ul><h2>Commitments heard</h2><ul id="c"></ul>
 <h2>Transcript tail</h2><div class="tail" id="tail"></div></div></div>""", LIVE_JS % json.dumps(key))
 
 
 @app.get("/digest/{key}")
 def digest(key: str):
-    """Drafts live in the approval queue inbox now (one pipeline for every draft)."""
-    from fastapi.responses import RedirectResponse
-    return RedirectResponse(A.QUEUE_UI)
+    """Drafts are reviewed inline on the command center now."""
+    return RedirectResponse("/#drafts")
+
+
+def _tail(p, n=40):
+    try:
+        return Path(p).read_text(errors="ignore").splitlines()[-n:]
+    except OSError:
+        return []
+
+
+@app.get("/admin", response_class=HTMLResponse)
+def admin():
+    e = html.escape
+    st = A.load_state()
+    rows = []
+    for k, m in sorted(all_meetings().items(), reverse=True):
+        ph = m.get("phases", {})
+        ev = m.get("event") or {}
+        bits = [f'<a href="/brief/{e(k)}">brief</a>' if "path" in (ph.get("brief") or {}) else "brief: -",
+                f'<a href="/live/{e(k)}">live</a>']
+        phs = ", ".join(f"{p}: {v.get('status')}" for p, v in ph.items())
+        rows.append(f"<tr><td class='mono'>{e(k[:16].replace('_', ' '))}{' (dry-run)' if m.get('dry') else ''}</td><td>{e(ev.get('title', k))}</td>"
+                    f"<td>{e(m.get('engagement') or 'unmatched')}</td><td>{' | '.join(bits)}</td><td class='muted'>{e(phs)}</td></tr>")
+    mb = "".join(f'<li><a href="/brief-file?path={e(p)}">{e(d)}</a></li>' for d, p in sorted(st.get("morning", {}).items(), reverse=True)[:7])
+    c = CRM.load()
+    lr = c.get("last_run") or {}
+    crm = (f"<p>Last run {e(str(lr.get('at', '-')))}, {'ok' if lr.get('ok') else 'failed: ' + e(str(lr.get('error')))}"
+           f", ${lr.get('usd', 0):.3f}, {lr.get('secs', '-')}s. CRM spend today ${CRM.crm_spend():.3f} of ${CRM.conf()['crm_cap_usd']:.2f}."
+           f" Auto: {e(CRM.due_auto() or 'due')}, every {CRM.conf()['crm_refresh_min']} min, hours {CRM.conf()['crm_hours']}.</p>")
+    hist = []
+    for it in Q.list_items(["sent", "done", "rejected"])[:25]:
+        last = (it.get("history") or [{}])[-1]
+        hist.append(f"<tr><td class='mono'>{e(it['created'][:16].replace('T', ' '))}</td><td>{e(it['status'])}</td><td>{e(it['kind'])}</td>"
+                    f"<td>{e(it['engagement'])}</td><td>{e(it['title'][:80])}</td><td class='muted'>{e(str(last.get('action', '')))} {e(str(last.get('note', ''))[:80])}</td></tr>")
+    log = "\n".join(e(x) for x in _tail(A.LOGS / "autopilot.log", 50))
+    spend = A.day_spend()
+    return page("Admin", f"""<h1>Admin</h1><p class="muted">Spend today ${spend:.3f} (soft cap ${A.cfg()['soft_cap_usd']:.2f}, hard cap ${A.cfg()['hard_cap_usd']:.2f}). Nothing here sends anything.</p>
+<h2>Meetings (autopilot state, incl. dry-run)</h2>
+<table><tr><th>When</th><th>Meeting</th><th>Engagement</th><th>Open</th><th>Phases</th></tr>{''.join(rows) or '<tr><td colspan=5>No meetings yet</td></tr>'}</table>
+<h2>CRM snapshot</h2>{crm}
+<h2>Morning briefs</h2><ul>{mb or '<li>none yet</li>'}</ul>
+<h2>Queue history</h2><table><tr><th>Created</th><th>Status</th><th>Kind</th><th>Engagement</th><th>Title</th><th>Last</th></tr>{''.join(hist)}</table>
+<p class="muted"><a href="http://127.0.0.1:8096/legacy">Old approvals inbox</a></p>
+<h2>Commands</h2><pre>{SCRIPT} status
+{SCRIPT} apply &lt;key&gt;        # fallback STATUS write
+{SCRIPT} undo &lt;key|engagement&gt;
+{SCRIPT} gmail-draft &lt;key&gt;  # creates a Gmail DRAFT, never sends
+{SCRIPT} uninstall
+{A.PY} {Path(CRM.__file__).resolve()} show|run</pre>
+<h2>Autopilot log</h2><pre class="log">{log}</pre>""")
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=A.PORT, log_level="warning")
+    uvicorn.run(app, host="127.0.0.1", port=PORT, log_level="warning")

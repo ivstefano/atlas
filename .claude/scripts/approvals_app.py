@@ -27,29 +27,40 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import approval_queue as Q  # noqa: E402
 import approval_executors as X  # noqa: E402
 
-from fastapi import FastAPI, HTTPException, Request  # noqa: E402
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse  # noqa: E402
+from fastapi import APIRouter, FastAPI, HTTPException, Request  # noqa: E402
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse  # noqa: E402
 
 FONTS = Path.home() / "Documents" / "Cognion" / "proto" / "static" / "fonts"
 ENG = Path.home() / "Documents" / "engagements"
 PORT = int(os.environ.get("APPROVALS_PORT", "8096"))
 HOSTS = {f"127.0.0.1:{PORT}", f"localhost:{PORT}"}
 ORIGINS = {f"http://{h}" for h in HOSTS}
+# The command center (autopilot/web.py, :8095) is the front page now; this port keeps the API and redirects "/".
+COMMAND_CENTER = os.environ.get("COMMAND_CENTER_URL", "http://127.0.0.1:8095")
 AUTOPILOT = Path(__file__).resolve().parent / "meeting_autopilot.py"
 AUTOPILOT_PY = "/Users/iris/Documents/Cognion/atlas/.venv/bin/python"   # = meeting_autopilot.PY
 app = FastAPI(title="Approvals")
 
 
-def _guard(req: Request, need_origin=False):
-    if req.headers.get("x-approvals") != "1":
-        raise HTTPException(403, "missing X-Approvals header")
-    if req.headers.get("host") not in HOSTS:
-        raise HTTPException(403, "wrong Host")
-    origin = req.headers.get("origin")
-    if (origin is None and need_origin) or (origin is not None and origin not in ORIGINS):
-        raise HTTPException(403, "request not from the inbox origin")
-    if req.headers.get("sec-fetch-site") not in (None, "same-origin"):
-        raise HTTPException(403, "cross-site request")
+def make_guard(port):
+    """POST guard bound to one local port (the inbox, or the command center that embeds this API)."""
+    hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
+    origins = {f"http://{h}" for h in hosts}
+
+    def guard(req: Request, need_origin=False):
+        if req.headers.get("x-approvals") != "1":
+            raise HTTPException(403, "missing X-Approvals header")
+        if req.headers.get("host") not in hosts:
+            raise HTTPException(403, "wrong Host")
+        origin = req.headers.get("origin")
+        if (origin is None and need_origin) or (origin is not None and origin not in origins):
+            raise HTTPException(403, "request not from the inbox origin")
+        if req.headers.get("sec-fetch-site") not in (None, "same-origin"):
+            raise HTTPException(403, "cross-site request")
+    return guard
+
+
+_guard = make_guard(PORT)
 
 
 def undo_argv(it):
@@ -75,9 +86,9 @@ def open_url(it):
     if t.get("prefill_url") or t.get("form_url"):
         return t.get("prefill_url") or t.get("form_url")
     if it["kind"] in ("email_draft", "gmail_draft") and t.get("to"):
-        q = dict(view="cm", to=t.get("to", ""), su=t.get("subject", ""), body=it.get("body", ""))
+        q = dict(view="cm", to=X.addr(t.get("to")), su=t.get("subject", ""), body=it.get("body", ""))
         if t.get("cc"):
-            q["cc"] = t["cc"]
+            q["cc"] = X.addr(t["cc"])
         return "https://mail.google.com/mail/?" + urllib.parse.urlencode(q)
     if it["kind"] == "slack_post":
         return f"https://irisai.slack.com/archives/{t.get('channel') or X.DEFAULT_CHANNEL}"
@@ -92,23 +103,43 @@ def fonts(name: str):
     return FileResponse(p)
 
 
-@app.get("/api/items")
-def items(status: str = None):
-    return Q.list_items(status.split(",") if status else None)
+def make_router(port):
+    """The queue API, guarded for one local port. Mounted by this inbox (:8096) and by the command center (:8095)."""
+    guard = make_guard(port)
+    r = APIRouter()
 
+    @r.get("/api/items")
+    def items(status: str = None):
+        return Q.list_items(status.split(",") if status else None)
 
-@app.post("/api/items/{item_id}/save")
-async def save(item_id: str, req: Request):
-    _guard(req)
-    data = await req.json()
-    return Q.update(item_id, "edited", body=data["body"])
+    @r.post("/api/items/{item_id}/save")
+    async def save(item_id: str, req: Request):
+        guard(req)
+        data = await req.json()
+        return Q.update(item_id, "edited", body=data["body"])
 
+    @r.post("/api/items/{item_id}/approve")
+    async def approve(item_id: str, req: Request):
+        guard(req)
+        data = await req.json()
+        return JSONResponse(_approve(item_id, data.get("body")))
 
-@app.post("/api/items/{item_id}/approve")
-async def approve(item_id: str, req: Request):
-    _guard(req)
-    data = await req.json()
-    return JSONResponse(_approve(item_id, data.get("body")))
+    @r.post("/api/batch/approve")
+    async def batch(req: Request):
+        guard(req)
+        data = await req.json()
+        return [dict(id=i, **_approve(i)) for i in data.get("ids", [])]
+
+    @r.post("/api/items/{item_id}/undo")
+    async def undo(item_id: str, req: Request):
+        guard(req, need_origin=True)
+        return JSONResponse(_undo(item_id))
+
+    @r.post("/api/items/{item_id}/{action}")
+    async def act(item_id: str, action: str, req: Request):
+        guard(req)
+        return _act(item_id, action)
+    return r
 
 
 def _approve(item_id, body=None):
@@ -131,41 +162,30 @@ def _approve(item_id, body=None):
     return dict(ok=True, **res)
 
 
-@app.post("/api/batch/approve")
-async def batch(req: Request):
-    _guard(req)
-    data = await req.json()
-    return [dict(id=i, **_approve(i)) for i in data.get("ids", [])]
-
-
-@app.post("/api/items/{item_id}/undo")
-async def undo(item_id: str, req: Request):
-    _guard(req, need_origin=True)
+def _undo(item_id):
     it = Q.get(item_id)
     if not it:
         raise HTTPException(404)
     argv = undo_argv(it)
     if not argv:
-        return JSONResponse(dict(ok=False, error="no valid undo command on this item"))
+        return dict(ok=False, error="no valid undo command on this item")
     if it["status"] != "done":
-        return JSONResponse(dict(ok=False, error=f"item is {it['status']}"))
+        return dict(ok=False, error=f"item is {it['status']}")
     try:
         r = subprocess.run(argv, capture_output=True, text=True, timeout=180, cwd=str(Path.home()))
     except subprocess.TimeoutExpired:
         Q.update(item_id, "undo_failed", note="timed out")
-        return JSONResponse(dict(ok=False, error="undo timed out"))
+        return dict(ok=False, error="undo timed out")
     if r.returncode != 0:
         err = (r.stderr.strip() or r.stdout.strip())[-300:]
         Q.update(item_id, "undo_failed", note=err)
-        return JSONResponse(dict(ok=False, error=err))
+        return dict(ok=False, error=err)
     out = r.stdout.strip()[-300:]
     Q.update(item_id, "undone from inbox", status="rejected", note=out)
-    return JSONResponse(dict(ok=True, result=out))
+    return dict(ok=True, result=out)
 
 
-@app.post("/api/items/{item_id}/{action}")
-async def act(item_id: str, action: str, req: Request):
-    _guard(req)
+def _act(item_id, action):
     it = Q.get(item_id)
     if not it:
         raise HTTPException(404)
@@ -185,12 +205,15 @@ async def act(item_id: str, action: str, req: Request):
     raise HTTPException(400, "unknown action")
 
 
+app.include_router(make_router(PORT))
+
+
 def _card(it):
     e = html.escape
     t = it.get("target") or {}
     tgt = (f"#{'active-engagements' if (t.get('channel') or X.DEFAULT_CHANNEL) == X.DEFAULT_CHANNEL else t.get('channel')}"
            + (" thread" if t.get("thread_ts") else "")) if it["kind"].startswith("slack") else \
-        (t.get("to") or t.get("path") or t.get("form_url") or "")
+        (X.addr(t.get("to")) or t.get("path") or t.get("form_url") or "")
     srcs = "".join(
         f'<li><a href="{e(s.get("path_or_url", ""))}" target="_blank">{e(s.get("label", ""))}</a></li>'
         if str(s.get("path_or_url", "")).startswith("http") else
@@ -228,8 +251,14 @@ def _card(it):
 </div>"""
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 def index():
+    """Front page moved to the command center; the old inbox stays reachable at /legacy."""
+    return RedirectResponse(COMMAND_CENTER + "/#drafts")
+
+
+@app.get("/legacy", response_class=HTMLResponse)
+def legacy():
     pend = Q.list_items("pending")
     groups = {}
     for it in pend:
