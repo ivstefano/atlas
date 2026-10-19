@@ -366,7 +366,7 @@ def snapshot(week_offset=0):
     crm = CRM.load()
     rows = [meeting_row(e, st, digs, crm) for e in evs]
 
-    pend = [queue_view(i) for i in Q.list_items("pending")]
+    pend = [queue_view(i) for i in Q.list_items("pending", visible_only=True)]   # quiet hours: held items surface at 08:00
     recent_cut = (now - dt.timedelta(days=3)).isoformat()
     undoable = [queue_view(i) for i in Q.list_items("done") if i.get("created", "") >= recent_cut]
     undoable = [i for i in undoable if i["can_undo"]]

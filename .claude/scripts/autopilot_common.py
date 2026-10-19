@@ -749,8 +749,172 @@ def system_prompt(today=None):
     return SYSTEM.format(voice=voice_block()) + away_rule(today)
 
 
+# ----------------------------------------------------------------------------- quiet hours
+# 19:00-08:00 Europe/Sofia: no notifications and no new inbox drafts surface. Work (digests, writes) still runs;
+# notifications are held in DEFERRED and flushed as one summary by the meeting-autopilot tick at 08:00, and new
+# queue items carry surface_at (the inbox hides them until then). Override in config.json:
+#   "quiet_hours": {"from": "19:00", "until": "08:00", "tz": "Europe/Sofia"}   or {"off": true}
+QUIET_DEFAULT = {"from": "19:00", "until": "08:00", "tz": "Europe/Sofia"}
+DEFERRED = ATLAS / "_autopilot" / "run" / "deferred_notifications.jsonl"
+
+
+def quiet_cfg():
+    q = dict(QUIET_DEFAULT)
+    q.update(load_config().get("quiet_hours") or {})
+    return q
+
+
+def quiet_until(t=None):
+    """If t (aware datetime, default now) is inside quiet hours: the aware datetime they end. Else None."""
+    import zoneinfo
+    q = quiet_cfg()
+    if q.get("off"):
+        return None
+    tz = zoneinfo.ZoneInfo(q.get("tz") or "Europe/Sofia")
+    t = (t or dt.datetime.now().astimezone()).astimezone(tz)
+    h0, m0 = map(int, q["from"].split(":"))
+    h1, m1 = map(int, q["until"].split(":"))
+    start, end = t.replace(hour=h0, minute=m0, second=0, microsecond=0), t.replace(hour=h1, minute=m1, second=0, microsecond=0)
+    if start <= end:                       # same-day window (not the default)
+        return end if start <= t < end else None
+    if t >= start:
+        return end + dt.timedelta(days=1)
+    if t < end:
+        return end
+    return None
+
+
+def defer_notification(title, msg, url=None, path=None, t=None):
+    """Hold a notification until quiet hours end. Returns the time it will surface."""
+    until = quiet_until(t)
+    p = Path(path or DEFERRED)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with p.open("a") as f:
+        f.write(json.dumps({"t": (t or dt.datetime.now().astimezone()).isoformat(timespec="seconds"),
+                            "until": until.isoformat() if until else None, "title": title, "msg": msg, "url": url},
+                           ensure_ascii=False) + "\n")
+    return until
+
+
+def pop_due_notifications(t=None, path=None):
+    """Held notifications whose quiet window is over (removed from the file). [] while still quiet."""
+    p = Path(path or DEFERRED)
+    t = t or dt.datetime.now().astimezone()
+    if quiet_until(t) or not p.exists():
+        return []
+    import fcntl
+    with open(str(p) + ".lock", "w") as lk:
+        fcntl.flock(lk, fcntl.LOCK_EX)
+        recs = [json.loads(x) for x in p.read_text().splitlines() if x.strip()]
+        due = [r for r in recs if not r.get("until") or dt.datetime.fromisoformat(r["until"]) <= t]
+        rest = [r for r in recs if r not in due]
+        p.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rest))
+    return due
+
+
+# ----------------------------------------------------------------------------- MCP servers for headless claude (Asana, HubSpot)
+ASANA_PROJECT = "1214855342290138"           # Iris.ai Commercial Engagements
+ASANA_WORKSPACE = "61830076465436"
+ASANA_PROJECT_URL = f"https://app.asana.com/1/{ASANA_WORKSPACE}/project/{ASANA_PROJECT}"
+CLAUDE_BIN = str(HOME / ".local" / "bin" / "claude")
+HAIKU = "eu.anthropic.claude-haiku-5-5"
+MCP_FALLBACK = {"hubspot": {"type": "http", "url": "https://mcp.hubspot.com"},
+                "asana": {"type": "http", "url": "https://mcp.asana.com/v2/mcp"}}
+# Asana: never delete, never touch other projects. Writes allowed per op (only on Ivo's click, approval_executors).
+ASANA_READ_RX = re.compile(r"(get_|search|list|typeahead|find)", re.I)
+ASANA_NEVER_RX = re.compile(r"(delete|remove|duplicate|archive|attachment|portfolio|goal|team|user_invite|webhook)", re.I)
+ASANA_WRITE_RX = {"complete": re.compile(r"update_tasks?$", re.I),
+                  "update": re.compile(r"update_tasks?$", re.I),
+                  "update_pipeline": re.compile(r"update_tasks?$", re.I),
+                  "create": re.compile(r"(create_tasks?|add_task_to_section|add_.*project.*task|add_task.*project)$", re.I)}
+
+
+def user_mcp_server(name):
+    """The user-scope MCP server config from ~/.claude.json (OAuth tokens stay in the keychain), else a fallback.
+    config.json "mcp_servers": {name: {...}} overrides both."""
+    over = (load_config().get("mcp_servers") or {}).get(name)
+    if over:
+        return over
+    try:
+        s = (json.loads((HOME / ".claude.json").read_text()).get("mcpServers") or {}).get(name)
+    except (OSError, ValueError):
+        s = None
+    return s or MCP_FALLBACK.get(name)
+
+
+def mcp_config_file(names, run_dir=None):
+    """Strict --mcp-config file with just these servers."""
+    run_dir = Path(run_dir or ATLAS / "_autopilot" / "run")
+    run_dir.mkdir(parents=True, exist_ok=True)
+    servers = {n: user_mcp_server(n) for n in names if user_mcp_server(n)}
+    p = run_dir / f"mcp_{'_'.join(sorted(names))}.json"
+    p.write_text(json.dumps({"mcpServers": servers}))
+    return str(p)
+
+
+def claude_env():
+    e = dict(os.environ)
+    e.update(ATLAS_STATE_FLUSH="1", ATLAS_AUTOPILOT_CHILD="1", CLAUDE_CODE_USE_BEDROCK="1",
+             AWS_PROFILE=e.get("AWS_PROFILE", "Iris_Devs"), AWS_REGION="eu-central-1",
+             PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:" + str(HOME / ".local" / "bin"))
+    return e
+
+
+def claude_headless(prompt, mcp_names=(), allowed="", model=HAIKU, budget=0.10, timeout=300):
+    """claude -p with only the named MCP servers and only `allowed` tools (no built-ins). -> (result|None, usd)."""
+    cmd = [CLAUDE_BIN, "-p", "--model", model, "--strict-mcp-config", "--mcp-config", mcp_config_file(mcp_names),
+           "--tools", "", "--allowedTools", allowed, "--permission-mode", "dontAsk", "--output-format", "json",
+           "--no-session-persistence", "--max-budget-usd", f"{budget:.2f}"]
+    try:
+        r = subprocess.run(cmd, input=prompt, capture_output=True, text=True, timeout=timeout, cwd="/tmp", env=claude_env())
+        d = json.loads(r.stdout)
+    except (subprocess.TimeoutExpired, ValueError, OSError):
+        return None, 0.0
+    return (None if d.get("is_error") and not d.get("result") else d.get("result")), float(d.get("total_cost_usd") or 0)
+
+
+def mcp_tools(name, max_age_days=7, refresh=False):
+    """Tool names the headless claude sees for MCP server `name` (cached; [] if the server is not authenticated)."""
+    p = ATLAS / "_autopilot" / "cache" / f"mcp_tools_{name}.json"
+    if p.exists() and not refresh:
+        try:
+            tools = json.loads(p.read_text())
+            age = time.time() - p.stat().st_mtime
+            if age < (max_age_days * 86400 if tools else 6 * 3600):   # "not authenticated" is re-checked after 6 h
+                return tools
+        except ValueError:
+            pass
+    out, _ = claude_headless(f"List every tool name you have that starts with mcp__{name}__, one per line, nothing else. "
+                             "If there are none, output NONE. Do not call any tool.", [name], "", budget=0.05, timeout=120)
+    tools = sorted({ln.strip().strip("`- ") for ln in (out or "").splitlines() if ln.strip().strip("`- ").startswith(f"mcp__{name}__")})
+    if out is not None:                      # a failed claude run (no answer) is not cached
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps(tools))
+    return tools
+
+
+def asana_allowed(ops=()):
+    """Comma list for --allowedTools: Asana read tools, plus the write tools the given ops need. Never delete."""
+    tools = mcp_tools("asana")
+    return asana_filter(tools, ops)
+
+
+def asana_filter(tools, ops=()):
+    def short(t):
+        return re.sub(r"^asana_", "", t.split("__")[-1])
+    keep = [t for t in tools if ASANA_READ_RX.match(short(t)) and not ASANA_NEVER_RX.search(short(t))
+            and not re.search(r"(create|update|add_|set_|delete|remove)", short(t))]
+    for op in ops:
+        rx = ASANA_WRITE_RX.get(op)
+        keep += [t for t in tools if rx and rx.search(short(t)) and not ASANA_NEVER_RX.search(short(t))]
+    return ",".join(sorted(set(keep)))
+
+
 # ----------------------------------------------------------------------------- notify
 def notify(path, title, msg):
+    if quiet_until():
+        defer_notification(title, msg, str(path))
+        return
     p = str(path).replace('"', '\\"')
     m = msg.replace('"', "'")
     script = (f'display notification "{m}" with title "{title}" sound name "Glass"\n'

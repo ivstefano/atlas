@@ -12,22 +12,24 @@ Item schema:
             slash-command (/reply, /email run by Ivo in a Claude tab)
   engagement str  engagements/ folder name, or "operations"
   kind      slack_post | slack_thread_reply | email_draft | gmail_draft | form | status_entry |
-            calendar_event | note
+            calendar_event | note | asana
   target    {channel, thread_ts, permalink} | {to, cc, subject} | {form_url, prefill_url} | {path}
   title     str
   body      str   markdown, editable in the inbox
   sources   [{label, path_or_url}]
   status    pending | approved | sent | rejected | done
   history   [{ts, action, by, note?}]
+  surface_at str  optional ISO time; the inbox hides the item until then (set automatically for items
+                  created in quiet hours, 19:00-08:00 Europe/Sofia, see autopilot_common.quiet_until)
   key       str   optional dedupe key: add() with the same key updates the pending item instead
                   of creating a second one (e.g. "monday-thread:intertek:2026-W43")
 
 API (import from any script):
-  add(source, engagement, kind, title, body, target=None, sources=None, key=None, by="autopilot") -> item
+  add(source, engagement, kind, title, body, target=None, sources=None, key=None, by="autopilot", surface_at=None) -> item
   get(id) -> item | None
-  list_items(status=None, engagement=None, source=None) -> [item], newest first
+  list_items(status=None, engagement=None, source=None, visible_only=False) -> [item], newest first
   update(id, action, by="ivo", note=None, **fields) -> item      (records history)
-  pending_count() -> int
+  pending_count(visible_only=True) -> int ; held_count() -> int (quiet-hours items not yet shown)
 
 CLI:  approval_queue.py list [status] | show <id> | count
       approval_queue.py add --kind slack_thread_reply --title T --channel C --thread-ts TS
@@ -48,7 +50,7 @@ QUEUE = Path.home() / "Documents" / "atlas" / "_autopilot" / "queue"
 SOURCES = {"weekly-rollup", "monday-thread", "missing-post", "post-call", "session-hook", "cognion-daily",
            "slash-command"}
 KINDS = {"slack_post", "slack_thread_reply", "email_draft", "gmail_draft", "form", "status_entry",
-         "calendar_event", "note"}
+         "calendar_event", "note", "asana"}
 STATUSES = {"pending", "approved", "sent", "rejected", "done"}
 
 
@@ -90,7 +92,30 @@ def _read_all():
     return out
 
 
-def add(source, engagement, kind, title, body, target=None, sources=None, key=None, by="autopilot"):
+def _quiet_until():
+    """End of quiet hours (19:00-08:00 Europe/Sofia, autopilot_common) if we are inside them, else None."""
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from autopilot_common import quiet_until
+        return quiet_until()
+    except Exception:
+        return None
+
+
+def visible(item, now=None):
+    """False while a new item is held back by quiet hours (surface_at in the future)."""
+    s = item.get("surface_at")
+    if not s:
+        return True
+    try:
+        return dt.datetime.fromisoformat(s) <= (now or dt.datetime.now().astimezone())
+    except ValueError:
+        return True
+
+
+def add(source, engagement, kind, title, body, target=None, sources=None, key=None, by="autopilot", surface_at=None):
+    """surface_at: ISO time before which the inbox hides the item. Default: end of quiet hours when created
+    inside them (so nothing new shows up after 19:00), else visible at once."""
     if source not in SOURCES:
         raise ValueError(f"unknown source {source!r}")
     if kind not in KINDS:
@@ -110,6 +135,12 @@ def add(source, engagement, kind, title, body, target=None, sources=None, key=No
                     history=[dict(ts=_now(), action="created", by=by)])
         if key:
             item["key"] = key
+        if surface_at is None:
+            q = _quiet_until()
+            surface_at = q.isoformat(timespec="seconds") if q else None
+        if surface_at:
+            item["surface_at"] = surface_at
+            item["history"].append(dict(ts=_now(), action=f"held until {surface_at[:16]} (quiet hours)", by=by))
         _write(item)
         return item
 
@@ -119,8 +150,11 @@ def get(item_id):
     return json.loads(p.read_text()) if p.exists() else None
 
 
-def list_items(status=None, engagement=None, source=None):
+def list_items(status=None, engagement=None, source=None, visible_only=False):
+    """visible_only: drop items still held by quiet hours (the inbox view). Dedupe/supersede callers keep the default."""
     items = _read_all()
+    if visible_only:
+        items = [i for i in items if visible(i)]
     if status:
         st = {status} if isinstance(status, str) else set(status)
         items = [i for i in items if i.get("status") in st]
@@ -147,8 +181,13 @@ def update(item_id, action, by="ivo", note=None, **fields):
         return it
 
 
-def pending_count():
-    return len(list_items("pending"))
+def pending_count(visible_only=True):
+    return len(list_items("pending", visible_only=visible_only))
+
+
+def held_count():
+    """Pending items created in quiet hours that surface in the morning."""
+    return len(list_items("pending")) - pending_count()
 
 
 def _cli_add(argv):
@@ -188,4 +227,5 @@ if __name__ == "__main__":
         print(json.dumps(get(sys.argv[2]), indent=1, ensure_ascii=False))
     else:
         for i in list_items(sys.argv[2] if len(sys.argv) > 2 else None):
-            print(f"{i['status']:8} {i['created'][:16]} {i['source']:14} {i['engagement']:24} {i['kind']:18} {i['title'][:60]}")
+            held = "" if visible(i) else f" (held until {i['surface_at'][11:16]})"
+            print(f"{i['status']:8}{held} {i['created'][:16]} {i['source']:14} {i['engagement']:24} {i['kind']:18} {i['title'][:60]}")
