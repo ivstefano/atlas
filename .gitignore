@@ -28,7 +28,11 @@ bitbucket-codes/
 # serena tool cache + local project config
 .serena/
 
+# personal finance research (confidential company + salary data)
+__finance/
+
 # meeting autopilot runtime (drafts, logs, live transcripts, spend) + its state
 _autopilot/
 _state/autopilot.json
 _state/autopilot.tmp
+__private/
