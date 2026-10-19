@@ -525,6 +525,18 @@ def save_config(c):
     tmp.replace(AP_CONFIG)
 
 
+META_CAP_DEFAULT = 5.0
+
+
+def meta_cap_hours():
+    """Weekly cap (hours) on meta-work: building Ivo's own tooling (atlas infra, Cognion, autopilot).
+    config.json key `meta_cap_hours_week`; default 5. Read by wrap.py."""
+    try:
+        return float(load_config().get("meta_cap_hours_week", META_CAP_DEFAULT))
+    except (TypeError, ValueError):
+        return META_CAP_DEFAULT
+
+
 def _rule_rx(match):
     """'AWS (credits, funding, co-sell, marketplace)' -> regex hitting any of those words."""
     words = [w for w in re.split(r"[^\w-]+", match or "") if len(w) >= 3]
