@@ -4,12 +4,17 @@ _All tasks with durable working memory. Newest activity first. Open `_state/<tas
 
 | Last session | Task | Tab | Next action |
 |---|---|---|---|
-| 2026-07-31T16:30 (playground funnel: 2 calls filed, STATUS committed) | **platform-product** | A: Operations | Resolve 6 open questions in `_state/platform-product.md`. Top: tell Liana tracking will undercount (Vova: any tracker partially blocked) before she builds expectations on the first campaign report. |
-| 2026-06-10T (internal proposal/pricing meeting) | **heineken** | A: Operations | Tomorrow 11 Jun pre-call: review Vankata's proposal (lands tonight) before the Lucy call. Jordan/Vankata commercial-lead. |
+| 2026-10-20T19:00 | **finca** | A: Operations | Wait on Jesse: which 361 docs Bain may share + Bain's use-case material (owed to |
+| 2026-10-07T18:55 | **ulstein** | A: Operations | Run the demo on the call Fri 2026-10-09 15:00 (EEST) with Anita, Vankata, Jose ( |
+| 2026-09-04T12:20 | **operations** | A: Operations | Send Dragos Constantin the Axion architecture reference so he can brief his CTO  |
+| 2026-08-14 | **playground-odl** | ? | Building the **ODL side-panel mock**: the Axion demo chrome (dark sidebar, file  |
+| 2026-08-11T (MVP delivery process agreed internally; team ownership left open) | **fresenius-complaint-coding** | A: Operations | **Chase Brian to confirm the compiled ground-truth lists.** That unblocks the Ax |
+| 2026-08-11T (MVP delivery process agreed internally; data chase email sent to Sathya) | **fresenius-cmc** | A: Operations | **Wed 12 Aug call with Sathya: leave with a named DAY for the two products, or a |
+| 2026-07-31T16:30 | **platform-product** | A: Operations | **Resolve the 6 open questions below.** Top priority: #4 (tell Liana the numbers |
+| 2026-07-03T (manual note) | **tandf** | A: Operations | **~Early September 2026: contact T&F to re-engage.** Owner: Ivo (Jordan commerci |
+| 2026-06-12T (filed 11 Jun demo transcript, updated STATUS/SOURCES) | **heineken** | A: Operations | Watch for: (1) IRIS proposal email to Lucy (integration range + run cost) — owne |
+| 2026-06-12T (Alex/Head-of-AI call, live-copilot) | **garrett** | A: Operations | NDA in motion so Garrett shares real sample drawings (Alex wants to try this wee |
 | 2026-06-01T (commercial Fast Start + review-session setup) | **aumovio** | A: Operations | Prep the Wed 3 Jun 12:15 CET review: walk Norbert + Phil through results vs thei |
 | 2026-05-31T (board catch-up, via Slack C0A754ESUDB) | **sms-group** | A: Operations | Mon 1 Jun: align with Vankata + Jordan on SMS next steps (Vankata leads). Ivo su |
 | 2026-05-31T (board catch-up) | **spie** | A: Operations | Prep the Wed 3 Jun 17:00 BG call: concrete pilot scope + price options, includin |
-| 2026-05-31T (board catch-up) | **garrett** | A: Operations | Prep the Tue 2 Jun 12:00 CET (13:00 BG) call with Liviu + Baala. Resolve price a |
-| 2026-06-11T (demo+dashboard built, reconstruct-diff plan agreed) | **fresenius-cmc** | A: Operations | Await 3.2.S from Sathya → run extraction/RECONSTRUCTION_PLAN.md (regenerate P.1/P.2, diff vs filed, missing bucket = next data ask). Demo+dashboard in 1_pre-scoping/extraction/demo/. Engagement CLAUDE.md added. Wed 09:00 ET working session. |
-| 2026-05-29T11:10 | **operations** | A: Operations | Live-test a real tab kill/resume: from an engagement folder, end a session, conf |
 | 2026-05-26T00:00 | **demo** | A: Demo | Produce 3 demo videos by Fri 5 Jun for the June 8 London summit (Ada streams on  |

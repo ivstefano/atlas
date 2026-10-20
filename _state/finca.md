@@ -3,49 +3,30 @@
 _Working memory for this task. Auto-written on session end/compact. Read on session start.
 This is NOT the client-facing STATUS.md._
 
-last_session: 2026-09-04T19:30
+last_session: 2026-10-20T19:00
 last_tab: A: Operations
 
 ## Now
-Opened the FINCA / 361 by FINCA engagement from scratch on 2026-09-01 (it had no folder;
-context was living in Slack scrollback only). Backfilled both call transcripts, mapped the
-25-page client deck, and drafted the response document Campbell asked Ivo for by name.
-
-Read `engagements/finca/HANDOFF.md` first - it is current as of 2026-09-04 and covers what
-this file would otherwise repeat. Don't duplicate CONTEXT/STATUS/COMMERCIAL content here.
+Bain is in. Campbell (on leave ~16 Oct to end Oct) handed the thread to **Jesse Mina**, Associate
+Partner, Bain London, Enterprise Technology (South African, ex-Middle East fintech product head).
+Bain runs a 10-week strategy engagement on own fees, then hands over; not funding the build.
+Bain / Iris sync held 2026-10-20 (Jesse + Steven, Eric, Vankata, Ivo). Transcript filed, STATUS
+corrected, stakeholders added, HANDOFF refreshed. Read `engagements/finca/HANDOFF.md` first.
 
 ## Next action
-**Sent.** Ivo emailed the response document to Alastair Campbell on 2026-09-04.
-
-Waiting on Campbell. He said he would forward it to André (CTO of 361) once comfortable,
-and offered a round trip first ("if we need to do a quick back and forth, we can").
-
-Next real action is preparing for the working session: **2026-09-09, 10:00-11:00 London,
-on Teams**, with André and possibly one or two others Campbell brings. Two things to watch
-for before then: any reply from Campbell that changes the agenda, and whether André's
-details arrive so he can be added to the invite.
+Wait on Jesse: which 361 docs Bain may share + Bain's use-case material (owed to Eric). Then answer
+Jesse's "how far does PoC go vs pilot" in stage-gate terms, from `_briefs/2026-10-16_poc-scope-for-jordan.md`.
+Next joint call when Campbell is back (no date). Eric to set separate AWS session.
 
 ## Open threads
-- No reply from Campbell yet as of 2026-09-04 evening. If nothing lands by Monday
-  2026-09-07, the 9th goes ahead on the agenda as written in section 4 of the sent document.
-- Cold start is the unresolved technical objection. Campbell raised it three times on
-  2026-09-01 and rejected every standard answer. Our position: his own Observed
-  Affordability Signals framework IS the cold-start answer. Expect André to test it.
-- Two corrections queued for André, not for a funder setting: sequencing (deck p16 items
-  5-6 vs his stated position that verification is the bottleneck), and a 1000x labelling
-  error on the deck's p4 funding-gap chart ($300M/$500M should be $300B/$500B vs the IFC
-  source). Detail in HANDOFF.md.
-- Unanswered: target funders beyond AWS and their decision cycle; Phanice Chiyumba's role;
-  André's surname and email.
+- Funding model: Jesse deferred to Campbell twice (donors + own model).
+- Vankata's line on 20 Oct: documents into schema yes, qualifying images no. Jesse's vision leads with
+  field-officer photos; keep that boundary.
+- Cold start still the live objection; our answer = his framework needs no outcome labels.
+- 2026-10-16 PoC scope brief: Ivo to review before sending to Jordan.
 
 ## Don't re-explain
-- Four decisions Ivo already made on 2026-09-04, in the response file's notes: don't name
-  the reference client (say "a European automotive manufacturer"); Ivo sends, not Jordan;
-  no bare 99.6% figure; **markdown only, an HTML version was built and deleted - do not
-  recreate one**.
-- The response doc has already had a `human-writing` pass (Flesch 61, no em dashes, no
-  contrast templates). Re-run the skill on any revision before sending.
-- The client deck is gitignored (`*.pdf`), so it is on this machine and Drive but not in
-  the repo. Page map is in `SOURCES.md`; p16 and p18 are the load-bearing pages.
-- Jordan's original Slack summary got the chart error and the "he ruled out scoring" point
-  slightly wrong. `STATUS.md` records the corrected readings; use those, not the Slack thread.
+- Campbell's "see the world better, not use apparent data" (1 Sep ~04:01) = fixed framework, AI fills
+  it from new evidence with proof. Not "AI that discovers problems". In CONTEXT §3.
+- Vankata = Ivan Tsenov (same person). "Alistair" in autopilot = Alastair Campbell.
+- Decisions from 2026-09-04 (no client name, no bare 99.6%, markdown-only response) still stand.
