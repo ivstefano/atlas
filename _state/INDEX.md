@@ -4,9 +4,9 @@ _All tasks with durable working memory. Newest activity first. Open `_state/<tas
 
 | Last session | Task | Tab | Next action |
 |---|---|---|---|
+| 2026-10-23T12:00 | **operations** | Schneider deep dive | Send the written Schneider deal-stopper flag (S2 off capability map, S3 vague as |
 | 2026-10-20T19:00 | **finca** | A: Operations | Wait on Jesse: which 361 docs Bain may share + Bain's use-case material (owed to |
 | 2026-10-07T18:55 | **ulstein** | A: Operations | Run the demo on the call Fri 2026-10-09 15:00 (EEST) with Anita, Vankata, Jose ( |
-| 2026-09-04T12:20 | **operations** | A: Operations | Send Dragos Constantin the Axion architecture reference so he can brief his CTO  |
 | 2026-08-14 | **playground-odl** | ? | Building the **ODL side-panel mock**: the Axion demo chrome (dark sidebar, file  |
 | 2026-08-11T (MVP delivery process agreed internally; team ownership left open) | **fresenius-complaint-coding** | A: Operations | **Chase Brian to confirm the compiled ground-truth lists.** That unblocks the Ax |
 | 2026-08-11T (MVP delivery process agreed internally; data chase email sent to Sathya) | **fresenius-cmc** | A: Operations | **Wed 12 Aug call with Sathya: leave with a named DAY for the two products, or a |

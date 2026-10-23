@@ -3,27 +3,24 @@
 _Working memory for this task. Auto-written on session end/compact. Read on session start.
 This is NOT the client-facing STATUS.md._
 
-last_session: 2026-09-04T12:20
-last_tab: A: Operations
+last_session: 2026-10-23T12:00
+last_tab: Schneider deep dive
 
 ## Now
-Live-supported the Sophia Genetics call (2026-09-04, 39 min) by repeatedly pulling the
-Tactiq transcript mid-call and feeding Ivo read-outs + next questions. Then opened the
-engagement: `engagements/sophia-genetics/` scaffolded from `_template`, all five docs
-written from the transcript, alias entry added, committed `809b471` on `master` and
-pushed to bitbucket. Only sophia paths were staged; other people's uncommitted work in
-that repo was left untouched.
+Live-supported the Schneider Electric India deep dive (2026-10-20, Kiran Vyas) from this
+tab: prep brief `briefs/2026/W43/2026-10-20_schneider-deep-dive.md`, layman explainers on
+data governance / poisoning / OT, mid-call Tactiq pulls, coverage table vs the
+iris-capabilities map (~25% realistic). Opened `engagements/schneider-electric/` (commit
+f6f7238). Verdict logged 2026-10-23 in its STATUS: low-value lead, Kiran sold his own
+vision (national AI security ops centre), no budget, no owning team, off capability map.
 
-Outcome of the call, for whoever picks this up: Axion is the agreed entry point, Neuralith
-declined for now, no live project until a multi-modal hospital data-collection initiative
-starts (end of 2026 or 2027, he refused to commit). Detail lives in the engagement's
-CONTEXT/STATUS/COMMERCIAL - don't duplicate it here.
+Previous (2026-09-04): Sophia Genetics call support + engagement opened; detail in
+`engagements/sophia-genetics/`.
 
 ## Next action
-Send Dragos Constantin the Axion architecture reference so he can brief his CTO and do
-internal publicity - he asked for it on the call, owner Ivo/Jordan, by 2026-09-05.
-Then the deployment requirements one-pager (Docker, GPU spec, egress, air-gapped vs
-endpoint) by 2026-09-11. Full list in `engagements/sophia-genetics/ARTEFACTS.md` Pending.
+Send the written Schneider deal-stopper flag (S2 off capability map, S3 vague ask, no
+budget) to Vankata + Steven, owner Ivo, by 2026-10-23. Older: Sophia Genetics pending list
+in `engagements/sophia-genetics/ARTEFACTS.md` (unverified whether done).
 
 ## Open threads
 - **Internal knowledge base** (worked 26 Aug + 1 Sep, findings in
@@ -59,6 +56,7 @@ endpoint) by 2026-09-11. Full list in `engagements/sophia-genetics/ARTEFACTS.md`
   source of truth for client-facing material. "Iris.ai" always lowercase-with-dot.
 
 ## Don't re-explain
+- PRIVATE: Ivo's Oct 2026 personal check of Iris.ai finances lives ONLY in `__finance/` (gitignored) + memory `iris-finance-check`. Never write figures, salaries, loans or fundraising details into this STATE file (it is committed). At most: "personal finance check, see __finance/README.md".
 - engagements/ is a SEPARATE git repo, sibling to atlas, and its default branch is `master`
   (not main). Project hooks load per-repo, so hook config is mirrored into both.
 - Scripts live in atlas/.claude/scripts/: state_common.py (resolver + template),
@@ -73,4 +71,4 @@ endpoint) by 2026-09-11. Full list in `engagements/sophia-genetics/ARTEFACTS.md`
   it to stdout. Never read tactiq.io URLs directly (JS-gated).
 - New engagements: `cp -R _template <name>`, fill the five docs, add an `_aliases.yaml`
   entry (domains + titles) so morning briefs match Calendar events.
-- No HubSpot MCP is wired on this machine. HubSpot facts have to be pasted in by Ivo.
+- HubSpot MCP wired 2026-10-19 (read-only). Query deals/contacts/notes directly; see _hubspot_mcp_setup.md.
